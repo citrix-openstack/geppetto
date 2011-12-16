@@ -1,0 +1,152 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Monitor Cloud{% endblock %}
+
+{% block nav_monitor_cloud %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+
+<h1>
+    <img src="images/nav/tasks.gif" alt="">
+    Monitor Cloud
+</h1>
+
+<div class="detailcontainer">
+    <h2>Summary</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Alerts:</th>
+            <td class="settingsdetail">4 / 6 (unresolved/total)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Enable Alert Plug-ins:</td>
+            <td class="settingsdetail">None</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Average Compute Load:</td>
+            <td class="settingsdetail">todo - graph of load over time</td>
+            <td></td>
+        </tr>
+    </table>
+    
+    <br/>
+</div>
+
+<br/>
+
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="5"><h2>Alerts</h2></th>
+        </tr>
+        <tr>
+            <th colspan="5" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>Critial</a> | <a>Unassigned</a> | <a>Similar Specification</a></div>
+                <div style="float:right">Actions: <a>View Node for Selected Node</a> | <a>Mark as Resolved</a></div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Alert Type (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Last Update (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Detail (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Current</td>
+      <td>Storage</td>
+      <td>13:49 2011/01/24</td>
+      <td>50GB/500GB (free/total)</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_green.png" alt="">Resolved</td>
+      <td>CPU</td>
+      <td>07:15 2011/01/23</td>
+      <td>CPU averaged 80% over last 10mins.</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="3">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="2" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+
+</table>
+
+<br>
+
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="5"><h2>Configuration Changes</h2></th>
+        </tr>
+        <tr>
+            <th colspan="5" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>Critial</a> | <a>Unassigned</a> | <a>Similar Specification</a></div>
+                <div style="float:right">Actions: <a>View Node for Selected Node</a> | <a>Mark as Resolved</a></div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Last Update (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Detail (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Error</td>
+      <td>13:49 2011/01/24</td>
+      <td>Reboot Compute Controller</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> - </td>
+      <td><img src="images/icon/bullet_green.png" alt="">Success</td>
+      <td>07:15 2011/01/23</td>
+      <td>Update MySQL server password.</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_green_grey.png" alt="">Pending</td>
+      <td>07:15 2011/01/23</td>
+      <td>Make Compute Controller</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="3">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="2" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+
+</table>
+{% endblock %}

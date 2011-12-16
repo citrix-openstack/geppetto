@@ -1,0 +1,14 @@
+div.bar_graph
+{
+  background-color: #eee;
+  border: 1px solid #888;
+  width: 100px;
+  padding: 1px;
+  margin-bottom: 5px;
+}
+
+div.bar_graph > div
+{
+  background-color: #247CC5;
+  height: 8px;
+}

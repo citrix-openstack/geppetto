@@ -1,0 +1,76 @@
+#!/bin/sh
+
+. /usr/local/share/geppetto/geppetto-env.sh
+
+SYSTEM_VERSION="/etc/openstack/vpx-version"
+BACKUPS="/var/lib/geppetto/backups"
+MP="/var/lib/geppetto/images"
+GEPPETTO_PYTHON_PATH=/usr/lib/python2.6/site-packages/geppetto
+MANAGE="$GEPPETTO_PYTHON_PATH/manage.py"
+
+fstab_entry_backup()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  local mount_point="$3"
+  grep "$mount_point" /etc/fstab >"$backup_path/$backup_file"
+  if [ "$?" -eq 1 ]
+  then
+    echo "No mount points to backup."
+    echo "None" >"$backup_path/$backup_file"
+  fi
+}
+
+geppettodb_backup()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
+  python26 $MANAGE dumpdata --indent 4 core auth.user \
+                            --format=json >"$backup_path/$backup_file"
+}
+
+vdisk_backup()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  local key="$3"
+  vdisk=$(vdisk-find "$key")
+  echo "$vdisk" >"$backup_path/$backup_file"
+}
+
+version_backup()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  source "$SYSTEM_VERSION"
+  echo $VPX_VERSION >"$backup_path/$backup_file"
+  echo $VPX_VERSION
+}
+
+symlink_latest()
+{
+  local backup_path="$1"
+  local filename="$2"
+  rm -rf "$BACKUPS/latest/$filename"
+  ln -s "$backup_path/$filename" "$BACKUPS/latest/$filename"
+}
+
+# timestamp format 2011-Sep-27-Tue-11.12.36.UTC
+timestamp=$(date '+%Y-%h-%d-%a-%H.%M.%S.%Z')
+mkdir -p "$BACKUPS"/$timestamp
+mkdir -p "$BACKUPS"/latest
+
+echo -n "Mountpoints backup..."
+fstab_entry_backup "$BACKUPS"/$timestamp fstab "$MP"
+symlink_latest "$BACKUPS"/$timestamp fstab
+vdisk_backup "$BACKUPS"/$timestamp image_vdisk os-vpx-images
+symlink_latest "$BACKUPS"/$timestamp image_vdisk
+echo "Done."
+echo -n "Geppetto DB backup..."
+geppettodb_backup "$BACKUPS"/$timestamp fixtures
+symlink_latest "$BACKUPS"/$timestamp fixtures
+echo "Done."
+VERSION=$(version_backup "$BACKUPS"/$timestamp version)
+symlink_latest "$BACKUPS"/$timestamp version
+echo "Backup of VPX($VERSION) successfully executed."

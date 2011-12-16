@@ -1,0 +1,17 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          openstack-dashboard
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Stop:      0 1 6
+# Short-Description: OpenStack Dashboard
+# Description:       OpenStack Dashboard for OpenStack Clouds.
+### END INIT INFO
+
+# openstack-dashboard: OpenStack Dashboard
+#
+# chkconfig: - 90 03
+# description: OpenStack Dashboard for OpenStack Clouds.
+
+. /etc/rc.d/init.d/openstack-dashboard.sh

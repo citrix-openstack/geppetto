@@ -1,0 +1,172 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Management Nodes{% endblock %}
+
+{% block nav_management_list %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+<h1>
+<img src="images/nav/pool.gif">
+Management Nodes
+</h1>
+
+<p>TODO - expand to multiple nodes? Expand the actual settings for each type of node</p>
+
+<div class="detailcontainer">
+    <h2>MySQL</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Hostname:</td>
+            <td class="settingsdetail">clustered.mysql.company.com</td>
+            <td><a class="action_button" href="setup_mysql"><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Node Type:</th>
+            <td class="settingsdetail">External</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Username:</th>
+            <td class="settingsdetail">user1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Password:</th>
+            <td class="settingsdetail">(stored)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Status:</td>
+            <td class="settingsdetail">-</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+
+<div class="detailcontainer">
+    <h2>RabbitMQ</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Hostname:</td>
+            <td class="settingsdetail">osvpx-234asdfd</td>
+            <td><a class="action_button" href="setup_rabbitmq"><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Node Type:</th>
+            <td class="settingsdetail">Managed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Status:</td>
+            <td class="settingsdetail">Running (17:20 2011/01/24)</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+
+<div class="detailcontainer">
+    <h2>Cloud Controller</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Hostname:</td>
+            <td class="settingsdetail">osvpx-234asdfd</td>
+            <td><a class="action_button" href="setup_nova_api"><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Web End-User UI:</td>
+            <td class="settingsdetail"><a href="">https://osvpx-234asdfd/</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>EC2 API:</td>
+            <td class="settingsdetail"><a href="">http://osvpx-234asdfd:8773/services/Cloud</a></td>
+            <td></td>
+        </tr>
+                <tr>
+            <th>Xen API password:</td>
+            <td class="settingsdetail">(stored)</td>
+            <td><a class="action_button" href="setup_nova_api"><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Node Type:</th>
+            <td class="settingsdetail">Managed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Status:</td>
+            <td class="settingsdetail">Running (17:20 2011/01/24)</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+
+<div class="detailcontainer">
+    <h2>Scheduler</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Hostname:</td>
+            <td class="settingsdetail">osvpx-234asdfd</td>
+            <td><a class="action_button" href="setup_scheduler"><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Node Type:</th>
+            <td class="settingsdetail">Managed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Status:</td>
+            <td class="settingsdetail">Running (17:20 2011/01/24)</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+
+<p>TODO - pull network into it's own section?</p>
+
+<div class="detailcontainer">
+    <h2>Network Controller</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Hostname:</td>
+            <td class="settingsdetail">osvpx-234asdfd</td>
+            <td><a class="action_button" href=""><img src="/images/icon/pencil.png" alt=""> Edit </a></td>
+        </tr>
+        <tr>
+            <th>Node Type:</th>
+            <td class="settingsdetail">Managed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Networking Type:</td>
+            <td class="settingsdetail">Flat networking</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>VPN:</td>
+            <td class="settingsdetail">Disabled</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Status:</td>
+            <td class="settingsdetail">Running (17:20 2011/01/24)</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+
+{% endblock %}

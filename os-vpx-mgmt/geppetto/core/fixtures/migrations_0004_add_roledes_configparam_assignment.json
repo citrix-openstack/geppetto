@@ -1,0 +1,58 @@
+[
+   {
+        "pk": 2,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 7,
+            "config_parameter": 9
+        }
+    },
+    {
+        "pk": 4,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 6,
+            "config_parameter": 17
+        }
+    },
+    {
+        "pk": 7,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 1,
+            "config_parameter": 75
+        }
+    },
+    {
+        "pk": 3,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 13,
+            "config_parameter": 89
+        }
+    },
+    {
+        "pk": 1,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 12,
+            "config_parameter": 74
+        }
+    },
+    {
+        "pk": 6,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 8,
+            "config_parameter": 6
+        }
+    },
+    {
+        "pk": 5,
+        "model": "core.roledesconfigparamassignment",
+        "fields": {
+            "role_description": 10,
+            "config_parameter": 67
+        }
+    }
+ ]

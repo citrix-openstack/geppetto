@@ -1,0 +1,17 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          citrix-geppetto
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Stop:      0 1 6
+# Short-Description: VPX Admin UI
+# Description:       Citrix Admin GUI for OpenStack VPX.
+### END INIT INFO
+
+# citrix-geppetto: Citrix VPX Admin UI
+#
+# chkconfig: - 64 46
+# description: Citrix Admin GUI for OpenStack VPX.
+
+. /etc/rc.d/init.d/citrix-geppetto.sh

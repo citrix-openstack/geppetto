@@ -1,0 +1,413 @@
+[
+    {
+        "pk": 7, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "Database"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "Message Queue"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Compute API"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Compute Scheduler"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Compute Worker"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "core.roledescription",
+        "fields": {
+            "name": "OpenStack Compute Console API"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Identity Worker"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Image API"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Image Registry"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Network Worker"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Object Storage API"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Object Storage Worker"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.roledescription", 
+        "fields": {
+            "name": "OpenStack Volume Worker"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto", 
+            "service": true, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto-celerycam", 
+            "service": true, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto-celeryd", 
+            "service": true, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "memcached", 
+            "service": true, 
+            "description": 10
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "mysqld", 
+            "service": true, 
+            "description": 7
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-dashboard", 
+            "service": true, 
+            "description": 1
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-glance-api", 
+            "service": true, 
+            "description": 8
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-glance-registry", 
+            "service": true, 
+            "description": 9
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-keystone-admin", 
+            "service": true, 
+            "description": 12
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-keystone-auth", 
+            "service": true, 
+            "description": 12
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-lb-service", 
+            "service": true, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-ajax-console-proxy", 
+            "service": true, 
+            "description": 13
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-api", 
+            "service": true, 
+            "description": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-compute", 
+            "service": true, 
+            "description": 3
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-network", 
+            "service": true, 
+            "description": 5
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-objectstore", 
+            "service": true, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-scheduler", 
+            "service": true, 
+            "description": 2
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-vncproxy", 
+            "service": true, 
+            "description": 13
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-volume", 
+            "service": true, 
+            "description": 4
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-account", 
+            "service": true, 
+            "description": 11
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-container", 
+            "service": true, 
+            "description": 11
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-object", 
+            "service": true, 
+            "description": 11
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-proxy", 
+            "service": true, 
+            "description": 10
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-rsync", 
+            "service": true, 
+            "description": 10
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-glance", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-nova", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-swift", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-image-container", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-logging", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-ring-builder", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-set-geppetto-properties", 
+            "service": false, 
+            "description": null
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "rabbitmq-server", 
+            "service": true, 
+            "description": 6
+        }
+    }
+]

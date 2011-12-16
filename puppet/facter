@@ -1,0 +1,66 @@
+#!/usr/bin/env python2.6
+
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright (c) 2011 Citrix Systems, Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+import os
+import shutil
+import socket
+import sys
+import xmlrpclib
+
+from geppetto.geppettolib import network
+from geppetto.geppettolib import puppet
+from geppetto.geppettolib import utils
+
+# Set connection timeout to 30 secs
+socket.setdefaulttimeout(30)
+
+# Set django settings as it's required by service_proxy
+os.environ['DJANGO_SETTINGS_MODULE'] = 'geppetto.core'
+
+from geppetto.core.views import service_proxy
+
+
+RUBY_LIB = '/tmp/ruby'
+FACTER_PATH = '%s/facter' % RUBY_LIB
+
+if __name__ == "__main__":
+    try:
+        os.environ['RUBYLIB'] = RUBY_LIB
+        if not os.path.exists(FACTER_PATH):
+            shutil.copytree('/var/lib/puppet/facts/', FACTER_PATH)
+
+        custom_fact = len(sys.argv) == 2 and sys.argv[1] or ''
+        facter_cmd = 'facter %s' % custom_fact
+        facts, err = utils.execute(facter_cmd)
+        facts = facts.replace(' => ', ': ')
+        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
+        proxy = service_proxy.create_proxy(master_fqdn, 8080,
+                                           service_proxy.Proxy.Facter)
+        proxy.process_facts(network.get_hostname().lower(), facts)
+        print facts
+        sys.exit(0)
+    except xmlrpclib.ProtocolError, err:
+        print >> sys.stderr, "A protocol error occurred"
+        print >> sys.stderr, "URL: %s" % err.url
+        print >> sys.stderr, "HTTP/HTTPS headers: %s" % err.headers
+        print >> sys.stderr, "Error code: %d" % err.errcode
+        print >> sys.stderr, "Error message: %s" % err.errmsg
+        sys.exit(1)
+    except Exception, err:
+        print >> sys.stderr, err
+        sys.exit(2)

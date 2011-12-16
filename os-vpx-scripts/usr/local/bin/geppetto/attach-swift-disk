@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. $GEPPETTO_SHARE_PATH/attach-data-disk.sh
+. /etc/openstack/swift-store
+
+MP_PREFIX='/srv/node'
+NAME_PREFIX='OpenStack Object Storage'
+KEY_PREFIX='os-vpx-swift'
+FS='xfs'
+UG='swift:swift'
+SIZE="${1-$SWIFT_DISK_SIZE_GB}"
+
+for device in $SWIFT_DEVICES
+do
+  mp="$MP_PREFIX/$device"
+  name="$NAME_PREFIX $HOSTNAME $device"
+  key="$KEY_PREFIX-$HOSTNAME-$device"
+
+  attach_data_disk "$device" "$mp" "$name" "$key" "$FS" "$UG" "$SIZE"
+
+  chown -R "$UG" "$mp"
+done
+
+touch $GEPPETTO_LIB_PATH/swift-init-run

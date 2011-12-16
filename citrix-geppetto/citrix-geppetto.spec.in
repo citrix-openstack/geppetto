@@ -1,0 +1,360 @@
+name: citrix-geppetto
+Summary: OS-VPX Cloud Deployment Management System
+Version: @PRODUCT_VERSION@
+Release: @BUILD_NUMBER@
+Group: Applications/System
+Vendor: Citrix Systems, Inc.
+License: N/A
+URL: http://deliver.citrix.com/projectolympus
+# these are the source code and media tarballs
+Source0: citrix-geppetto-%{version}-%{release}.tar.gz
+Source4: citrix-geppetto.logrotate
+Source21: citrix-geppetto-client-%{version}-%{release}.tar.gz
+Source31: citrix-geppetto-media-%{version}-%{release}.tar.gz
+# this is in citrix-geppetto
+Source1: citrix-geppetto.conf
+Source2: citrix-geppetto.init
+Source3: citrix-geppetto.sh
+Source30: geppetto
+Source40: citrix-geppetto-celery.sh
+Source41: citrix-geppetto-celeryd.init
+Source42: citrix-geppetto-celerycam.init
+# this is in puppet
+Source5: service.pp
+Source6: config.pp
+Source7: deps.pp
+Source8: site.pp
+Source9: classifier
+Source10: puppet.conf
+Source11: fileserver.conf
+Source12: auth.conf
+Source13: geppetto_hypervisor_details.rb
+Source14: facter
+Source15: agent
+Source16: hapi_password.rb
+# this is in scripts
+Source32: test_generator.sh
+Source33: rndckeygen.sh
+Source34: dhclient-enter-hooks
+Source35: dhclient-exit-hooks
+Source36: 70-gen-dhcp-hostname
+# this is for console
+Source50: citrix-console.init
+Source51: citrix-console.sh
+# this patch is in citrix-geppetto
+Patch0: os-vpx-data-path.patch
+BuildRoot: %{_tmppath}/%{name}
+BuildArch: noarch
+BuildRequires: puppet, puppet-server, bind
+
+Requires(post): chkconfig
+Requires(preun): chkconfig
+
+%global _datarootdir /usr/share
+%global _localbindir /usr/local/bin
+%global _localsharedir /usr/local/share
+%global _sharedstatedir /var/lib
+%global python_sitelib /usr/lib/python2.6/site-packages
+
+
+%description
+
+
+%package base
+Summary: Base Geppetto package
+Group:   Applications/System
+Requires: shadow-utils, bind, puppet
+
+%description base
+
+
+%package client
+Summary: Client Scripts for OpenStack VPX
+Group:   Applications/System
+Requires: %{name}-base = %{version}-%{release}, python26, bash
+
+%description client
+
+
+%package console
+Summary: Text Console for OpenStack VPX
+Group:   Applications/System
+Requires: %{name}-base = %{version}-%{release}, dhcp, puppet-server, daemonize
+
+%description console
+
+
+%package server
+Summary: Deployment Management Tools for OpenStack VPX
+Group:   Applications/System
+Requires: %{name}-console = %{version}-%{release}
+
+%description server
+
+
+%prep
+
+%setup -q -n citrix-geppetto-%{version}
+%patch0 -p1
+sed -i -e "s/@VERSION@/%{version}/g" geppetto/settings.py
+sed -i -e "s/@VERSION@/%{version}/g" setup.py
+
+
+%build
+
+%{__python} setup.py build
+
+
+%install
+rm -rf %{buildroot}
+# geppetto/console/server
+%{__python} setup.py install -O1 --root %{buildroot}
+# Remove tests
+rm -rf %{buildroot}%{python_sitelib}/geppetto/tests
+
+# geppetto-client
+mkdir -p %{buildroot}
+tar -zxvf %{SOURCE21} -C %{buildroot}
+cd %{buildroot}
+find .%{_localbindir}/geppetto -type f | sed -e 's/^\./%attr(0754, geppetto, root) /' \
+                     -e '\,/etc/,s,^,%config,' \
+  >$RPM_BUILD_DIR/%{name}-%{version}/file.list.%{name}
+
+find .%{_localbindir}/geppetto -type l | sed -e 's/^\./\%attr(0754, geppetto, root) /' \
+  >>$RPM_BUILD_DIR/%{name}-%{version}/file.list.%{name}
+
+find .%{_localsharedir}/geppetto -type f | sed -e 's/^\./%attr(0754, geppetto, root) /' \
+                     -e '\,/etc/,s,^,%config,' \
+  >>$RPM_BUILD_DIR/%{name}-%{version}/file.list.%{name}
+
+find .%{_localsharedir}/geppetto -type l | sed -e 's/^\./\%attr(0754, geppetto, root) /' \
+  >>$RPM_BUILD_DIR/%{name}-%{version}/file.list.%{name}
+
+# Setup directories
+install -d -m 755 %{buildroot}%{_datarootdir}/geppetto
+install -d -m 755 %{buildroot}%{_sysconfdir}/geppetto
+install -d -m 755 %{buildroot}%{_sysconfdir}/firstboot.d
+install -d -m 755 %{buildroot}%{_sharedstatedir}/geppetto
+install -d -m 755 %{buildroot}%{_localstatedir}/log/geppetto
+install -d -m 755 %{buildroot}%{_sysconfdir}/puppet
+install -d -m 755 %{buildroot}%{_sysconfdir}/puppet/manifests
+install -d -m 755 %{buildroot}%{_sysconfdir}/puppet/manifests/classes
+install -d -m 755 %{buildroot}%{_sharedstatedir}/puppet/facts
+install -d -m 755 %{buildroot}%{_localbindir}/puppet
+install -d -m 755 %{buildroot}%{_localbindir}/geppetto
+
+# Install init files
+install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/citrix-geppetto
+install -p -D -m 755 %{SOURCE3} %{buildroot}%{_initrddir}/citrix-geppetto.sh
+install -p -D -m 755 %{SOURCE40} %{buildroot}%{_initrddir}/citrix-geppetto-celery.sh
+install -p -D -m 755 %{SOURCE41} %{buildroot}%{_initrddir}/citrix-geppetto-celeryd
+install -p -D -m 755 %{SOURCE42} %{buildroot}%{_initrddir}/citrix-geppetto-celerycam
+install -p -D -m 755 %{SOURCE50} %{buildroot}%{_initrddir}/citrix-console
+install -p -D -m 755 %{SOURCE51} %{buildroot}%{_initrddir}/citrix-console.sh
+
+# Install puppet files
+install -p -D -m 755 %{SOURCE5} %{buildroot}%{_sysconfdir}/puppet/manifests/classes/service.pp
+install -p -D -m 755 %{SOURCE6} %{buildroot}%{_sysconfdir}/puppet/manifests/classes/config.pp
+install -p -D -m 755 %{SOURCE7} %{buildroot}%{_sysconfdir}/puppet/manifests/classes/deps.pp
+install -p -D -m 755 %{SOURCE8} %{buildroot}%{_sysconfdir}/puppet/manifests/site.pp
+install -p -D -m 755 %{SOURCE13} %{buildroot}%{_sharedstatedir}/puppet/facts/geppetto_hypervisor_details.rb
+install -p -D -m 755 %{SOURCE16} %{buildroot}%{_sharedstatedir}/puppet/facts/hapi_password.rb
+install -p -D -m 755 %{SOURCE9} %{buildroot}%{_localbindir}/puppet/classifier
+install -p -D -m 755 %{SOURCE14} %{buildroot}%{_localbindir}/puppet/facter
+install -p -D -m 755 %{SOURCE15} %{buildroot}%{_localbindir}/puppet/agent
+# hack to avoid transaction check error
+install -p -D -m 644 %{SOURCE10} %{buildroot}%{_datarootdir}/geppetto/puppet.conf
+install -p -D -m 644 %{SOURCE11} %{buildroot}%{_datarootdir}/geppetto/fileserver.conf
+install -p -D -m 644 %{SOURCE12} %{buildroot}%{_datarootdir}/geppetto/auth.conf
+
+# Install script files for setup of basic services
+install -p -D -m 755 %{SOURCE32} %{buildroot}%{_localbindir}/geppetto/test_generator.sh
+install -p -D -m 755 %{SOURCE33} %{buildroot}%{_localbindir}/geppetto/rndckeygen.sh
+install -p -D -m 755 %{SOURCE34} %{buildroot}%{_sysconfdir}/dhclient-enter-hooks
+install -p -D -m 755 %{SOURCE35} %{buildroot}%{_sysconfdir}/dhclient-exit-hooks
+install -p -D -m 755 %{SOURCE36} %{buildroot}%{_sysconfdir}/firstboot.d/70-gen-dhcp-hostname
+
+# Install logrotate
+install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/logrotate.d/citrix-geppetto
+
+# Install config file
+install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/geppetto/citrix-geppetto.conf
+
+# Install bin file
+install -p -D -m 755 %{SOURCE30} %{buildroot}%{_bindir}/geppetto
+
+# Install pid directory
+install -d -m 755 %{buildroot}%{_localstatedir}/run/geppetto
+
+# Install media files
+tar -zxvf %{SOURCE31} -C %{buildroot}%{_datarootdir}/geppetto
+
+# Install symlinks to template files
+# DHCP
+ln -s %{python_sitelib}/geppetto/core/templates/dhcpd_conf.template %{buildroot}%{_datarootdir}/geppetto
+ln -s %{python_sitelib}/geppetto/core/templates/dhcpd_args.template %{buildroot}%{_datarootdir}/geppetto
+# BIND
+ln -s %{python_sitelib}/geppetto/core/templates/forward_zone.template %{buildroot}%{_datarootdir}/geppetto
+ln -s %{python_sitelib}/geppetto/core/templates/named_conf.template %{buildroot}%{_datarootdir}/geppetto
+ln -s %{python_sitelib}/geppetto/core/templates/reverse_zone.template %{buildroot}%{_datarootdir}/geppetto
+#NTP
+ln -s %{python_sitelib}/geppetto/core/templates/ntp_conf.template %{buildroot}%{_datarootdir}/geppetto
+# IFCFG
+ln -s %{python_sitelib}/geppetto/core/templates/interface_dhcp.template %{buildroot}%{_datarootdir}/geppetto
+ln -s %{python_sitelib}/geppetto/core/templates/interface.template %{buildroot}%{_datarootdir}/geppetto
+# RESOLV
+ln -s %{python_sitelib}/geppetto/core/templates/resolv_conf.template %{buildroot}%{_datarootdir}/geppetto
+# NETWORK
+ln -s %{python_sitelib}/geppetto/core/templates/network.template %{buildroot}%{_datarootdir}/geppetto
+ln -s %{python_sitelib}/geppetto/core/templates/hosts.template %{buildroot}%{_datarootdir}/geppetto
+# DNSMASQ
+ln -s %{python_sitelib}/geppetto/core/templates/dnsmasq.d_os-vpx-mgmt.template %{buildroot}%{_datarootdir}/geppetto
+
+
+%clean
+rm -rf %{buildroot}
+
+
+%pre base
+getent group geppetto >/dev/null || groupadd -r geppetto
+getent passwd geppetto >/dev/null || \
+useradd -r -g geppetto -G named,root,puppet -d %{_sharedstatedir}/geppetto -s /sbin/nologin \
+-c "Citrix Geppetto Daemons" geppetto
+exit 0
+
+
+%posttrans console
+/sbin/chkconfig --add citrix-console
+
+
+%preun console
+if [ $1 = 0 ] ; then
+    /sbin/service citrix-console stop >/dev/null 2>&1
+    /sbin/chkconfig --del citrix-console
+fi
+
+
+%postun console
+if [ "$1" -ge "1" ] ; then
+    /sbin/service citrix-console condrestart >/dev/null 2>&1 || :
+fi
+
+
+%posttrans server
+# Install services
+/sbin/chkconfig --add citrix-geppetto
+/sbin/chkconfig --add citrix-geppetto-celeryd
+/sbin/chkconfig --add citrix-geppetto-celerycam
+# Tweaks permissions to access named data directory from geppetto
+chmod g+w,o+w /var/named -R
+chmod g+s,o+s /var/named -R 
+
+# Move dhcpd files so that geppetto can edit
+cp -f /etc/dhcpd.conf %{_datarootdir}/geppetto/dhcpd.conf.origin
+cp -f /etc/dhcpd.conf %{_datarootdir}/geppetto/dhcpd.conf
+rm -rf /etc/dhcpd.conf
+ln -s %{_datarootdir}/geppetto/dhcpd.conf /etc/dhcpd.conf
+chown geppetto:geppetto %{_datarootdir}/geppetto/dhcpd.conf
+cp -f /etc/sysconfig/dhcpd %{_datarootdir}/geppetto/dhcpd.origin
+cp -f /etc/sysconfig/dhcpd %{_datarootdir}/geppetto/dhcpd
+rm -rf /etc/sysconfig/dhcpd
+ln -s %{_datarootdir}/geppetto/dhcpd /etc/sysconfig/dhcpd
+chown geppetto:geppetto %{_datarootdir}/geppetto/dhcpd
+
+# Move dns/named files so that geppetto can edit
+touch %{_datarootdir}/geppetto/named.conf
+chown geppetto:geppetto %{_datarootdir}/geppetto/named.conf
+cp -f /etc/rndc.key %{_datarootdir}/geppetto/rndc.key.origin
+cp -f /etc/rndc.key %{_datarootdir}/geppetto/rndc.key
+touch %{_datarootdir}/geppetto/resolv.conf
+rm -rf /etc/rndc.key
+chown geppetto:geppetto %{_datarootdir}/geppetto/rndc.key
+chown geppetto:geppetto %{_datarootdir}/geppetto/resolv.conf
+ln -s %{_datarootdir}/geppetto/named.conf /etc/named.conf 
+ln -s %{_datarootdir}/geppetto/rndc.key /etc/rndc.key
+ln -s %{_datarootdir}/geppetto/resolv.conf /etc/resolv.conf
+# Copy Puppet files over (avoid transaction check error)
+cp -f %{_datarootdir}/geppetto/puppet.conf /etc/puppet/puppet.conf
+cp -f %{_datarootdir}/geppetto/fileserver.conf /etc/puppet/fileserver.conf
+cp -f %{_datarootdir}/geppetto/auth.conf /etc/puppet/auth.conf
+
+
+%preun server
+if [ $1 = 0 ] ; then
+    /sbin/service citrix-geppetto stop >/dev/null 2>&1
+    /sbin/service citrix-geppetto-celeryd stop >/dev/null 2>&1
+    /sbin/service citrix-geppetto-celerycam stop >/dev/null 2>&1
+    /sbin/chkconfig --del citrix-geppetto
+    /sbin/chkconfig --del citrix-geppetto-celeryd
+    /sbin/chkconfig --del citrix-geppetto-celerycam
+fi
+
+# Re-instate config files and permissions
+rm -rf /etc/dhcpd.conf
+rm -rf /etc/sysconfig/dhcpd
+rm -rf /etc/named.conf
+rm -rf /etc/rndc.key
+rm -rf /etc/resolv.conf
+cp -f %{_datarootdir}/geppetto/dhcpd.conf.origin /etc/dhcpd.conf
+cp -f %{_datarootdir}/geppetto/dhcpd.origin /etc/sysconfig/dhcpd
+cp -f %{_datarootdir}/geppetto/rndc.key.origin /etc/rndc.key
+chmod g-w,o-w /var/named -R
+chmod g-s,o-w /var/named -R
+
+
+%files base
+
+
+%files server
+# Test scripts for DHCP/DNS
+%attr(0755, root, root) %{_localbindir}/geppetto/rndckeygen.sh
+%attr(0755, root, root) %{_localbindir}/geppetto/test_generator.sh
+%defattr(-,root,root,-)
+%config(noreplace) %{_bindir}/geppetto
+%config(noreplace) %{_sysconfdir}/logrotate.d/citrix-geppetto
+%config(noreplace) %{_sysconfdir}/geppetto/citrix-geppetto.conf
+%config(noreplace) %{_initrddir}/citrix-geppetto
+%config(noreplace) %{_initrddir}/citrix-geppetto.sh
+%config(noreplace) %{_initrddir}/citrix-geppetto-celeryd
+%config(noreplace) %{_initrddir}/citrix-geppetto-celery.sh
+%config(noreplace) %{_initrddir}/citrix-geppetto-celerycam
+# Puppet Recipes
+%config(noreplace) %{_sysconfdir}/puppet/manifests/classes/service.pp
+%config(noreplace) %{_sysconfdir}/puppet/manifests/classes/config.pp
+%config(noreplace) %{_sysconfdir}/puppet/manifests/classes/deps.pp
+%config(noreplace) %{_sysconfdir}/puppet/manifests/site.pp
+# Puppet Facts
+%config(noreplace) %{_sharedstatedir}/puppet/facts/geppetto_hypervisor_details.rb
+%config(noreplace) %{_sharedstatedir}/puppet/facts/hapi_password.rb
+
+%dir %{_sysconfdir}/geppetto
+%dir %attr(0755, geppetto, root) %{_localstatedir}/run/geppetto
+%dir %attr(0755, geppetto, root) %{_datarootdir}/geppetto
+
+%{python_sitelib}/geppetto/*.py*
+%{python_sitelib}/geppetto/core
+%{python_sitelib}/geppetto/geppettolib
+%{python_sitelib}/geppetto/hapi
+%{python_sitelib}/geppetto/ui
+%{python_sitelib}/geppetto/tasks
+%{python_sitelib}/geppetto-%{version}-*.egg-info
+
+%{_localbindir}/puppet*
+
+%defattr(-,geppetto,geppetto,-)
+%{_datarootdir}/geppetto/*
+%{_sharedstatedir}/geppetto
+
+
+%files console
+%dir %attr(0755, geppetto, root) %{_localstatedir}/log/geppetto
+%defattr(-,root,root,-)
+%config(noreplace) %{_initrddir}/citrix-console
+%config(noreplace) %{_initrddir}/citrix-console.sh
+%config(noreplace) %{_sysconfdir}/dhclient-enter-hooks
+%config(noreplace) %{_sysconfdir}/dhclient-exit-hooks
+%config(noreplace) %{_sysconfdir}/firstboot.d/70-gen-dhcp-hostname
+%{python_sitelib}/geppetto/firstboot
+
+
+%files client -f file.list.%{name}

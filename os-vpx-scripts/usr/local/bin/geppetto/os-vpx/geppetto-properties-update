@@ -1,0 +1,128 @@
+#!/usr/bin/env python2.6
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright (c) 2011 Citrix Systems, Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+import sys
+import socket
+import logging
+
+from geppetto.hapi import config_util
+from geppetto.hapi import interface
+from geppetto.hapi import exception
+from geppetto import hapi
+
+logger = logging.getLogger('geppetto-properties-update')
+
+default_prefix = "Citrix OpenStack-VPX"
+hostname_format = "%s (%s)"
+tags_to_labels = {
+                  "mysqld": "Database",
+                  "rabbitmq-server": "Message Queue",
+                  "openstack-nova-compute": "OpenStack Compute Worker",
+                  "openstack-nova-api": "OpenStack Compute API",
+                  "openstack-dashboard": "OpenStack Dashboard",
+                  "openstack-nova-scheduler": "OpenStack Compute Scheduler",
+                  "openstack-nova-volume": "OpenStack Volume Worker",
+                  "openstack-nova-network": "OpenStack Network Worker",
+                  "openstack-glance-api": "OpenStack Image API",
+                  "openstack-glance-registry": "OpenStack Image Registry",
+                  "openstack-swift-proxy": "OpenStack Object Storage API",
+                  "openstack-swift-object": "OpenStack Object Storage Worker",
+                  "openstack-keystone-admin": "OpenStack Identity Admin",
+                  "openstack-keystone-auth": "OpenStack Identity Auth",
+                 }
+
+
+def generate_short_vpx_label(vpx_label_prefix):
+    host_name = socket.gethostname()
+
+    if vpx_label_prefix != "":
+        return hostname_format % (vpx_label_prefix, host_name)
+    else:
+        return hostname_format % (default_prefix, host_name)
+
+
+def generate_vpx_label(vpx_tags, vpx_label_prefix):
+    # check for override, or need to use the default
+    if (vpx_label_prefix != "") or (len(vpx_tags) == 1):
+        return generate_short_vpx_label(vpx_label_prefix)
+
+    # OpenStack Roles
+    labels = []
+    for tag in vpx_tags:
+        try:
+            label = tags_to_labels[tag]
+        except KeyError:
+            pass
+        else:
+            labels.append(label)
+
+    # Default Label
+    if len(labels) >= 1:
+        labels.sort()
+        prefix = ', '.join(labels)
+    else:
+        prefix = default_prefix
+
+    host_name = socket.gethostname()
+    return hostname_format % (prefix, host_name)
+
+if __name__ == "__main__":
+    try:
+        logger.info('Running geppetto-properties-update...')
+
+        geppetto_config = config_util.parse_config('/etc/openstack/geppetto')
+        logger.info('Geppetto config is: %s', geppetto_config)
+        vpx_description = config_util.config_get(geppetto_config,
+                                                 'VPX_DESCRIPTION')
+        vpx_tags = eval(config_util.config_get(geppetto_config,
+                                               'VPX_TAGS', '[]'))
+        vpx_tags.append("openstack")
+        vpx_label_prefix = config_util.config_get(geppetto_config,
+                                                  'VPX_LABEL_PREFIX')
+        vpx_label = generate_vpx_label(vpx_tags, vpx_label_prefix)
+
+        logger.info('Setting the following properties: %s %s %s',
+                    vpx_label, vpx_description, vpx_tags)
+
+        session = interface.Session.createSession()
+        session.login()
+        try:
+            session.VM.set_properties(name=vpx_label,
+                                      name_description=vpx_description,
+                                      tags=vpx_tags)
+        except Exception, e:
+            # this might be because the the name is too long
+            # so try a shorter name
+            logger.exception(e)
+            vpx_label = generate_short_vpx_label(vpx_label_prefix)
+            session.VM.set_properties(name=vpx_label,
+                                      name_description=vpx_description,
+                                      tags=vpx_tags)
+
+        logger.info('Successfully set the following properties: %s %s %s',
+                    vpx_label, vpx_description, vpx_tags)
+
+        # Session should log out automatically at this point
+    except exception.HAPIFailure, e:
+        logger.exception('Failure: exit_code(%s), message(%s)' \
+                                                    % (e.code, e.message))
+        if e.inner:
+            logger.exception('Inner failure: %s' % e.inner)
+        sys.exit(1)
+    except Exception, e:
+        logger.exception(e)
+        sys.exit(2)

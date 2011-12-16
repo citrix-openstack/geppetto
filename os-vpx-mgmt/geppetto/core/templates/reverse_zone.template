@@ -1,0 +1,9 @@
+$TTL 86400
+%(reverse_zone_prefix)s.in-addr.arpa.	IN	SOA	%(hostname)s.%(dns_suffix)s. admin.%(dns_suffix)s. (
+			2007032003	; serial
+			10800		; refresh (3 hours)
+			86400		; retry (1 day)
+			604800		; expire (1 week)
+			3600)		; minimum (1 hour)
+; Domain Server
+%(reverse_zone_prefix)s.in-addr.arpa.	IN	NS	%(hostname)s.%(dns_suffix)s.

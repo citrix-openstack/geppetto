@@ -1,0 +1,4 @@
+option puppet-master-name code 194 = text;
+option os-vpx-reverse-dns-prefix code 195 = text;
+send host-name "dummy-hostname";
+request;

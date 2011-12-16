@@ -1,0 +1,22 @@
+--- os-vpx-mgmt/geppetto/settings.py	2011-12-12 17:46:41.337752382 +0000
++++ os-vpx-mgmt/geppetto/settings.py	2011-12-12 18:19:43.493763541 +0000
+@@ -5,9 +5,7 @@
+ DEBUG = False
+ TEMPLATE_DEBUG = DEBUG
+ ADD_STATIC_CONTENT_URLS = True
+-GEPPETTO_MEDIA_DIR = \
+-    os.path.normpath(os.path.join(os.path.dirname(__file__),
+-                                  '../geppetto-media')).replace('\\', '/')
++GEPPETTO_MEDIA_DIR = '/usr/share/geppetto/citrix-geppetto-media-@VERSION@/'
+ 
+ ADMINS = (
+     # ('Your Name', 'your_email@domain.com'),
+@@ -18,7 +16,7 @@
+ DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+-        'NAME': 'sqlite3.db~',
++        'NAME': '/var/lib/geppetto/sqlite3.db~',
+         'USER': '',
+         'PASSWORD': '',
+         'HOST': '',

@@ -1,0 +1,12 @@
+<div class="welcome-item">  
+  <div class="welcome-item-title">
+	<div class="welcome-item-text"><img src="images/icon/treeplus.gif" id="{{ id }}-img" class="welcome-toggle-image" onclick="ShowHide('{{ id }}-img', '{{ id }}');">{{ title }}</div>
+  	<div class="welcome-item-status welcome-item-status-{{ status }}">&nbsp;
+  	{% if status == "not_started" %}Not started <img src="images/icon/install-cl-not-started.gif">{% endif %}
+  	{% if status == "pending" %}Pending <img src="images/icon/install-cl-pending.gif">{% endif %}
+  	{% if status == "success" %}Completed <img src="images/icon/install-cl-completed.gif">{% endif %}
+  	{% if status == "failure" %}Error <img src="images/icon/install-cl-error.gif">{% endif %}
+  	</div>
+  </div>
+  {{ content }}
+</div>

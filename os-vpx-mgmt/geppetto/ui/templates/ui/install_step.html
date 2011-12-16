@@ -1,0 +1,106 @@
+{% extends "ui/postlogin_base.html" %}
+
+{% block title %}Setup{% endblock %}
+
+{% block content_login %}
+
+<script type="text/javascript" src="javascript/xregexp-min.js"></script>
+<script type="text/javascript" src="javascript/xregexp-unicode-base.js"></script>
+<script type="text/javascript" src="javascript/passwordstrength.js"></script>
+
+
+
+<form method="post" id="SubmitForm" {% if require_multipart %}enctype="multipart/form-data"{% endif %}>
+<input type="hidden" name="choice" value="asdf" />
+
+<div class="login_header">
+<h1>
+    {{ header }}
+</h1>
+</div>
+
+<div class="login_text">
+<p>
+    {{ text }}
+</p>
+
+{% if form.errors %}
+<p style="color: red;">
+    Please correct the error{{ form.errors|pluralize }} below.
+</p>
+{% endif %}
+
+<table class="editorview" id="id_table">
+  {{ form.as_table }}
+</table>
+</div>
+    
+<div class="login_footer">
+    
+    
+    <a class="button button_w" title="Next" href="javascript:submit_form('SubmitForm')">
+        <div>
+            <div style="float:left;"><img src="images/icon/arrow_right.png" /></div>
+            <div style="float:left;margin-top:1px;">&nbsp;Next</div>
+            <div style="clear:both;"></div>
+        </div>
+    </a>
+
+    <div style="clear:both;"></div>    
+</div>
+
+
+<script type="text/javascript">
+    function eventSubmit(e){
+        prepareToSubmit('None');
+    }
+    $("#password1").focus();
+    $("#SubmitForm").bind('submit', eventSubmit);
+    
+    $(function(){
+        // TODO - this is only used for the connect_compute_to_storage page        
+        if($('.change-label').length > 0) {
+            var changeLabelTargets = $(".change-label");
+	        $('input[type=radio]').click(function() {
+	            var radioButtonId = $(this).attr("id");
+	            changeLabelTargets.each(function() {
+	                var newLabelText = $(this).attr(radioButtonId);
+	                var newTextboxValue = $(this).attr(radioButtonId + "_data");
+	                var textBoxId = $(this).attr("id");
+	                $("label[for="+textBoxId+"]").text(newLabelText)
+	                $("#"+textBoxId).val(newTextboxValue);             
+	            });
+	        });
+            var maxSize = 0;
+            $("label").each(function(){
+                var width = $(this).width();
+                if(width > maxSize) {
+                    maxSize = width;
+                }
+            }).parent().width(maxSize);
+            $('input[type=radio]')[0].click(); 
+        }               
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($("#id_hypervisor").length > 0) {
+	    $('#id_table tr:last').hide();
+	}
+	$("#id_hypervisor").change(function() {
+	    if ($("#id_hypervisor").val()== 'esx') {
+	        $('#id_table tr:last').show();
+            }
+            else {
+                $('#id_table tr:last').hide();
+            }
+        });
+    });
+</script>
+
+
+</form>
+
+{% endblock %}

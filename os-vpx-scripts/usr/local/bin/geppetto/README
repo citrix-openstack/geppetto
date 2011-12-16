@@ -1,0 +1,5 @@
+# Files contained in these directories are required by Geppetto to configure
+# OpenStack services during the cloud setup. Please, do not edit!
+#
+# init files typically call into os-vpx files to customize the properties
+# of the virtual machine Geppetto runs in.

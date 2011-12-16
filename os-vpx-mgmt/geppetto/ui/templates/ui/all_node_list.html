@@ -1,0 +1,14 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}All Nodes{% endblock %}
+
+{% block nav_all_node_list %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+<h1>
+<img src="images/nav/pool.gif">
+All Nodes
+</h1>
+
+There are the following types of nodes:(1)Fully managed (normal VPX), (2) Partially managed (fixed role, manage config with puppet), (3) External (for MySQL just record the connection string?) 
+{% endblock %}

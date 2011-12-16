@@ -1,0 +1,117 @@
+#!/usr/bin/env python2.6
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright 2010 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# Copyright 2010-2011 OpenStack LLC.
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+"""
+Try to fix up issues around moving keystone
+and the location stored in the glance db
+"""
+
+import re
+import sys
+import string
+import logging
+import os
+logger = logging.getLogger('glance-location-update')
+
+from sqlalchemy import asc, create_engine, desc
+from sqlalchemy.orm import sessionmaker
+
+from glance.registry.db import models
+
+REPLACE_LOCATION_REGEX = re.compile('swift\+http://.*:.*:.*/v1.0', re.IGNORECASE)
+LOCATION_URL_BASE = None
+
+_ENGINE = None
+_MAKER = None
+BASE = models.BASE
+
+
+def get_session(autocommit=True, expire_on_commit=False):
+    """Helper method to grab session"""
+    global _MAKER, _ENGINE
+    if not _MAKER:
+        assert _ENGINE
+        _MAKER = sessionmaker(bind=_ENGINE,
+                              autocommit=autocommit,
+                              expire_on_commit=expire_on_commit)
+    return _MAKER()
+
+
+def generate_new_location(old_url):
+    return REPLACE_LOCATION_REGEX.sub(LOCATION_URL_BASE, old_url)
+
+
+def update_image_locations():
+    """
+    Used internally by image_create and image_update
+
+    :param context: Request context
+    :param values: A dict of attributes to set
+    :param image_id: If None, create the image, otherwise, find and update it
+    """
+    session = get_session()
+    with session.begin():
+        session = get_session()
+        images = session.query(models.Image).all()
+        for image_ref in images:
+            old_location = image_ref.location
+            if image_ref.status == 'active' and \
+                string.find(old_location, LOCATION_URL_BASE) == -1:
+                print "updating location on image: %s" % image_ref.id
+                values = {"location": generate_new_location(old_location)}
+                image_ref.update(values)
+                image_ref.save(session=session)
+
+if __name__ == "__main__":
+    try:
+        logger.info('Running keystone-endpoint-update...')
+
+        from geppetto.hapi import config_util
+
+
+        GLANCE_REGISTRY_FILE = "/etc/glance/glance-registry.conf"
+        glance_config = config_util.parse_config(GLANCE_REGISTRY_FILE)
+        sql_connection = config_util.config_get(glance_config,
+                                                 'sql_connection', '')
+        _ENGINE = create_engine(sql_connection)
+
+
+        KEYSTONE_CONFIG_FILE = "/etc/openstack/keystone"
+        keystone_config = config_util.parse_config(KEYSTONE_CONFIG_FILE)
+        keystone_host = config_util.config_get(keystone_config,
+                                                 'KEYSTONE_HOST', '')
+        keystone_name = config_util.config_get(keystone_config,
+                                            'KEYSTONE_SUPERUSER_NAME', '')
+        keystone_password = config_util.config_get(keystone_config,
+                                            'KEYSTONE_SUPERUSER_PASS', '')
+
+        LOCATION_URL_BASE = "swift+http://%s:%s@%s:5000/v1.0" \
+                            % (keystone_name, keystone_password, keystone_host)
+
+        update_image_locations()
+
+        TOUCH_FILE = "/var/lib/geppetto/glance-location-update-run"
+        if not os.path.exists(TOUCH_FILE):
+            open(TOUCH_FILE, 'a').close()
+
+    except Exception, e:
+        logger.exception(e)
+        print e
+        sys.exit(1)

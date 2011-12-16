@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eux
+
+if [ "$GLANCE_STORE" = "file" ]
+then
+    exec /usr/local/bin/geppetto/init/glance-api-init
+else
+    echo "Cannot attach a Glance disk when GLANCE_STORE = $GLANCE_STORE." >&2
+    exit 1
+fi

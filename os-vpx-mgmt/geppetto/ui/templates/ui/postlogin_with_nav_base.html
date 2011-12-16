@@ -1,0 +1,17 @@
+{% extends "ui/postlogin_base.html" %}
+
+{% block body_class %}standard_body{% endblock %}
+
+{% block content %}
+
+<div id="content_nav_holder">
+
+<div id="content">
+{% block content_main %}
+{% endblock %}
+</div>
+
+{% include "ui/nav.html" %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. $GEPPETTO_SHARE_PATH/attach-data-disk.sh
+. /etc/openstack/glance-store
+
+if [ "$GLANCE_STORE" = "file" ]
+then
+    SIZE="${1-$GLANCE_FILE_STORE_SIZE_GB}"
+    DEV='xvdh'
+    MP='/var/lib/glance/images'
+    NAME='OpenStack Glance images (testing purposes only)'
+    KEY='os-vpx-glance-images'
+    FS='ext3'
+    UG='glance:glance'
+
+    attach_data_disk "$DEV" "$MP" "$NAME" "$KEY" "$FS" "$UG" "$SIZE"
+elif [ "$GLANCE_STORE" = "swift" ]
+then
+    echo "GLANCE_STORE set to 'swift'."
+else
+    echo Glance does not support Backend: $GLANCE_STORE.
+    exit 1
+fi
+
+touch $GEPPETTO_LIB_PATH/glance-init-run

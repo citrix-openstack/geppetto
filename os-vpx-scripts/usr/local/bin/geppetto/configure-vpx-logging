@@ -1,0 +1,53 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. /etc/openstack/syslog
+
+SYSLOGD_OPTIONS="-m 0"
+REMOTE_SYSLOGD_OPTIONS="$SYSLOGD_OPTIONS -r514"
+LOCAL_DEST="-/var/log/messages"
+REMOTE_DEST="@$VPX_LOGGING_COLLECTOR"
+THIS_HOST=$(hostname -f)
+
+set_syslog_options() 
+{
+  local opts="$1"
+  sed -e "s,^SYSLOGD_OPTIONS=.*$,SYSLOGD_OPTIONS=\"$opts\"," \
+      -i /etc/sysconfig/rsyslog
+}
+
+set_syslog_config()
+{
+  local locl="$1"
+  local remote="$2"
+  local level="$VPX_LOGGING_LEVEL"
+  awk "
+/authpriv.none/ {
+  if ($locl)
+    print \"*.$level;mail.none;authpriv.none;cron.none\t\t$LOCAL_DEST\";
+  if ($remote)
+    print \"*.$level;mail.none;authpriv.none;cron.none\t\t$REMOTE_DEST\";
+  }
+!/authpriv.none/
+" /etc/rsyslog.conf >/etc/rsyslog.conf.new
+  mv /etc/rsyslog.conf{.new,}
+}
+
+if [ "$VPX_LOGGING_COLLECTOR" == 'localhost' ]
+then
+  echo "Set syslog to log locally."
+  set_syslog_options "$SYSLOGD_OPTIONS"
+  set_syslog_config 1 0
+elif [ "$VPX_LOGGING_COLLECTOR" != "$THIS_HOST" ]
+then
+  echo "Set syslog to log remotely to $VPX_LOGGING_COLLECTOR"
+  set_syslog_options "$SYSLOGD_OPTIONS"
+  set_syslog_config 1 1
+elif [ "$VPX_LOGGING_COLLECTOR" == "$THIS_HOST" ]
+then
+  echo "Set this host to be the syslog server."
+  set_syslog_options "$REMOTE_SYSLOGD_OPTIONS"
+  set_syslog_config 1 0
+fi

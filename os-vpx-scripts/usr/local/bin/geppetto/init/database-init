@@ -1,0 +1,125 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. /etc/openstack/mysql
+. /etc/openstack/networking
+
+nova_migrate_repo="/usr/lib/python2.6/site-packages/nova/db/sqlalchemy/migrate_repo/versions"
+
+passwd="${1-$MYSQL_PASS}"
+
+log="logger -s -t $(basename $0) --"
+
+call_mysqladmin()
+{
+  mysqladmin -p"$passwd" "$@"
+}
+
+call_mysql()
+{
+  mysql -p"$passwd" -e "$*"
+}
+
+call_mysql_db()
+{
+  db="$1"
+  shift
+  mysql -p"$passwd" "$db" -e "$*"
+}
+
+# If database population fails, we're going to delete the whole thing, so
+# that we can retry later.  We don't want a half-populated database lying
+# around.
+cleanup_required=
+cleanup()
+{
+  if [ "$cleanup_required" ]
+  then
+    $log "Cleaning up broken database $cleanup_required..."
+    call_mysql drop database "$cleanup_required"
+    $log "Cleaned up broken database $cleanup_required."
+  fi
+}
+trap cleanup EXIT
+
+create_db()
+{
+  if ! call_mysql show databases | grep -q "$1"
+  then
+    call_mysqladmin create "$1"
+
+    case "$1" in
+      "nova")
+        $log "Initializing nova database..."
+        cleanup_required="nova"
+
+        /usr/local/bin/nova-manage db sync
+
+        $log "Checking nova database..."
+
+        # Belt-and-braces, since we've had trouble in this area before.
+        # Check that the database schema is now the version that we expect.
+        expected_version=$(ls "$nova_migrate_repo" | grep -v __init__.py |
+                           cut -d_ -f 1 | uniq | tail -1 | sed 's,^0,,')
+
+        db_version=$(/usr/local/bin/nova-manage db version)
+        if [[ "$db_version" = "$expected_version" ]]
+        then
+          $log "Database schema as expected: $db_version."
+        else
+          $log "Database schema not as expected."
+          $log "$db_version != $expected_version."
+          exit 1
+        fi
+
+        cleanup_required=
+        $log "Initialized nova database."
+        ;;
+      *)
+        ;;
+    esac
+  fi
+}
+
+# Configure or reconfigure IP
+if service mysqld status >/dev/null
+then
+  if grep -q "^bind-address=127.0.0.1" /etc/my.cnf
+  then
+    ip=$(get_ip_address "$PRIVATE_NIC")
+    sed -e "s,^bind-address=.*$,bind-address=$ip," -i /etc/my.cnf
+    service mysqld restart
+  fi
+else
+  ip=$(get_ip_address "$PRIVATE_NIC")
+  sed -e "s,^bind-address=.*$,bind-address=$ip," -i /etc/my.cnf
+  service mysqld start
+fi
+
+# Set password
+mysqladmin password "$passwd" 2>/dev/null || true
+
+# Delete the test database and users
+if call_mysql show databases | grep -q test
+then
+  call_mysql drop database test
+fi
+call_mysql_db mysql delete from db || true
+call_mysql_db mysql delete from user where not \
+                        '(host="localhost" and user="root")' || true
+cat /dev/null >~/.mysql_history
+rm -f ~/.mysql_history
+
+# Allow remote connections from nova services
+mysql -p$passwd -e"grant all privileges on *.* to 'root'@'%' \
+                                  identified by '$passwd' with grant option;"
+
+# Setup OpenStack DBs
+for db in ${MYSQL_DBS//,/ }
+do
+  create_db "$db"
+done
+
+touch $GEPPETTO_LIB_PATH/database-init-run

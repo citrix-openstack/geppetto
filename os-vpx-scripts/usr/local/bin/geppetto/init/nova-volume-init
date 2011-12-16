@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+
+volume_disk=xvdd
+
+# Create and attach disk to the VPX
+attach-nova-volume-disk
+
+if [ -e '/etc/openstack/vmware-url' ]
+then
+  volume_disk=`ls -ltr /dev/disk/by-path/ | tail -n1 | cut -d'/' -f3`
+fi
+
+# Create nova-volumes group
+vgcreate nova-volumes /dev/$volume_disk"1"
+
+# Install and start iscsitarget service
+chkconfig iscsi-target on
+service iscsi-target start
+
+# Install and start iscsd service
+chkconfig iscsid on
+service iscsid start
+
+# Signal Puppet that's all done!
+touch $GEPPETTO_LIB_PATH/nova-volume-init-run

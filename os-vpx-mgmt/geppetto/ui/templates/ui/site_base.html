@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Citrix OpenStack VPX - {% block title %}{{ title }}{% endblock %}</title>
+    <!-- Style Sheets Includes and Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/layout.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/tables.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/menu.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/vmlist.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/poollist.css">
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/layout-ie.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/vmlist-ie.css">
+    <![endif]-->
+    <!-- End Styles -->
+
+    <!--SubModal-->
+    <link rel="stylesheet" type="text/css" href="/css/submodal.css">
+    <script type="text/javascript" src="/javascript/submodal-common.js"></script>
+    <script type="text/javascript" src="/javascript/submodal.js"></script>
+    <!--/SubModal-->
+    
+    <script type="text/javascript" src="/javascript/util.js"></script>
+    <script type="text/javascript" src="/javascript/json2.js"></script>
+    <script type="text/javascript" src="/javascript/menu.js"></script>
+    
+    <script type="text/javascript" src="/javascript/jquery-1.3.2.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.sparkline.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.form.js"></script>
+</head>
+{% block body %}
+<body class="{% block body_class %}login_layout{% endblock %}">
+
+{% block header %}
+<div id="header">
+    <div id="header_right">
+    	{% now "jS F Y H:i" %}
+        <a href="http://citrix.com/" target="_blank" id="citrix_logo">
+            <img
+                src="/oem-map/citrix_logo.png"
+                alt="Citrix Systems, Inc."
+            >
+        </a>
+    </div>
+
+    <div id="header_title">
+        <img
+            src="/oem-map/logo.png"
+            alt="XenServer Web Self Service"
+        >
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+</body>
+{% endblock %}
+</html>

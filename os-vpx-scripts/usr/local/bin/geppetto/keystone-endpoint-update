@@ -1,0 +1,141 @@
+#!/usr/bin/env python2.6
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright (c) 2011 Citrix Systems, Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+import httplib2
+import json
+import os
+import sys
+
+import logging
+logger = logging.getLogger('geppetto-properties-update')
+
+# TODO - sharecode with keystone test
+
+URL_V2 = "http://localhost:5001/v2.0/"
+
+def get_token(user, pswd, tenant_id, url=URL_V2, kind='token'):
+    header = httplib2.Http(".cache")
+    url = '%stokens' % url
+
+    if not tenant_id:
+        body = {"auth": {
+                   "passwordCredentials": {"username": user,
+                                        "password": pswd}}}
+    else:
+        body = {"auth": {
+                   "passwordCredentials": {"username": user,
+                                        "password": pswd}},
+                "tenantId": tenant_id}
+
+    resp, content = header.request(url, "POST", body=json.dumps(body),
+        headers={"Content-Type": "application/json"})
+
+    if int(resp['status']) == 200:
+        content = json.loads(content)
+        token = str(content['access']['token']['id'])
+    else:
+        token = None
+    if kind == 'token':
+        return token
+    else:
+        return (resp, content)
+
+def update_endpoint_template(endpoint_template_id, region, service,
+    public_url, admin_url, internal_url, enabled, is_global, auth_token):
+    header = httplib2.Http(".cache")
+
+    url = '%sendpointTemplates/%s' % (URL_V2, endpoint_template_id)
+    body = {"endpointTemplate": {"region": region,
+                       "serviceId": service,
+                       "publicURL": public_url,
+                       "adminURL": admin_url,
+                       "internalURL": internal_url,
+                       "enabled": enabled,
+                       "global": is_global}}
+    resp, content = header.request(url, "PUT", body=json.dumps(body),
+                              headers={"Content-Type": "application/json",
+                                       "X-Auth-Token": auth_token})
+
+    if resp.status in (400, 401, 403, 404, 408, 413, 500, 501):
+        raise Exception("Error while trying to update endpoint: %s" % content)
+
+    print content
+    return (resp, content)
+
+
+if __name__ == "__main__":
+    try:
+        logger.info('Running keystone-endpoint-update...')
+
+        from geppetto.hapi import config_util
+
+        GLANCE_CONFIG_FILE = "/etc/openstack/glance"
+        KEYSTONE_CONFIG_FILE = "/etc/openstack/keystone"
+        SWIFT_CONFIG_FILE = "/etc/openstack/swift"
+        COMPUTE_API_CONFIG_FILE = "/etc/openstack/compute-api"
+
+        glance_config = config_util.parse_config(GLANCE_CONFIG_FILE)
+        glance_hostname = config_util.config_get(glance_config,
+                                                 'GLANCE_HOSTNAME', '')
+        glance_api_port = config_util.config_get(glance_config,
+                                                 'API_BIND_PORT', '')
+
+        keystone_config = config_util.parse_config(KEYSTONE_CONFIG_FILE)
+        keystone_host = config_util.config_get(keystone_config,
+                                                 'KEYSTONE_HOST', '')
+        auth_token = config_util.config_get(keystone_config,
+                                            'KEYSTONE_SUPERUSER_TOKEN', '')
+
+        swift_config = config_util.parse_config(SWIFT_CONFIG_FILE)
+        swift_hostname = config_util.config_get(swift_config,
+                                                 'SWIFT_PROXY_ADDRESS', '')
+
+        compute_api_config = config_util.parse_config(COMPUTE_API_CONFIG_FILE)
+        compute_api_hostname = config_util.config_get(compute_api_config,
+                                                 'COMPUTE_API_HOST', '')
+
+        region = "RegionOne"
+        enabled_flag = "True"
+        global_flag = "True"
+
+        glance_url = "http://" + glance_hostname + ":" + glance_api_port + \
+                                                            "/v1.1/%tenant_id%"
+        update_endpoint_template(1, region, "1",
+                                 glance_url, glance_url, glance_url,
+                                 enabled_flag, global_flag, auth_token)
+
+        keystone_url = "http://" + keystone_host + ":5001/v2.0"
+        update_endpoint_template(2, region, "2",
+                                 keystone_url, keystone_url, keystone_url,
+                                 enabled_flag, global_flag, auth_token)
+
+        compute_v1_url = "http://" + compute_api_hostname \
+                                   + ":8774/v1.1/%tenant_id%"
+        update_endpoint_template(3, region, "3",
+                                 compute_v1_url, compute_v1_url,
+                                 compute_v1_url,
+                                 enabled_flag, global_flag, auth_token)
+
+        swift_url = "https://" + swift_hostname + "/v1/AUTH_%tenant_id%"
+        update_endpoint_template(4, region, "4",
+                                 swift_url, swift_url, swift_url,
+                                 enabled_flag, global_flag, auth_token)
+
+    except Exception, e:
+        logger.exception(e)
+        print e
+        sys.exit(1)

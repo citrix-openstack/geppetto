@@ -1,0 +1,67 @@
+{% extends "ui/prelogin_base.html" %}
+
+{% block content_login %}
+
+<form method="post" id="SubmitForm">
+
+<input type="hidden" name="next" value="{{ next|escape }}" />
+{% csrf_token %}
+
+<div class="login_header">
+<h1>Login</h1>
+</div>
+
+<div class="login_text">
+{% if form.errors %}
+    <p style="color:red;">Sorry, that's not a valid username or password</p>
+  {% endif %}
+<p>
+
+<table class="editorview">
+
+    <tr>
+        <th>
+            <label for="username">User name:</label>
+        <td>
+            <input type="text" name="username" value="" id="username">
+            
+    <tr>
+        <th>
+            <label for="password">Password:</label>
+        <td>
+            <input type="password" name="password" id="password" value="">
+    
+</table>
+
+</div>
+
+
+<div class="login_footer">
+            
+    
+    <a class="button button_w" title="Login" href="javascript:submit_form('SubmitForm', 'Logging in')">
+        <div>
+            <!--<div style="float:left;"><img src="/images/icon/tick.png" /></div>-->
+            <div style="float:left;margin-top:1px;margin-left:20px">Login</div>
+            <div style="clear:both;"></div>
+        </div>
+    </a>
+
+            <div style="clear:both;"></div>
+
+<script type="text/javascript">
+    function eventSubmit(e){
+        prepareToSubmit('Logging in');
+    }
+    document.getElementById("username").focus();
+    $("#SubmitForm").bind('submit', eventSubmit);    
+</script>
+<input type="image" src="/images/1px.png" style="width:1px;height:1px;" alt=""/>
+
+
+</div>
+
+
+</form>
+
+{% endblock %}

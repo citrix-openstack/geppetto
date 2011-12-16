@@ -1,0 +1,126 @@
+<div id="navigation">
+
+  <div class="nav_section">
+    <div>Manage Cloud</div>
+    <ul>
+        <li {% block nav_install_checklist %}id="nav_current"{% endblock %}>
+            <a href="/install_checklist"><img src="/images/nav/install_checklist.gif" alt="">Install Checklist</a>
+        </li>
+    </ul>
+  </div>
+  <div class="nav_section">
+      <div>Basic Admin</div>
+      <ul>
+        <li>
+            <a href="/admin/core/node/"><img src="/images/nav/pool.gif" alt="">List Nodes...</a>
+        </li>
+        <li>
+            <a href="/upgrade_node"><img src="/images/nav/upgrade.gif" alt="">Upgrade Node...</a>
+        </li>
+        <li>
+            <a href="/admin/core/noderoleassignment/"><img src="/images/nav/settings.gif" alt="">Edit Role Assignments...</a>
+        </li>
+        <li>
+           <a href="/admin/core/configclassparameter/"><img src="/images/nav/settings.gif" alt="">Edit Global Settings...</a>
+        </li>
+        <li>
+           <a href="/admin/core/override/"><img src="/images/nav/settings.gif" alt="">Edit Node Overrides...</a>
+        </li>
+        <li>
+           <a href="/admin/core/groupoverride/"><img src="/images/nav/settings.gif" alt="">Edit Group Overrides...</a>
+        </li>
+        <li>
+           <a href="/setup_image_container" {% if not nova_complete %}title="OpenStack Compute must be provisioned first!" onclick="return false"{% endif %}><img src="/images/nav/requests.gif" alt="">Upload Images...</a>
+        </li>
+        <li>
+           <a href="/network_create" {% if not nova_complete %}title="OpenStack Compute must be provisioned first!" onclick="return false"{% endif %}><img src="/images/nav/tools.gif" alt="">Create Networks...</a>
+        </li>
+        <li>
+           <a href="/floating_create" {% if not nova_complete %}title="OpenStack Compute must be provisioned first!" onclick="return false"{% endif %}><img src="/images/nav/settings.gif" alt="">Create Floating IPs...</a>
+        </li>
+
+    </ul>
+  </div>
+  <div class="nav_section">
+    <div>Shortcuts</div>
+    <ul>
+        <li>
+            <a target="_blank" href="{{dashboard_url}}" {% if not dashboard_url %}title="OpenStack Dashboard must be provisioned first!" onclick="return false"{% endif %}><img src="/images/nav/machine.gif" alt="">OpenStack Dashboard...</a>
+        </li>
+        <li>
+            <a target="_blank" href="/lbservice" {% if not lbservice_url %}title="OpenStack LBaaS must be provisioned first!" onclick="return false"{% endif %}><img src="/images/nav/machine.gif" alt="">OpenStack LBService...</a>
+        </li>
+    </ul>
+  </div>
+{% comment %}
+TODO - Restore the full nav...
+  <div class="nav_section">
+    <div>Manage Cloud</div>
+    <ul>
+        <li {% block nav_install_checklist %}{% endblock %}>
+            <a href="install_checklist"><img src="images/nav/install_checklist.gif" alt="">Install Checklist</a>
+        </li> 
+        <li {% block nav_monitor_cloud %}{% endblock %}>
+             <a href="monitor_cloud"><img src="images/nav/tasks.gif" alt="">Monitor Cloud (2)</a>
+        </li>
+        <li {% block nav_global_settings %}{% endblock %}>
+            <a href="global_settings"><img src="images/nav/settings.gif" alt="">Global Settings</a>
+        </li>
+        <li {% block nav_unassigned_workers %}{% endblock %}>
+            <a href="unassigned_workers_list"><img src="images/nav/pool.gif" alt="">Assign Nodes (4)</a>
+        </li>
+        <li>
+            <a href="/admin/core/noderoleassignment/"><img src="images/nav/settings.gif" alt="">Manual Database...</a>
+        </li>
+    </ul>
+  </div>
+    
+  <div class="nav_section">
+    <div>Manage Compute</div>
+    <ul>
+        <li {% block nav_compute_list %}{% endblock %}>
+            <a href="compute_list"><img src="images/nav/pool.gif" alt="">Compute Workers (10)</a>
+        </li>        
+        <li {% block nav_block_storage_list %}{% endblock %}>
+            <a href="block_storage_list"><img src="images/nav/pool.gif" alt="">Block Storage (5)</a>
+        </li>
+        <li {% block nav_image_storage_list %}{% endblock %}>
+            <a href="image_storage_list"><img src="images/nav/pool.gif" alt="">Image Registry (1)</a>
+        </li>
+        <li {% block nav_network_list %}{% endblock %}>
+            <a href="image_network_list"><img src="images/nav/pool.gif" alt="">Network (1)</a>
+        </li>
+        <li {% block nav_management_list %}{% endblock %}>
+            <a href="management_list"><img src="images/nav/pool.gif" alt="">Mangement (4)</a>
+        </li>
+        <li>
+            <a href=""><img src="images/nav/users.gif" alt="">Projects and Users??</a>
+        </li>
+    </ul>
+  </div>
+  
+  <div class="nav_section">
+    <div>Manage Object Storage</div>
+    <ul>
+        <li {% block nav_object_storage_list %}{% endblock %}>
+            <a href="object_storage_list"><img src="images/nav/pool.gif" alt="">Overview</a>
+        </li>
+        <li>
+            <a href="object_storage_list"><img src="images/nav/pool.gif" alt="">Storage Nodes (3)</a>
+        </li>
+        <li>
+            <a href="object_storage_list"><img src="images/nav/pool.gif" alt="">Management Nodes (2)</a>
+        </li>
+        <li>
+            <a href=""><img src="images/nav/users.gif" alt="">Users??</a>
+        </li>
+    </ul>
+  </div>
+{% endcomment %}
+
+  <div class="nav_copyright">
+        &copy;
+        <a href="http://citrix.com/" target="_blank">Citrix Systems, Inc.</a>&nbsp;
+  </div>
+
+</div>

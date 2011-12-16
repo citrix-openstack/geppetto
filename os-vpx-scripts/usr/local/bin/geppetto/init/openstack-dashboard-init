@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. /etc/openstack/dashboard
+. /etc/openstack/keystone
+
+echo "Resetting dashboard state."
+service openstack-dashboard stop
+rm -rf /var/lib/dashboard/dashboard_openstack.sqlite3 >/dev/null
+rm -rf /var/run/dashboard/dashboard.pid
+
+touch "$GEPPETTO_LIB_PATH/openstack-dashboard-init-run"

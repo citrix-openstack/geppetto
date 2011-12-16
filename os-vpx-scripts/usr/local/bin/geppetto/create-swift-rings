@@ -1,0 +1,92 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. /etc/openstack/swift-store
+
+PART_POWER="18"
+REPLICAS="3"
+MIN_PART_HOURS="1"
+
+if [ "$#" -lt $REPLICAS ]
+then
+  echo "Usage: os-vpx-create-swift-rings <addr 1> <addr 2> <addr 3> ..." >&2
+  echo "       e.g. <addr N> is the address of the Nth storage node." >&2
+  echo "            You need at least $REPLICAS IP addresses." >&2
+  exit 1
+fi
+
+addrs="$@"
+
+swift_dir=$(grep "swift_dir" "/etc/swift/proxy-server.conf" | cut -d" " -f3)
+
+cd "$swift_dir"
+
+if [ -e account.builder ] || \
+   [ -e container.builder ] || \
+   [ -e object.builder ]
+then
+  echo "Rings are already present.  Remove them from $swift_dir." >&2
+  exit 1
+fi
+
+build_ring()
+{
+  # Exit codes for swift-ring-builder are:
+  # EXIT_RING_CHANGED = 0
+  # EXIT_RING_UNCHANGED = 1
+  # EXIT_ERROR  = 2
+  set +e
+  swift-ring-builder "$1" create "$PART_POWER" "$REPLICAS" "$MIN_PART_HOURS"
+  retval=$?
+  set -e
+  if [ "$retval" = 2 ]
+  then
+    return 1
+  fi
+}
+
+add_ring()
+{
+  set +e
+  swift-ring-builder "$1" add "z$2-$3:$4/$5" "$6"
+  retval=$?
+  set -e
+  if [ "$retval" = 2 ]
+  then
+    return 1
+  fi
+}
+
+rebalance()
+{
+  set +e
+  swift-ring-builder "$1" rebalance
+  retval=$?
+  set -e
+  if [ "$retval" = 2 ]
+  then
+    return 1
+  fi
+}
+
+build_ring "account.builder"
+build_ring "container.builder"
+build_ring "object.builder"
+
+zone=1
+for addr in $addrs
+do
+  for device in $SWIFT_DEVICES
+  do
+    add_ring "account.builder"   "$zone" "$addr" 6002 "$device" 100
+    add_ring "container.builder" "$zone" "$addr" 6001 "$device" 100
+    add_ring "object.builder"    "$zone" "$addr" 6000 "$device" 100
+  done
+  zone=$(( $zone + 1 ))
+done
+
+rebalance "account.builder"
+rebalance "container.builder"
+rebalance "object.builder"

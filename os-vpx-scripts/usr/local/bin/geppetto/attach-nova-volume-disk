@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. $GEPPETTO_SHARE_PATH/attach-data-disk.sh
+. /etc/openstack/volume
+
+SIZE="${1-$VOLUME_DISK_SIZE_GB}"
+DEV='xvdd'
+MP='nomp'
+NAME_PREFIX='OpenStack Nova Volume disk'
+KEY_PREFIX='os-vpx-nova-volume'
+FS='lvm'
+UG='nova:nova'
+
+name="$NAME_PREFIX $HOSTNAME $DEV"
+key="$KEY_PREFIX-$HOSTNAME-$DEV"
+
+attach_data_disk "$DEV" "$MP" "$name" "$key" "$FS" "$UG" "$SIZE"

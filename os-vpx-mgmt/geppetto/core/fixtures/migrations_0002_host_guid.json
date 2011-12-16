@@ -1,0 +1,29 @@
+[
+    {
+        "pk": 36, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "host-config", 
+            "description": "Stores configuration about the host identity."
+        }
+    }, 
+    {
+        "pk": 90, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "", 
+            "config_type": 11, 
+            "config_class": 36, 
+            "name": "HOST_GUID", 
+            "description": "The unique id for a Host"
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 36, 
+            "role": 18
+        }
+    }
+]

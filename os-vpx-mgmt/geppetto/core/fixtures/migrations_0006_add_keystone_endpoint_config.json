@@ -1,0 +1,26 @@
+[
+    {
+        "pk": 37, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "configure-keystone-endpoints", 
+            "description": "Trigger the correct configuration the keystone endpoints."
+        }
+    },
+    {
+        "pk": 91, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 37, 
+            "role": 31
+        }
+    },
+    {
+        "pk": 92, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 31
+        }
+    }
+]

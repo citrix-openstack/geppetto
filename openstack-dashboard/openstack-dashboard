@@ -1,0 +1,15 @@
+#!/usr/bin/python2.6
+
+from dashboard.wsgi import run_eventlet_server
+
+
+PORT = 9999
+ADDRESS = '0.0.0.0'
+
+
+def main():
+    run_eventlet_server(PORT, ADDRESS)
+
+
+if __name__ == "__main__":
+    main()

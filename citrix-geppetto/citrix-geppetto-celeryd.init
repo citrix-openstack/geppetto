@@ -1,0 +1,19 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          citrix-geppetto-celeryd
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Stop:      0 1 6
+# Short-Description: Citrix VPX Celery Service
+# Description:       Citrix Geppetto's Celery daemon that tracks current tasks
+### END INIT INFO
+
+# citrix-geppetto-celeryd: Citrix VPX Celery Service
+#
+# chkconfig: - 65 45
+# description: Citrix Geppetto's Celery daemon
+
+name="celeryd"
+
+. /etc/rc.d/init.d/citrix-geppetto-celery.sh

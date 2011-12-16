@@ -1,0 +1,218 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Unassigned Workers{% endblock %}
+
+{% block nav_unassigned_workers %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+
+<div class="header_general header_warning">
+    <img src="images/icon/header_warning.gif" alt="">
+    You must setup the Managment Nodes before you can assign any worker nodes. Please run <a href="master_setup_dhcp_dns">Setup Managment Workers Wizard</a>.
+</div>
+
+<div style="float:left;">
+    <div style="float:left;">
+        <div class="" onmouseover="this.className='flyout_menu_mouseover';flyout_menu_onmouseover(this, 'add', 'content_nav_holder');" onmouseout="this.className='';submenu_onmouseout(this, 'add');">
+                <h1 class="flyout_menu_title">
+                    <img src="/images/nav/pool.gif" alt="">
+                    Unassigned Workers
+                    <img src="/images/flyoutmenu/next_16X16.gif" style="padding-right:3px;">
+                </h1>
+            <div class="flyout_menu_container" onmouseover="flyout_menu_onmouseover(this, 'add', 'content_nav_holder');" id="add" style="visibility:hidden;customWidth:0; customHeight: 0; customScroll: noScroll;" >
+                            <a class="flyout_menu_link" 
+                                href="addpool.mako">
+                                <img src="images/icon/add.png" />
+                            Edit Cloud Joining Policy
+                            </a>    
+            </div>
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+<div class="filters right">
+    <span class="filter_caption">Search:</span>
+
+    <form method="get" id="UserSearchForm" action="userlist.mako">
+        
+    <input type="text" name="search" id="search" value="" class="searchInput" />
+
+    <a href="javascript:clearTextBox('search');submit_form('UserSearchForm', 'Searching...');" title="Clear"><img src="/images/icon/clear.png" style="vertical-align:bottom;padding-bottom:3px;"  /></a>
+    <a href="javascript:submit_form('UserSearchForm', 'Searching...');" title="Search"><img src="/images/icon/search.png" style="vertical-align:bottom;padding-bottom:3px;" /></a>       
+
+    <script type="text/javascript">
+    function eventSubmit(e){
+        prepareToSubmit('Searching...');
+    }
+    document.getElementById("search").focus();
+    $("#UserSearchForm").bind('submit', eventSubmit);    
+    </script>
+    <input type="image" src="/images/1px.png" style="width:1px;height:1px;" />
+
+    </form>
+</div>
+
+<div style="clear:both;"></div>
+
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="6" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>Waiting to Join</a> | <a>Unassigned</a> | <a>Similar Specification</a></div>
+                <div style="float:right">Actions: <a>Join Cloud</a> | <a>Assign Compute Controller Role</a> | <a>Assign Other Role...</a> </div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Dated Joined (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>CPU (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Memory (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Storage (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Waiting to join</td>
+      <td>-</td>
+      <td>8 x Intel Xeon @ 3.05Gz</td>
+      <td>8 GB</td>
+      <td>500 GB</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname3" />  hostname2</td>
+      <td><img src="images/icon/bullet_green_grey.png" alt="">Pending join</td>
+      <td>-</td>
+      <td>8 x Intel Xeon @ 3.05Gz</td>
+      <td>8 GB</td>
+      <td>500 GB</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname2" />  hostname2</td>
+      <td><img src="images/icon/bullet_green.png" alt="">Joined but unassigned</td>
+      <td>2011-01-13 16:56:18</td>
+      <td>8 x Intel Xeon @ 3.05Gz</td>
+      <td>8 GB</td>
+      <td>500 GB</td>
+     </tr>
+     <tr>
+      <td><input type="checkbox" name="hostname3" />  hostname2</td>
+      <td><img src="images/icon/bullet_green_grey.png" alt="">Pending assignment</td>
+      <td>2011-01-13 16:56:18</td>
+      <td>8 x Intel Xeon @ 3.05Gz</td>
+      <td>8 GB</td>
+      <td>500 GB</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="3">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="3" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+
+</table>
+
+<br/>
+
+<h2>One another page after you click "edit joining policy" ...<h2>
+
+<div class="detailcontainer">
+    <h2>Cloud Joining Policy</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Master:</th>
+            <td class="settingsdetail">cloudmaster.domain.com</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Joining mode:</td>
+            <td class="settingsdetail">Explicit</td>
+            <td><a class="action_button" href=""><img src="/images/icon/pencil.png" alt=""> Enable Automatic Mode</a></td>
+        </tr>
+        <tr>
+            <th>Automatic Role Assignemnt:</td>
+            <td class="settingsdetail">No Rules Defined</td>
+            <td><a class="action_button" href=""><img src="/images/icon/pencil.png" alt=""> Edit Rule Set</a></td>
+        </tr>
+    </table>
+</div>
+
+<br/>
+<br/>
+
+<table class="listview" cellspacing="0">
+
+    <thead>
+        <tr>
+            <th>Login           
+            <th>Status
+            <th>Added By 
+            <th>Added At (UTC)       
+        </tr>
+    </thead>
+
+    <tfoot>
+        <tr>
+            <td colspan="7">0 Pool(s)</td>
+        </tr>
+        <tr>
+            <td colspan="6">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">            
+    </tfoot>
+    
+    <tbody>
+            <tr>                
+                <td>
+                    <div class="resource_name ">                     
+                        <div style="float:left;"><div class="" onmouseover="this.className='flyout_menu_mouseover';flyout_menu_onmouseover(this, 'userid=1', 'content_nav_holder');" onmouseout="this.className='';submenu_onmouseout(this, 'userid=1');">
+                            admin <img src="images/flyoutmenu/arrow_next.gif">
+                            <div class="flyout_menu_container" onmouseover="flyout_menu_onmouseover(this, 'userid=1', 'content_nav_holder');" id="userid=1" style="visibility:hidden;customWidth:0; customHeight: 0; customScroll: noScroll;" >
+                                <a class="flyout_menu_link" href="changepassword.mako?userid=1">
+                                   <img src="images/icon/key.png" />
+                                   Change Password
+                                </a>
+                                <hr>
+                                <a class="flyout_menu_link" href="tasklist.mako?filter_userid=1">
+                                   <img src="images/icon/logs.png" />
+                                   View Task Logs
+                                </a>    
+                                <a class="flyout_menu_link" href="vmlist.mako">
+                                   <img src="images/icon/view.png" />
+                                   View Shared VMs
+                                </a>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </td>                
+                <td>                 
+                        <img src="images/icon/bullet_green.png" alt="">
+                        Enabled
+                <td>
+                        admin
+                <td>
+                    2011-01-13 16:56:18                   
+    </tbody>
+ </table>
+
+
+{% endblock %}

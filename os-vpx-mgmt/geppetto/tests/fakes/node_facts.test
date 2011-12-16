@@ -1,0 +1,63 @@
+architecture: i386
+domain: openstack.com
+facterversion: 1.5.9
+fqdn: master.openstack.com
+hardwareisa: i686
+hardwaremodel: i686
+host_cpu_count: 16
+host_fqdn: host_fqdn1232131
+host_ip: 10.219.13.20
+host_local_storage_size: 237568532480
+host_local_storage_utilisation: 4657770496
+host_memory_free: 22468952064
+host_memory_total: 25759420416
+host_password_status: SET
+host_type: xenapi
+host_version: 6.0.0
+hostname: test_node
+id: root
+interfaces: eth0,eth1,eth2,lo,sit0
+ipaddress: 169.254.0.4
+ipaddress_eth0: 169.254.0.4
+ipaddress_eth1: 192.168.1.1
+ipaddress_lo: 127.0.0.1
+is_virtual: true
+kernel: Linux
+kernelmajversion: 2.6
+kernelrelease: 2.6.18-194.32.1.el5xen
+kernelversion: 2.6.18
+macaddress: 52:EA:32:C5:E8:9F
+macaddress_eth0: 52:EA:32:C5:E8:9F
+macaddress_eth1: 72:4D:46:63:73:B7
+macaddress_eth2: 52:DD:91:CB:75:42
+memoryfree: 317.30 MB
+memorysize: 500.17 MB
+netmask: 255.255.0.0
+netmask_eth0: 255.255.0.0
+netmask_eth1: 255.255.255.0
+netmask_lo: 255.0.0.0
+network_eth0: 169.254.0.0
+network_eth1: 192.168.1.0
+network_lo: 127.0.0.0
+operatingsystem: CentOS
+operatingsystemrelease: 5.5
+path: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+physicalprocessorcount: 0
+processor0: Intel(R) Xeon(R) CPU           E5620  @ 2.40GHz
+processorcount: 1
+ps: ps -ef
+puppetversion: 2.6.9
+rubysitedir: /usr/lib/ruby/site_ruby/1.8
+rubyversion: 1.8.5
+selinux: false
+sshdsakey: AAAAB3NzaC1kc3MAAACBAMhAsE/rtrBIo41rVUnQ4XNHtw/k12ystG1PlWT6RQdCccVCPPdpDYr30NIud+FuW3MSTYOyCKGU4Oxb0Xt2Qil5jtk3Kj1fyct8G7b1CdQkMA81wrOjXuN+DsdYt4P01PHIrOt0JxrXGOwBzgoh3a7g6X/2D9syZ3uM+cLzt3E5AAAAFQCm/m0W8SqV9vPcNXkWcU7ogYPBvQAAAIBe/DzJ4lauk2SyI8OUNpYdDub0Nd8EE8y5cSMb5NnWX3hK/JD3VqTV8KBVzc/qOSsSqYljveB8FUTYkokY1vuwpQjKQdTuKfBYLDwRtIqp5AU/x88jQqzk2tpDTYOk8HnW2i88E3mJk8EVve1RFHH+bZhS8I7cjgPm4tHbjVtpywAAAIAighkj4+2AaJS/XDcKSNie5kgfCAzIV90n4Zl2EXAQLJEQ1I8HLax2aeen60bjjZQX1I0hmdA70C3qOOocLtRtiHtp//e8C7xxFmovPxRAwzTx784LaqLOqWZAV8gyJAvfEjVRgsefylBlCQWop9D9CKQfOYrdoW7LX5U0LdOExQ==
+sshrsakey: AAAAB3NzaC1yc2EAAAABIwAAAQEAsdeKzmh0JZmJTuKqcwGvPsgxJOo4gbd7FMEMyXMqYBOcGvk52tmA282Z89WXEry5LAzFVHzOUVUBw2xeNfhOlev9SRsu8XVfl5DyeBkOeybQ0FTDCZJvVwWGiQEQEGYZg+/rWZakWC0Q31httH3v13wVp0Hd0H5z3l8xEYtw4jXbjgXwVE1zUDGWHvycfAIUu1mz/6bn90q6iBu+WjaAaFrraaaHznN46QKFL6vknX/k/akPuzifgn2rwaJSBZ6kBnOZPtnBUn0z+FImnFXCXNCQBWm9+vN3afOVf+hnPnFjFKY400X+AHsnuOhjpj4NQQYXBVvUjIAzkjTxUPpy8Q==
+swapfree: 0.00 kB
+swapsize: 0.00 kB
+timezone: UTC
+uniqueid: 007f0101
+uptime: 1 day
+uptime_days: 1
+uptime_hours: 38
+uptime_seconds: 137251
+virtual: xenu

@@ -1,0 +1,8 @@
+
+div#content_splash
+{
+        height: 400px;
+        background-image: url(../oem-map/powered_by_sse.png);
+        background-position: center;
+        background-repeat: no-repeat;
+}

@@ -1,0 +1,212 @@
+
+
+th, td
+{
+    text-align: left;
+    vertical-align: top;
+}
+
+/*** List Views ***/
+
+table.listview
+{
+    width:100%;
+    background-color:#fff;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #d9d9d9;
+    clear:both;
+    
+    -webkit-box-shadow: 0 0 8px #c7c7c7;
+    -moz-box-shadow: 0 0 8px #c7c7c7;
+
+}
+
+table.listview tbody tr:hover td
+{ 
+    background-color:#DBEEF7;
+}
+table.listview tbody tr:hover td table th  /* 'pro'-rules! */
+{ 
+    background-color:#DBEEF7;
+}
+
+
+table.listview th, table.listview td
+{
+    padding: 6px 5px;
+}
+
+table.listview th
+{
+    border-left: 1px solid #d9d9d9;
+    background-color: #e7e7e7;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEFEFE), to(#E7E7E7));
+    background: -moz-linear-gradient(0% 100% 90deg, #e7e7e7, #fefefe);
+}
+table.listview th:first-child
+{
+    border-left:0px;
+}
+
+
+table.listview td
+{
+    border-top: 1px solid #d9d9d9;
+}
+
+table.listview table th, table.listview table td /* anti-rules */
+{
+    border: 0;
+    padding: 0;
+    color: #000;
+    background: none;
+    background-color: #fff;
+}
+
+table.listview tfoot td
+{
+    background-color: #e7e7e7;
+}
+
+
+table table.innerlist th, table table.innerlist td
+{
+    padding: 0 8px 4px 0;
+}
+table table.innerlist th
+{
+    font-weight: normal;
+}
+
+
+
+
+/*** Detail Views ***/
+div.detailcontainer{
+    background-color:#fff;
+    border: 1px solid #d9d9d9;
+    
+    -webkit-box-shadow: 0 0 8px #c7c7c7;
+    -moz-box-shadow: 0 0 8px #c7c7c7;
+}
+div.detailcontainer h2{
+    font-size:0.85em;
+    margin-bottom:12px;
+    margin-top:0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 10px 6px;
+    background-color: #e7e7e7;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEFEFE), to(#E7E7E7));
+    background: -moz-linear-gradient(0% 100% 90deg, #e7e7e7, #fefefe);
+}
+
+div.helpcontainer{
+    background-color:#F9FCFF;
+    border:1px solid #C3DCF6;
+}
+
+table.detailview
+{
+    margin:0;
+    width:100%;
+}
+table.detailview th{
+    border:0 none;
+    font-size:0.8em;
+    font-weight:normal;
+    padding:5px 2px 5px 5px;
+    vertical-align:top;
+    width:22%;
+}
+table.detailview td {
+    border:0 none;
+    font-size:0.8em;
+    padding:5px 2px;
+    width:60%;
+}
+table.settingsdetailview
+{
+    margin:0;
+    width:100%;
+}
+table.settingsdetailview th{
+    border:0 none;
+    font-size:0.8em;
+    font-weight:normal;
+    padding:5px 2px 5px 5px;
+    vertical-align:top;
+    width:20%;
+}
+table.settingsdetailview td{
+    border:0 none;
+    font-size:0.8em;
+    padding:5px 2px;
+    width:45%;
+}
+table.settingsdetailview td.settingsdetail{
+    border:0 none;
+    font-size:0.8em;
+    padding:5px 2px;
+    width:15%;
+}
+
+table.editorview
+{
+    margin-bottom: 10px;
+    font-size: 0.85em;
+    width:100%;
+}
+table.editorview th, table.editorview td
+{
+    padding: 4px 5px;
+}
+
+table.editorview th
+{
+    padding-top: 10px;
+    font-weight: normal;
+    width:22%;
+}
+table.editorview td  input[type=text], table.editorview td  input[type=password], table.editorview td  select{
+    width:250px;
+}
+table.editorview td  input[readonly=readonly]
+{
+	color:grey;
+	font-style:italic;
+}
+
+body.login_layout table.editorview th
+{
+    width: auto;
+}
+
+
+/*** Form Related ***/
+
+div.form_button_block, tr.form_button_block
+{
+    margin-bottom:10px;
+    margin-top:10px;
+}
+tr.form_button_block {
+    font-size: 1.2em;
+}
+div.form_button_block, tr.form_button_block th, tr.form_button_block td
+{
+    padding:5px;
+    background-color:#F9FCFF;
+    border-top:1px solid #C8DBF0;
+}
+.form_button_block input, .form_button_block a
+{
+    margin-right: 20px;
+}
+
+.form_button_block a         { text-decoration: none;  }
+.form_button_block a:hover   { text-decoration: underline;  }
+
+

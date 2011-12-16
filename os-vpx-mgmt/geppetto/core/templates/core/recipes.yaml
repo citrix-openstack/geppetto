@@ -1,0 +1,12 @@
+{% autoescape off %}---
+classes:
+  - openstack-role-set
+  - os-vpx-maintenance{% for class in classes %}
+  - {{ class }}{% endfor %} 
+
+environment: development
+
+parameters:{% for service in running_services %}{% if forloop.first %}
+  running_services: [{% endif %}"{{ service }}"{% if not forloop.last %}, {% endif %}{% if forloop.last %}]{% endif %}{% endfor %}{% for service in stopped_services %}{% if forloop.first %}
+  stopped_services: [{% endif %}"{{ service }}"{% if not forloop.last %}, {% endif %}{% if forloop.last %}]{% endif %}{% endfor %}{% for key,value in settings.items %}
+  {{ key }}: {{ value }}{% endfor %}{% endautoescape %}

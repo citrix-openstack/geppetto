@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 91, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": false, 
+            "config_type": 6, 
+            "config_class": 3, 
+            "name": "MULTI_HOST", 
+            "description": "Enables or disables HA networking mode."
+        }
+    }
+]

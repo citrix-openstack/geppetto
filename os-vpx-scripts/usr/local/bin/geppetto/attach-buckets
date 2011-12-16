@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. $GEPPETTO_SHARE_PATH/attach-data-disk.sh
+
+DEV='xvdd'
+MP='/var/lib/nova/buckets'
+NAME='OpenStack VPX buckets'
+KEY='os-vpx-buckets'
+FS='ext3'
+UG='nova:nobody'
+SIZE="${1-500}"
+
+attach_data_disk "$DEV" "$MP" "$NAME" "$KEY" "$FS" "$UG" "$SIZE"

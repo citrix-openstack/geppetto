@@ -1,0 +1,83 @@
+#!/bin/sh
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright 2010 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# Copyright 2011 OpenStack LLC.
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+set -eux
+
+. /etc/openstack/keystone
+. /etc/openstack/mysql
+
+sed -e "s,sql_connection = .*,sql_connection = mysql://$MYSQL_USER:$MYSQL_PASS@$MYSQL_HOST/keystone," \
+    -i /etc/keystone/keystone.conf
+
+TOUCH_FILE="/var/lib/geppetto/keystone-init-run"
+
+keystone_manage="keystone-manage $@"
+
+tenant_list=$(keystone-manage tenant list)
+is_tenant_1_present=$(echo "$tenant_list" | grep -c 1) || true
+
+if [ $is_tenant_1_present -ne 0 ]
+then
+    echo "There is already a tenant in the db, skipping this setup script"
+    touch $TOUCH_FILE
+    exit 0
+fi
+
+$keystone_manage service add glance image "Glance Image Service"
+$keystone_manage service add keystone identity "Keystone Identity Service"
+$keystone_manage service add nova compute "Nova Compute Service"
+$keystone_manage service add swift object-store "Swift Service"
+
+$keystone_manage endpointTemplates add RegionOne glance \
+  http://dummy \
+  http://dummy \
+  http://dummy 1 1
+$keystone_manage endpointTemplates add RegionOne keystone \
+  http://dummy \
+  http://dummy \
+  http://dummy 1 1
+$keystone_manage endpointTemplates add RegionOne nova \
+  http://dummy \
+  http://dummy \
+  http://dummy 1 1
+$keystone_manage endpointTemplates add RegionOne swift \
+  http://dummy \
+  http://dummy \
+  http://dummy 1 1
+
+$keystone_manage role add Admin
+$keystone_manage role add KeystoneAdmin
+$keystone_manage role add KeystoneServiceAdmin
+$keystone_manage role add Member
+$keystone_manage role add netadmin
+$keystone_manage role add projectmanager
+$keystone_manage role add sysadmin
+
+
+os-vpx-add-tenant "$KEYSTONE_SUPERUSER_TENANT"
+
+os-vpx-add-user \
+         "$KEYSTONE_SUPERUSER_TENANT" \
+         "$KEYSTONE_SUPERUSER_NAME" \
+         "$KEYSTONE_SUPERUSER_PASS" \
+         "Admin,1 KeystoneAdmin,1 KeystoneServiceAdmin,1 Admin,0 Member,0 netadmin,0 projectmanager,0 sysadmin,0" \
+         "$KEYSTONE_SUPERUSER_TOKEN"
+
+touch $TOUCH_FILE

@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 97, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": true, 
+            "config_type": 6, 
+            "config_class": 3, 
+            "name": "FLAT_INJECTED", 
+            "description": "Enables or disables injection of IP configuration into instances."
+        }
+    }
+]

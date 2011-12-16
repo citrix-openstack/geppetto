@@ -1,0 +1,40 @@
+{% extends "ui/site_base.html" %}
+
+{% block body_class %}login_layout{% endblock %}
+
+{% block header %}
+<div id="header">
+    <div id="header_right">
+        	{% now "jS F Y H:i" %} &nbsp;|&nbsp;
+            <a href="/admin/">DB Admin</a>
+            &nbsp;|&nbsp;
+            <img src="images/icon/information.png" alt="">
+            <a href="http://support.citrix.com/product/xens" target="_blank">Help</a>
+                &nbsp;|&nbsp;
+                <img src="images/icon/logout.png" alt="">
+                <a href="/accounts/logout/">Logout</a>
+        <a href="http://citrix.com/" target="_blank" id="citrix_logo">
+            <img
+                src="oem-map/citrix_logo.png"
+                alt="Citrix Systems, Inc."
+            >
+        </a>
+    </div>
+
+    <div id="header_title">
+        <a href="/">
+        <img
+            src="oem-map/logo.png"
+            alt="XenServer Web Self Service"
+        >
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content_login">
+{% block content_login %}
+{% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,2269 @@
+[
+    {
+        "pk": 1, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "cert-config", 
+            "description": "Stores standard x509 crypto data elements in '/etc/openstack/cert'"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "compute-api-config", 
+            "description": "Holds the configuration stored in '/etc/openstack/compute-api'"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "configure-eth2", 
+            "description": "Controls configuration for the VPX public network interface stored in /etc/sysconfig/network-scripts/ifcfg-eth2"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "dashboard-config", 
+            "description": "Stores configuration for OpenStack Dashboard in '/etc/openstack/dashboard'"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-glance-init-run", 
+            "description": "Triggered for first-time provisioning of the Image Registry and API"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-image-container-init-run", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-keystone-init-run", 
+            "description": "Triggered for first-time provisioning of the OpenStack Keystone."
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-mysql-init-run", 
+            "description": "Triggered for first-time provisioning of the Compute Database"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-nova-volume-init-run", 
+            "description": "Triggered for first-time provisioning of the OpenStack Nova Volume"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-ns-vpx-provision-init-run", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-openstack-dashboard-init-run", 
+            "description": "Triggered for first-time provisioning of the OpenStack Dashboard"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-swift-init-run", 
+            "description": "Triggered for the attaching disks to Object Workers"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "ensure-swift-ring-builder-init-run", 
+            "description": "Triggered for the auto-generation of ring files"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "geppetto-syslog-config", 
+            "description": "Stores configuration for logging remotely in '/etc/openstack/syslog'."
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "geppetto-vpx-config", 
+            "description": "Stores VPX properties in '/etc/openstack/geppetto'. For VPX on XenServer these get shown in XenCenter too"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "glance-config", 
+            "description": "Stores properties to configure the Image Servers in '/etc/openstack/glance'"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "glance-store-config", 
+            "description": "Stores Glance backend configuration in '/etc/openstack/glance-store'"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "guest-network-config", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "hapi-config", 
+            "description": "Stores credentials and elements to access the hypevisor in '/etc/openstack/hapi'"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "keystone-config", 
+            "description": "Stores all the configuration related to Keystone in '/etc/openstack/keystone'."
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "memcached", 
+            "description": "Internal use only"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "mysql-config", 
+            "description": "Stores credentials to access the database in '/etc/openstack/mysql'"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "netscaler-config", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "networking-config", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "nova-ajax-console-proxy-config", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "nova-ajax-console-public-config", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "openstack-role-set", 
+            "description": "Control configuration. Internal use only"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "rabbitmq-config", 
+            "description": "Stores credentials to access the message queue in '/etc/openstack/rabbitmq'"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "scheduler-config", 
+            "description": "The configuration for openstack-nova-scheduler"
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "swift-config", 
+            "description": "Stores swift configuration elements in '/etc/openstack/swift'"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "swift-disks-config", 
+            "description": "Stores configuration elements for swift object servers in '/etc/openstack/swift-store'"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "swift-rings-config", 
+            "description": "Ring files dispatcher. Internal use only"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.configclass", 
+        "fields": {
+            "name": "volume-config", 
+            "description": "Stores properties to configure the OpenStack Nova Volume Service in '/etc/openstack/volume'"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "boolean_validator", 
+            "validator_kwargs": "", 
+            "name": "boolean"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "email_validator", 
+            "validator_kwargs": "", 
+            "name": "email"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "fqdn_validator", 
+            "validator_kwargs": "", 
+            "name": "fqdn"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "enum_validator", 
+            "validator_kwargs": "file=0,swift=1", 
+            "name": "glance_backend"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "int_validator", 
+            "validator_kwargs": "", 
+            "name": "int"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "ipv46address_validator", 
+            "validator_kwargs": "", 
+            "name": "ipaddress"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "ipaddress_range_validator", 
+            "validator_kwargs": "", 
+            "name": "ipaddressrange"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "macaddress_validator", 
+            "validator_kwargs": "", 
+            "name": "macaddress"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "enum_validator", 
+            "validator_kwargs": "off=0,dhcp=1,static=2", 
+            "name": "onboot_option"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "port_range_validator", 
+            "validator_kwargs": "", 
+            "name": "port"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "string_validator", 
+            "validator_kwargs": "", 
+            "name": "string"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "enum_validator", 
+            "validator_kwargs": "emerg=0,alert=1,crit=2,err=3,warn=4,notice=5,info=6,debug=7", 
+            "name": "syslog_level"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.configclassparametertype", 
+        "fields": {
+            "validator_function": "url_validator", 
+            "validator_kwargs": "", 
+            "name": "url"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "0.0.0.0", 
+            "config_type": 3, 
+            "config_class": 2, 
+            "name": "API_BIND_HOST", 
+            "description": "The interface on which Glance API should be listening"
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "9292", 
+            "config_type": 4, 
+            "config_class": 2, 
+            "name": "API_BIND_PORT", 
+            "description": "The port to be used for Glance API"
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 31, 
+            "name": "COMPUTE_API_HOST", 
+            "description": "Holds the fqdn of the compute api"
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.network.linux_net", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "COMPUTE_NETWORK_DRIVER", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "COMPUTE_VLAN_INTERFACE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "XX", 
+            "config_type": null, 
+            "config_class": 1, 
+            "name": "CRED_CERT_C", 
+            "description": "Country for the user certificate subject"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "Cloud", 
+            "config_type": null, 
+            "config_class": 1, 
+            "name": "CRED_CERT_L", 
+            "description": "City or Locality for the user certificate subject"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "Cloud", 
+            "config_type": null, 
+            "config_class": 1, 
+            "name": "CRED_CERT_O", 
+            "description": "Organization for the user certificate subject"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "Cloud", 
+            "config_type": null, 
+            "config_class": 1, 
+            "name": "CRED_CERT_OU", 
+            "description": "Organizational Unit for the user certificate subject"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "Cloud", 
+            "config_type": null, 
+            "config_class": 1, 
+            "name": "CRED_CERT_ST", 
+            "description": "State for the user certificate subject"
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "ef81eccc-172c-4aad-810b-05278bbdbbf3", 
+            "config_type": null, 
+            "config_class": 28, 
+            "name": "DASHBOARD_ACCESS", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "dashboard", 
+            "config_type": null, 
+            "config_class": 28, 
+            "name": "DASHBOARD_ADMIN", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "dashboard", 
+            "config_type": null, 
+            "config_class": 28, 
+            "name": "DASHBOARD_PROJECT", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "b24b6b50-dee5-4ed7-9d2a-ba965cd4493c", 
+            "config_type": null, 
+            "config_class": 28, 
+            "name": "DASHBOARD_SECRET", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": null, 
+            "config_class": 28, 
+            "name": "DASHBOARD_SMTP_PWD", 
+            "description": "User password for mail notifications"
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 28, 
+            "name": "DASHBOARD_SMTP_SVR", 
+            "description": "SMTP server for mail notifications"
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "admin@example.org", 
+            "config_type": 1, 
+            "config_class": 28, 
+            "name": "DASHBOARD_SMTP_USR", 
+            "description": "User account for mail notifications"
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "", 
+            "config_type": null, 
+            "config_class": 13, 
+            "name": "ETH2_HOST_NETWORK", 
+            "description": "Network on which to connect the virtual interface to"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "127.0.1.1", 
+            "config_type": 3, 
+            "config_class": 13, 
+            "name": "ETH2_IP", 
+            "description": "Static IP address for the interface"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "off", 
+            "config_type": 12, 
+            "config_class": 13, 
+            "name": "ETH2_MODE", 
+            "description": "Configuration mode"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "255.255.255.0", 
+            "config_type": 3, 
+            "config_class": 13, 
+            "name": "ETH2_NETMASK", 
+            "description": "Netmask for the interface"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "5", 
+            "config_type": 7, 
+            "config_class": 12, 
+            "name": "GLANCE_FILE_STORE_SIZE_GB", 
+            "description": "'file' backend only: the size of the disk that serves the filestore backend"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 2, 
+            "name": "GLANCE_HOSTNAME", 
+            "description": "FQDN for the VPX node on which Glance servers are running"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "file", 
+            "config_type": 8, 
+            "config_class": 12, 
+            "name": "GLANCE_STORE", 
+            "description": "The type of storage backend supported by Glance API"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 12, 
+            "name": "GLANCE_SWIFT_ADDRESS", 
+            "description": "'swift' backend only: the fqdn of the Swift API server"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "citrix", 
+            "config_type": 13, 
+            "config_class": 12, 
+            "name": "GLANCE_SWIFT_STORE_KEY", 
+            "description": "'swift' backend only: the store key for accessing glance images on swift"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "root", 
+            "config_type": 13, 
+            "config_class": 12, 
+            "name": "GLANCE_SWIFT_USER", 
+            "description": "'swift' backend only: the {account,user} tuple to access glance images on swift"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "xenbr0", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "GUEST_NETWORK_BRIDGE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "192.168.1.1", 
+            "config_type": 3, 
+            "config_class": 3, 
+            "name": "GUEST_NETWORK_DNS", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": 13, 
+            "config_class": 8, 
+            "name": "HAPI_PASS", 
+            "description": "The user password"
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "root", 
+            "config_type": 13, 
+            "config_class": 8, 
+            "name": "HAPI_USER", 
+            "description": "The user name"
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "geppetto", 
+            "config_type": null, 
+            "config_class": 23, 
+            "name": "IMG_CONTAINER_OWNER", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "10", 
+            "config_type": 7, 
+            "config_class": 23, 
+            "name": "IMG_CONTAINER_SIZE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "iqn.2010-10.org.openstack", 
+            "config_type": null, 
+            "config_class": 7, 
+            "name": "IQN_PREFIX", 
+            "description": "Prefix for iscsi volumes"
+        }
+    }, 
+    {
+        "pk": 47, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "192.168.1", 
+            "config_type": null, 
+            "config_class": 7, 
+            "name": "ISCSI_IP_PREFIX", 
+            "description": "Discover volumes on the ip that starts with this prefix"
+        }
+    }, 
+    {
+        "pk": 74, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 29, 
+            "name": "KEYSTONE_HOST", 
+            "description": "The FQDN of the keystone node."
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "root", 
+            "config_type": 13, 
+            "config_class": 29, 
+            "name": "KEYSTONE_SUPERUSER_NAME", 
+            "description": "The admin user provisioned automatically in Keystone."
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "citrix", 
+            "config_type": 13, 
+            "config_class": 29, 
+            "name": "KEYSTONE_SUPERUSER_PASS", 
+            "description": "The password for the user provisioned automatically in Keystone."
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "Administrator", 
+            "config_type": 13, 
+            "config_class": 29, 
+            "name": "KEYSTONE_SUPERUSER_TENANT", 
+            "description": "The admin tenant provisioned automatically in Keystone."
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "999888777666", 
+            "config_type": 13, 
+            "config_class": 29, 
+            "name": "KEYSTONE_SUPERUSER_TOKEN", 
+            "description": "The token for the admin user provisioned automatically in Keystone."
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova, glance, keystone", 
+            "config_type": null, 
+            "config_class": 4, 
+            "name": "MYSQL_DBS", 
+            "description": "Comma separated list of DBs to be provided by this MySQL host."
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 4, 
+            "name": "MYSQL_HOST", 
+            "description": "The FQDN of the database node"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "citrix", 
+            "config_type": 13, 
+            "config_class": 4, 
+            "name": "MYSQL_PASS", 
+            "description": "The user password"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "internal", 
+            "config_type": null, 
+            "config_class": 4, 
+            "name": "MYSQL_TYPE", 
+            "description": "Mark if the database is not managed and provisioned by Geppetto. Internal use only"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "root", 
+            "config_type": 13, 
+            "config_class": 4, 
+            "name": "MYSQL_USER", 
+            "description": "The user name"
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.network.manager.FlatManager", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "NETWORK_MANAGER", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.network.linux_net", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "NETWORK_NETWORK_DRIVER", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "eth2", 
+            "config_type": null, 
+            "config_class": 3, 
+            "name": "NETWORK_VLAN_INTERFACE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "0.0.0.0", 
+            "config_type": 3, 
+            "config_class": 34, 
+            "name": "NOVA_AJAX_CONSOLE_PROXY_BIND_INTERFACE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "8000", 
+            "config_type": 4, 
+            "config_class": 34, 
+            "name": "NOVA_AJAX_CONSOLE_PROXY_BIND_PORT", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "auto", 
+            "config_type": 5, 
+            "config_class": 35, 
+            "name": "NOVA_AJAX_CONSOLE_PUBLIC_URL", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 89, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "http://localhost:8080/", 
+            "config_type": 5, 
+            "config_class": 35, 
+            "name": "NOVA_AJAX_CONSOLE_PUBLIC_URL_COMPUTED", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 49, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "127.0.0.1", 
+            "config_type": 3, 
+            "config_class": 24, 
+            "name": "NS_VPX_HOST", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 52, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nsroot", 
+            "config_type": null, 
+            "config_class": 24, 
+            "name": "NS_VPX_PASS", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 50, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "80", 
+            "config_type": 4, 
+            "config_class": 24, 
+            "name": "NS_VPX_PORT", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 51, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nsroot", 
+            "config_type": null, 
+            "config_class": 24, 
+            "name": "NS_VPX_USER", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 53, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "192.168.1.50-192.168.1.99", 
+            "config_type": 10, 
+            "config_class": 24, 
+            "name": "NS_VPX_VIPS", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 55, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "d6:a3:57:d5:c0:08", 
+            "config_type": 11, 
+            "config_class": 25, 
+            "name": "NS_VPX_VM_MAC_ADDRESS", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 56, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "xenbr1", 
+            "config_type": null, 
+            "config_class": 25, 
+            "name": "NS_VPX_VM_NETWORK_BRIDGE", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 54, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "NS-VPX-4-LBAAS", 
+            "config_type": null, 
+            "config_class": 25, 
+            "name": "NS_VPX_VM_TEMPLATE_NAME", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "eth1", 
+            "config_type": null, 
+            "config_class": 5, 
+            "name": "PRIVATE_NIC", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 9, 
+            "name": "RABBIT_HOST", 
+            "description": "The FQDN of the message queue node"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "guest", 
+            "config_type": 13, 
+            "config_class": 9, 
+            "name": "RABBIT_PASS", 
+            "description": "The user password"
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "5672", 
+            "config_type": 4, 
+            "config_class": 9, 
+            "name": "RABBIT_PORT", 
+            "description": "The port on which RabbitMQ server is listening"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "guest", 
+            "config_type": 13, 
+            "config_class": 9, 
+            "name": "RABBIT_USER", 
+            "description": "The user name"
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "0.0.0.0", 
+            "config_type": 3, 
+            "config_class": 2, 
+            "name": "REGISTRY_BIND_HOST", 
+            "description": "The interface on which Glance Registry should be listening"
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "9191", 
+            "config_type": 4, 
+            "config_class": 2, 
+            "name": "REGISTRY_BIND_PORT", 
+            "description": "The port to be used for Glance Registry"
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.scheduler.base_scheduler.BaseScheduler", 
+            "config_type": 13, 
+            "config_class": 33, 
+            "name": "SCHEDULER_COMPUTE_DRIVER", 
+            "description": "Specifies the scheduler that deals with the compute operations."
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "InstanceMetadataFilter", 
+            "config_type": 13, 
+            "config_class": 33, 
+            "name": "SCHEDULER_DEFAULT_HOST_FILTER", 
+            "description": "Specifies the host filter used by the scheduler."
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.scheduler.simple.SimpleScheduler", 
+            "config_type": 13, 
+            "config_class": 33, 
+            "name": "SCHEDULER_VOLUME_DRIVER", 
+            "description": "Specifies the scheduler that deals with the volume operations."
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "xvdf xvdg", 
+            "config_type": null, 
+            "config_class": 27, 
+            "name": "SWIFT_DEVICES", 
+            "description": "List of labels to be used for creating disks for the VPX node"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "10", 
+            "config_type": 7, 
+            "config_class": 27, 
+            "name": "SWIFT_DISK_SIZE_GB", 
+            "description": "The size of the disk to be attached to an Storage Object Worker"
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "citrix", 
+            "config_type": 13, 
+            "config_class": 16, 
+            "name": "SWIFT_HASH_PATH_SUFFIX", 
+            "description": "The hash path suffix for swift"
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": null, 
+            "config_class": 26, 
+            "name": "SWIFT_NODES_IPS", 
+            "description": "The list of IP addresses of swift oject servers"
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 16, 
+            "name": "SWIFT_PROXY_ADDRESS", 
+            "description": "The FQDN of the Object Storage API node"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 7, 
+            "name": "TARGET_HOST", 
+            "description": "'iscsi' backend only: the FQDN of the iscsi target host exposed by OpenStack Nova Volume"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "3260", 
+            "config_type": 4, 
+            "config_class": 7, 
+            "name": "TARGET_PORT", 
+            "description": "The port for the iSCSI protocol"
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "True", 
+            "config_type": 6, 
+            "config_class": 7, 
+            "name": "USE_LOCAL_VOLUMES", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 73, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "file:///etc/openstack/visdk/vimService.wsdl", 
+            "config_type": 5, 
+            "config_class": 8, 
+            "name": "VMWAREAPI_WSDL_LOC", 
+            "description": "The URL for the WSDL file for the VMWare Web Service API"
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "5", 
+            "config_type": 7, 
+            "config_class": 7, 
+            "name": "VOLUME_DISK_SIZE_GB", 
+            "description": "'iscsi' backend only: the size of the disk to be used for providing block storage volumes"
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.volume.driver.ISCSIDriver", 
+            "config_type": null, 
+            "config_class": 7, 
+            "name": "VOLUME_DRIVER", 
+            "description": "The driver for the OpenStack Nova Volume Server"
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": null, 
+            "config_class": 19, 
+            "name": "VPX_ABSENT_FILES", 
+            "description": "List of init files that must not be present (or removed) from the VPX node. To be used as node override with onetime=True only"
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "OpenStack VPX managed by Geppetto", 
+            "config_type": 13, 
+            "config_class": 18, 
+            "name": "VPX_DESCRIPTION", 
+            "description": "Brief description of the VPX node"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": 13, 
+            "config_class": 18, 
+            "name": "VPX_LABEL_PREFIX", 
+            "description": "A prefix to be added to the VPX friendly name"
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "localhost", 
+            "config_type": 2, 
+            "config_class": 32, 
+            "name": "VPX_LOGGING_COLLECTOR", 
+            "description": "The logging destination for syslog."
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "debug", 
+            "config_type": 14, 
+            "config_class": 32, 
+            "name": "VPX_LOGGING_LEVEL", 
+            "description": "The syslog log level."
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": " ", 
+            "config_type": null, 
+            "config_class": 19, 
+            "name": "VPX_RESTART_SERVICES", 
+            "description": "List of services that need to be restarted on the node VPX. To be used as node override with onetime=True only"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto-celerycam", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "core.role", 
+        "fields": {
+            "internal": true, 
+            "name": "citrix-geppetto-celeryd", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "memcached", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "mysqld", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-dashboard", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-glance-api", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-glance-registry", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-keystone-admin", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-keystone-auth", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-lb-service", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-ajax-console-proxy", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-api", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-compute", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-network", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-objectstore", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-scheduler", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-vncproxy", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-nova-volume", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-account", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-container", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-object", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-proxy", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "openstack-swift-rsync", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-glance", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-nova", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-cli-swift", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-image-container", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-logging", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-ring-builder", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "os-vpx-set-geppetto-properties", 
+            "service": false
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.role", 
+        "fields": {
+            "internal": false, 
+            "name": "rabbitmq-server", 
+            "service": true
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 10
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 10
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 10, 
+            "role": 10
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 23
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 21, 
+            "role": 23
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 28, 
+            "role": 23
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 23
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 11, 
+            "role": 7
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 12, 
+            "role": 7
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 13, 
+            "role": 7
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 7
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 8
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 8
+        }
+    }, 
+    {
+        "pk": 84, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 32
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 32
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 2, 
+            "role": 31
+        }
+    }, 
+    {
+        "pk": 73, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 31
+        }
+    }, 
+    {
+        "pk": 70, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 31
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 30, 
+            "role": 31
+        }
+    }, 
+    {
+        "pk": 74, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 31, 
+            "role": 31
+        }
+    }, 
+    {
+        "pk": 56, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 24, 
+            "role": 25
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 25, 
+            "role": 25
+        }
+    }, 
+    {
+        "pk": 87, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 34, 
+            "role": 34
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 2, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 9, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 13, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 88, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 35, 
+            "role": 1
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 2, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 3, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 54, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 7, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 8, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 9, 
+            "role": 2
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 3, 
+            "role": 3
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 3
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 9, 
+            "role": 3
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 4
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 5
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 9, 
+            "role": 5
+        }
+    }, 
+    {
+        "pk": 86, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 33, 
+            "role": 5
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 6
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 7, 
+            "role": 6
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 8, 
+            "role": 6
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 9, 
+            "role": 6
+        }
+    }, 
+    {
+        "pk": 49, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 22, 
+            "role": 6
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 14
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 14
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 15
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 14, 
+            "role": 15
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 15
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 8, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 14, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 15, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 27, 
+            "role": 16
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 13, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 14, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 17, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 13
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 5, 
+            "role": 17
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 16, 
+            "role": 17
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 2, 
+            "role": 21
+        }
+    }, 
+    {
+        "pk": 50, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 1, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 51, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 2, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 52, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 3, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 4, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 83, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 31, 
+            "role": 19
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 29, 
+            "role": 27
+        }
+    }, 
+    {
+        "pk": 53, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 23, 
+            "role": 24
+        }
+    }, 
+    {
+        "pk": 85, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 32, 
+            "role": 33
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 26, 
+            "role": 26
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 8, 
+            "role": 18
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 18, 
+            "role": 18
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "core.master", 
+        "fields": {
+            "enabled": true, 
+            "fqdn": "master", 
+            "promoted_date": "2001-01-01 00:00:00"
+        }
+    }
+]

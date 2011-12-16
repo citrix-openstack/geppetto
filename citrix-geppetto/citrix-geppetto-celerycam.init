@@ -1,0 +1,19 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          citrix-geppetto-celerycam
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Stop:      0 1 6
+# Short-Description: Citrix VPX CeleryCam Service
+# Description:       Citrix Geppetto's CeleryCam daemon that tracks current tasks
+### END INIT INFO
+
+# citrix-geppetto-celerycam: Citrix VPX CeleryCam
+#
+# chkconfig: - 65 45
+# description: Citrix Geppetto's CeleryCam daemon
+
+name="celerycam"
+
+. /etc/rc.d/init.d/citrix-geppetto-celery.sh

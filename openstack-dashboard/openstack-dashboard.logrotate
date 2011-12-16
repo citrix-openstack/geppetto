@@ -1,0 +1,5 @@
+/var/log/dashboard/*-stderr.log {
+    weekly
+    missingok
+}
+

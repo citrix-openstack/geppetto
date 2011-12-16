@@ -1,0 +1,170 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Object Storage{% endblock %}
+
+{% block nav_object_storage_list %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+<h1>
+<img src="images/nav/pool.gif">
+Object Storage
+</h1>
+
+<div class="detailcontainer">
+    <h2>Image Cache</h2>
+    <p>TODO - This is the glance (?) image cache.</p>
+   
+<div style="padding:5px 10px;">
+
+    <div class="detailcontainer">
+       <h2>General Settings</h2>
+    <table class="settingsdetailview">
+        <tr>
+            <th>Image Source:</th>
+            <td class="settingsdetail">Storage API (asdfasdf.afsd.com)</td>
+            <td></td>
+        </tr>
+    </table>
+    <br/>
+    </div>
+    
+    <br/>
+    
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="5"><b>Image Caches</b></th>
+        </tr>
+        <tr>
+            <th colspan="5" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>None</a></div>
+                <div style="float:right">Actions: <a>Edit configuration</a> | <a>Unassign current role</a></div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Last Update (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Detail (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Error</td>
+      <td>13:49 2011/01/24</td>
+      <td>Reboot Compute Controller</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="2">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="2" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+</table>
+</div>
+    
+</div>
+
+<br/>
+
+
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="5"><h2>Storage API (Swift)</h2></th>
+        </tr>
+        <tr>
+            <th colspan="5" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>None</a></div>
+                <div style="float:right">Actions: <a>Edit configuration</a> | <a>Unassign current role</a></div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Last Update (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Detail (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Error</td>
+      <td>13:49 2011/01/24</td>
+      <td>Reboot Compute Controller</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="2">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="2" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+</table>
+
+<table class="listview" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="5"><h2>Storage Node (Swift)</h2></th>
+        </tr>
+        <tr>
+            <th colspan="5" style="font-weight:normal">
+                <div style="float:left">Select: <a>All</a> | <a>None</a></div>
+                <div style="float:right">Actions: <a>Edit configuration</a> | <a>Unassign current role</a></div>
+                <div style="clear:both;"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>Hostname
+            <th>Status (<a>acc</a>|<a style="color:silver">dec</a>)
+            <th>Last Update (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+            <th>Detail (<a style="color:silver">acc</a>|<a style="color:silver">dec</a>)
+        </tr>
+    </thead>
+
+  <tbody>
+     <tr>
+      <td><input type="checkbox" name="hostname1" style="padding:0;margin:0" /> hostname1</td>
+      <td><img src="images/icon/bullet_red.png" alt="">Error</td>
+      <td>13:49 2011/01/24</td>
+      <td>Reboot Compute Controller</td>
+     </tr>
+  </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="2">                      
+                <img src="images/paging/resultset_first_disabled.gif">
+                <img src="images/paging/resultset_previous_disabled.gif">
+                 1 - 1 of 1 
+                <img src="images/paging/resultset_next_disabled.gif">
+                <img src="images/paging/resultset_last_disabled.gif">
+            </td>
+            <td colspan="2" style="text-align:right">
+                Per page: <a>All</a> | <a>10</a> | <a>20</a> | <a>50</a>
+            </td>        
+    </tfoot>
+</table>
+{% endblock %}

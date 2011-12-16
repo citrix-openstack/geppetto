@@ -1,0 +1,58 @@
+---
+classes:
+  - openstack-role-set
+  - os-vpx-maintenance
+  - geppetto-syslog-config
+  - cert-config
+  - glance-config
+  - guest-network-config
+  - mysql-config
+  - hapi-config
+  - geppetto-vpx-config
+  - host-config
+  - keystone-config
+  - compute-api-config 
+
+environment: development
+
+parameters:
+  stopped_services: ["memcached", "mysqld", "openstack-dashboard", "openstack-glance-api", "openstack-glance-registry", "openstack-keystone-admin", "openstack-keystone-auth", "openstack-lb-service", "openstack-nova-ajax-console-proxy", "openstack-nova-api", "openstack-nova-compute", "openstack-nova-network", "openstack-nova-objectstore", "openstack-nova-scheduler", "openstack-nova-vncproxy", "openstack-nova-volume", "openstack-swift-account", "openstack-swift-container", "openstack-swift-object", "openstack-swift-proxy", "openstack-swift-rsync", "rabbitmq-server"]
+  MYSQL_PASS: citrix
+  API_BIND_PORT: 9292
+  MULTI_HOST: False
+  REGISTRY_BIND_PORT: 9191
+  MYSQL_DBS: nova, glance, keystone
+  VMWAREAPI_WSDL_LOC: file:///etc/openstack/visdk/vimService.wsdl
+  KEYSTONE_SUPERUSER_TOKEN: 999888777666
+  FLAT_INJECTED: True
+  KEYSTONE_SUPERUSER_PASS: citrix
+  NETWORK_MANAGER: nova.network.manager.FlatManager
+  MYSQL_USER: root
+  KEYSTONE_HOST: localhost
+  KEYSTONE_SUPERUSER_NAME: root
+  GLANCE_HOSTNAME: localhost
+  VPX_TAGS: 
+  MYSQL_TYPE: internal
+  VPX_LABEL_PREFIX:  
+  HAPI_USER: root
+  HOST_GUID: 00:00:00:00:be:ef
+  FIREWALL_DRIVER: nova.virt.xenapi.firewall.Dom0IptablesFirewallDriver
+  COMPUTE_API_HOST: localhost
+  MYSQL_HOST: localhost
+  VPX_LOGGING_COLLECTOR: localhost
+  CRED_CERT_OU: Cloud
+  API_BIND_HOST: 0.0.0.0
+  COMPUTE_VLAN_INTERFACE: 
+  CRED_CERT_O: Cloud
+  HAPI_PASS:  
+  CRED_CERT_L: Cloud
+  REGISTRY_BIND_HOST: 0.0.0.0
+  VPX_LOGGING_LEVEL: debug
+  BRIDGE_INTERFACE: eth2
+  GUEST_NETWORK_DNS: 192.168.1.1
+  CRED_CERT_C: XX
+  KEYSTONE_SUPERUSER_TENANT: Administrator
+  VPX_DESCRIPTION: OpenStack VPX managed by Geppetto
+  GUEST_NETWORK_BRIDGE: xenbr0
+  NETWORK_NETWORK_DRIVER: nova.network.linux_net
+  CRED_CERT_ST: Cloud

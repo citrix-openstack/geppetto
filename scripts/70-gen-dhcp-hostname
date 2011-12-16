@@ -1,0 +1,65 @@
+#!/bin/sh
+function generate_random_numeric_suffix() {
+  charspool=('0' '1' '2' '3' '4' '5' '6' '7' '8' '9');
+
+  len=${#charspool[*]}
+  num=6
+  randomnumbers=$(head -c $num /dev/urandom | od -t u1 | awk '{for (i = 2; i <= NF; i++) print $i}')
+
+  text=-
+  for c in $randomnumbers; do
+     text=$text${charspool[$((c % len))]}
+  done
+  echo $text
+}
+
+function get_mac_address() {
+  ifconfig eth1 | grep -m1 'HWaddr' | awk '{ print $5}'
+}
+
+function generate_mac_suffix() {
+  mac=$(get_mac_address)
+  text=${mac//:/-}
+  echo $text
+}
+
+ETH1_CONF_FILE=/etc/dhclient-eth1.conf
+HOSTNAME_BASE=os-vpx-
+KERNEL_OPTIONS=`cat /proc/cmdline`
+
+# if we are using crowbar, use crowbar style names
+if [[ $KERNEL_OPTIONS == *crowbar=true* ]]
+then
+  HOSTNAME_BASE="h"
+# if we are enforcing the VPX to be master, use 'master' as name
+elif [[ $KERNEL_OPTIONS == *geppetto_master=true* ]]
+then
+  HOSTNAME="master"
+# Otherwise, generate unique suffix for this host, based on the MAC address
+else
+  HOSTNAME_SUFFIX=$(generate_mac_suffix)
+  HOSTNAME=$HOSTNAME_BASE$HOSTNAME_SUFFIX
+fi
+
+# Edit network file
+echo HOSTNAME=\"${HOSTNAME}\" > /etc/sysconfig/network
+
+# Edit dhclient conf file
+echo "option puppet-master-name code 194 = text;" > $ETH1_CONF_FILE
+echo "option os-vpx-reverse-dns-prefix code 195 = text;" >> $ETH1_CONF_FILE
+echo "send host-name \"$HOSTNAME\";" >> $ETH1_CONF_FILE
+# The 'request;' line makes the client ask all the options,
+# even the 'puppet-master-name' one
+echo "request;" >> $ETH1_CONF_FILE
+echo "retry 60;" >> $ETH1_CONF_FILE
+
+# register with crowbar to get a proper IP address, before the network is restarted
+if [[ $KERNEL_OPTIONS == *crowbar=true* ]]
+then
+  MAC_ADDRESS=$(get_mac_address)
+  wget -q "http://192.168.124.10:3000/machines/transition/0.yaml?mac="$MAC_ADDRESS"&state=ready" -O- -T 30
+fi
+
+# Restart network service
+echo Hostname: \"${HOSTNAME}\"
+service network restart

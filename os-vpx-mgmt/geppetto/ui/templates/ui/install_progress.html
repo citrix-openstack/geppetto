@@ -1,0 +1,65 @@
+{% extends "ui/postlogin_base.html" %}
+
+{% block title %}Setup{% endblock %}
+
+{% block content_login %}
+
+<script type="text/javascript" src="javascript/xregexp-min.js"></script>
+<script type="text/javascript" src="javascript/xregexp-unicode-base.js"></script>
+<script type="text/javascript" src="javascript/passwordstrength.js"></script>
+
+
+
+<form method="post" id="SubmitForm">
+<input type="hidden" name="choice" value="asdf" />
+
+<div class="login_header">
+<h1>
+    Please wait...
+</h1>
+</div>
+
+<div class="login_text">
+<p style="text-align:center">
+    Please wait while the services start...
+</p>
+<p style="text-align:center"><img src="/images/submodal/submodal-loading.gif" alt="loading..."/></p>
+
+</form>
+
+<script type="text/javascript">
+function poll_status_after_interval() {
+    setTimeout("poll_status()",5*1000);
+}
+
+var task_url = '/celery/' + '{{task_id}}' + '/status';
+var service_name = "{{service_name}}"
+
+var result = null;
+on_poll_success = function() { window.location.href = 'install_checklist';}
+var on_error = function() { alert("Sorry, the " + service_name + " service has not yet started. " + result) }; // TODO - redirect to error page...
+
+function check_status(task_url, on_pending, on_success, on_error) {
+	$.getJSON(task_url, function(data) {
+  		status = data["task"]["status"];
+  		result = data["task"]["result"];
+  		if (status == "PENDING") {
+  		    on_pending();
+  		} else if(status == "SUCCESS") {
+  		    on_success();
+  		} else {
+  			on_error();
+  			on_success();
+  		}
+	});
+}
+
+function poll_status() {
+    check_status(task_url, poll_status_after_interval, on_poll_success, on_error);
+}
+
+poll_status_after_interval();
+
+</script>
+
+{% endblock %}

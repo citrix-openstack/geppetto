@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 92,
+        "model": "core.configclassparameter", 
+        "fields": {
+            "default_value": "nova.virt.xenapi.firewall.Dom0IptablesFirewallDriver", 
+            "config_type": 13, 
+            "config_class": 3, 
+            "name": "FIREWALL_DRIVER", 
+            "description": "Driver for implementing the security group feature."
+        }
+    }
+]

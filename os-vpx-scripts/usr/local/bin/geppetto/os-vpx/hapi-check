@@ -1,0 +1,66 @@
+#!/usr/bin/env python2.6
+# vim: tabstop=4 shiftwidth=4 softtabstop=4
+
+# Copyright (c) 2011 Citrix Systems, Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+import logging
+import sys
+import socket
+
+from geppetto.hapi import config_util
+from geppetto.hapi import interface
+from geppetto.hapi import exception
+
+logger = logging.getLogger('hapi-check')
+
+
+if __name__ == "__main__":
+    try:
+        session = interface.Session.createSession()
+        if len(sys.argv) == 2 and sys.argv[1] == '--password_status':
+            try:
+                session.login()
+                state = 'SET'
+            except exception.HAPIFailure, e:
+                logger.exception('Failure: exit_code(%s), message(%s)' \
+                                                    % (e.code, e.message))
+                if e.code == 4:
+                    state = 'WRONG'
+                elif e.code == 1:
+                    state = 'UNSET'
+            with open('/tmp/hapi.validated', 'w') as f:
+                f.write(state)
+            print state
+        elif len(sys.argv) == 4 and sys.argv[1] == '--test':
+            username = sys.argv[2]
+            password = sys.argv[3]
+            session.login(username, password)
+            print 'Success!'
+        else:
+            session.login()
+            print 'Success!'
+    except exception.HAPIFailure, e:
+        print >> sys.stderr, \
+                'Failure: exit_code(%s), message(%s)' % (e.code, e.message)
+        logger.exception('Failure: exit_code(%s), message(%s)' \
+                                                    % (e.code, e.message))
+        sys.exit(4)
+    except socket.error, exn:
+        if exn.errno == 111:
+            print >> sys.stderr, 'Error: connection refused.'
+            sys.exit(2)
+        else:
+            print >> sys.stderr, exn
+            sys.exit(1)

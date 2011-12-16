@@ -1,0 +1,38 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Monitor Cloud{% endblock %}
+
+{% block nav_global_settings %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+<h1>
+<img src="images/nav/settings.gif">
+Global Settings
+</h1>
+
+<p>TODO - expand</p>
+
+<div class="detailcontainer">
+    <h2>Certificate</h2>
+
+    <table class="settingsdetailview">
+        <tr>
+            <th>Subject:</td>
+            <td class="settingsdetail">Cloud</td>
+            <td><a class="action_button" href=""><img src="/images/icon/pencil.png" alt=""> Upload Certificate </a></td>
+        </tr>
+        <tr>
+            <th>Issuer:</th>
+            <td class="settingsdetail">External</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Thumbprint:</th>
+            <td class="settingsdetail">123456789</td>
+            <td></td>
+        </tr>
+    </table>    
+    <br/>
+</div>
+<br>
+{% endblock %}

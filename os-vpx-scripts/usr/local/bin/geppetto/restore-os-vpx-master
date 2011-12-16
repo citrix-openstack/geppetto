@@ -1,0 +1,71 @@
+#!/bin/sh
+
+set -e
+. /usr/local/share/geppetto/geppetto-env.sh
+
+BACKUPS="/var/lib/geppetto/backups"
+MP="/var/lib/geppetto/images"
+DEV="xvde"
+host=$(hostname -f)
+
+fstab_entry_restore()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  local mount_point="$3"
+  entry=$(cat "$backup_path/$backup_file")
+  if [ "$entry" != "None" ]
+  then
+    grep -v "$mount_point" /etc/fstab >/tmp/fstab
+    echo "$entry" >>/tmp/fstab
+    mv /tmp/fstab /etc/fstab
+    rm -rf /tmp/fstab
+    set +e
+    mount "$mount_point" >/dev/null 2>&1
+    code=$?
+    set -e
+    if [[ $code -eq 32 ]]
+    then
+      echo -e "\tAssuming the mount point already mounted, nothing to do!"
+    elif [[ $code -ne 0 ]]
+    then
+      echo -e "\n\tFailed to mount $mount_point, bailing!"
+      exit 1
+    fi
+  else
+    echo -e "\n\tNo mounting points, nothing to do!"
+  fi
+}
+
+vdisk_restore()
+{
+  local backup_path="$1"
+  local backup_file="$2"
+  local user_device="$3"
+  vdisk=$(cat "$backup_path/$backup_file")
+  if [ "$vdisk" != "" ]
+  then
+    if [ ! -b "/dev/$user_device" ]
+    then
+      vdisk-attach "$vdisk" "$user_device"
+    else
+      echo -e "\n\tDevice $user_device already present!"
+    fi
+  fi
+}
+
+# The restore script is pretty dumb at the moment.
+echo -n "Restoring mountpoints..."
+vdisk_restore $BACKUPS/latest image_vdisk "$DEV"
+fstab_entry_restore $BACKUPS/latest fstab "$MP"
+echo "Done."
+echo -n "Restoring VPX name..."
+geppetto-properties-update
+echo "Done."
+echo -n "Restoring SysLog settings..."
+configure-vpx-logging  2&>1 /dev/null
+service rsyslog restart  2&>1 /dev/null
+echo "Done."
+echo -n "Finalising changes..."
+os-vpx Task apply_changes "['$host',]"
+echo "Done."

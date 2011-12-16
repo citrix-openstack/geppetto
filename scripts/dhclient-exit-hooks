@@ -1,0 +1,23 @@
+MGMT_INTF=eth1
+case "$reason" in
+"REBOOT" | "BOUND" )
+    if service puppet status >/dev/null
+    then
+        # restarts puppet if the interface comes up and puppet is
+        # already running. This should speed up the registering
+        # process between Master and Agent        
+        if [ $interface == "$MGMT_INTF" ]
+        then
+            service puppet restart
+        fi
+    fi
+    # Note that we can't just reload dnsmasq -- it only reloads /etc/hosts,
+    # not its config files.
+    service dnsmasq restart
+    ;;
+"MEDIUM" | "PREINIT" | "RENEW" | "REBIND" | "EXPIRE" | "FAIL" | "TIMEOUT" )
+    ;;
+default )
+    echo "Unknown reason $reason"
+    ;;
+esac

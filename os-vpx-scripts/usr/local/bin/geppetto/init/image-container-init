@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+
+attach-image-container $1 $2
+touch $GEPPETTO_LIB_PATH/image-container-init-run

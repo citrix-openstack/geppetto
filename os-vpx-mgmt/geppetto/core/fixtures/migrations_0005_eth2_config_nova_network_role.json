@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 90, 
+        "model": "core.roleconfigclassassignment", 
+        "fields": {
+            "config_class": 13, 
+            "role": 3
+        }
+    } 
+]

@@ -1,0 +1,18 @@
+/var/log/geppetto/celery*.log {
+    daily
+    missingok
+}
+
+/var/log/geppetto/geppetto.log {
+    daily
+    missingok
+    postrotate
+       /etc/init.d/citrix-geppetto stop
+       /etc/init.d/citrix-geppetto start
+    endscript
+}
+
+#/var/log/geppetto/*-stderr.log {
+#    weekly
+#    missingok
+#}

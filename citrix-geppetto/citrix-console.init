@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# citrix-osconsole: Citrix Text Console for OpenStack VPX
+#
+# chkconfig: 2345 99 99
+# description: Citrix Text Console for OpenStack VPX.
+
+. /etc/rc.d/init.d/citrix-console.sh

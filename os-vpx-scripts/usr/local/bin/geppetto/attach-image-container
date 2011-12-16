@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+. $GEPPETTO_SHARE_PATH/attach-data-disk.sh
+
+DEV='xvde'
+NAME='OpenStack VPX images'
+KEY='os-vpx-images'
+FS='ext3'
+SIZE="${1-500}"
+MARK="${2-nova}"
+MP="/var/lib/${MARK}/images"
+UG="${MARK}:${MARK}"
+
+attach_data_disk "$DEV" "$MP" "$NAME" "$KEY" "$FS" "$UG" "$SIZE"

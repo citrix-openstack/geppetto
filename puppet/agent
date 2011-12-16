@@ -1,0 +1,42 @@
+# This is a Geppetto Service Script used on the VPX Master to run puppet-agent periodically.
+
+set -x
+
+slave_switch="$1"   # Ask to restart puppet agent daemon that runs on slaves
+
+if [ "$slave_switch" == "--check-daemon" ]
+then
+  if [ -f "/var/lib/geppetto/os-vpx-reset_daemon" ]
+  then
+    service puppet stop 2> /dev/null
+    service puppet start 2> /dev/null
+    rm -f "/var/lib/geppetto/os-vpx-reset_daemon"
+  fi
+  exit 0
+fi
+
+PUPPET_LOCKFILE="/var/lib/puppet/state/puppetdlock"
+
+# Note that we don't even try to run puppetd if the lock file exists.
+# It does quite a lot of stuff at startup, even before it checks the
+# lockfile exists itself, so this saves a fair amount of CPU.
+# We fall through to check whether the lock file is stale though, in which
+# case it will get cleaned up for next time.
+[ ! -f "$PUPPET_LOCKFILE" ] && \
+  /usr/sbin/puppetd --onetime --no-daemonize --verbose
+
+if [[ "$?" -eq 1 ]]
+then
+  zombies=$(ps -elf | grep 'Z' | grep puppetd)
+  runners=$(ps aux | grep ruby | grep puppetd | awk '{ print $2 }')
+  # If no puppetd is executing or there are zombies lurking around
+  # make sure we clean the lock file if it is present.
+  if [ -z "$runners" -o -n "$zombies" -a -f "$PUPPET_LOCKFILE" ]
+  then
+    echo "Puppet believes that it is already running, but it is not...deleting  stale lock file."
+    rm -rf $PUPPET_LOCKFILE
+    echo "WARNING: celeryd is not cleaning up child processes:\n"
+    echo "WARNING: $zombies."
+  fi
+fi
+

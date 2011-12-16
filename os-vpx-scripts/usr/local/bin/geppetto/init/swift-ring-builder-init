@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eux
+
+. /usr/local/share/geppetto/geppetto-env.sh
+
+# Remove old ring builds
+rm -rf /var/lib/swift/*
+chown swift:swift -R /var/lib/swift
+
+# Create rings
+create-swift-rings $@
+
+# Belt-and-braces check that we actually created all three rings.  See OS-854.
+if [ ! -f /var/lib/swift/account.ring.gz ] ||
+   [ ! -f /var/lib/swift/container.ring.gz ] ||
+   [ ! -f /var/lib/swift/object.ring.gz ]
+then
+  exit 1
+fi
+
+# Tell Puppet to do it once
+touch $GEPPETTO_LIB_PATH/swift-ring-builder-init-run

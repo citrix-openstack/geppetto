@@ -1,0 +1,12 @@
+$ORIGIN %(dns_suffix)s.
+$TTL 3h
+@ IN SOA %(hostname)s.%(dns_suffix)s. admin.%(dns_suffix)s. (
+		2008071012	; Serial yyyymmddnn
+		3h		; Refresh After 3 hours
+		1h		; Retry Retry after 1 hour
+		1w		; Expire after 1 week
+		1h)		; Minimum negative caching of 1 hour
+; Name servers
+@ 	3600 IN NS %(hostname)s.%(dns_suffix)s.
+@ 	3600 IN A %(interface)s
+%(hostname)s	3600 IN A %(interface)s

@@ -1,0 +1,180 @@
+{% extends "ui/postlogin_with_nav_base.html" %}
+
+{% block title %}Install Checklist{% endblock %}
+
+{% block nav_install_checklist %}id="nav_current"{% endblock %}
+
+{% block content_main %}
+
+{% load install_checklist_extras %}
+
+<link rel="stylesheet" href="css/welcome.css" />
+<script type="text/javascript">
+    function ShowHide(id1, id2){
+        var img = document.getElementById(id1);
+        var div = document.getElementById(id2);
+        if(div.style.display=="none"){
+            div.style.display = "";
+            img.src = "images/icon/treeminus.gif";
+        }
+        else{
+            div.style.display = "none";
+            img.src = "images/icon/treeplus.gif";
+        }
+    }
+</script>
+<h1>
+    <img src="images/nav/install_checklist.gif" alt="">
+    Install Checklist
+</h1>
+<div class="welcome-content">
+    <div class="welcome-item-title-bar">
+        <div class="welcome-item-title">
+            Required Steps
+        </div>
+    </div>
+    
+    {% welcome-item "setup-hypervisor" "1: Setup Hypervisor Integration" hypervisor_status %}
+        <div class="welcome-sub-items" id="setup-hypervisor" {% if hypervisor_complete %}style="display:none"{% endif %}>
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not hypervisor_complete %}<a href="setup_password" id="setup_hypervisor">{% endif %}Setup Hypervisor Integration{% if not hypervisor_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if swift_complete %}
+            You have successfully setup the Hypervisor Integration.
+            {% else %}
+            The Citrix OpenStack management system needs the credentials for your hypervisor (such as XenServer) so it can configure each node for your chosen setup.
+            {% endif %}
+            </div>
+        </div>        
+   {% welcome-item-end %}
+   
+   {% welcome-item "setup-rabbitmqmysql" "2. Setup Database and Message Queue" rabbit_mysql_status %}
+        <div class="welcome-sub-items" id="setup-rabbitmqmysql" {% if rabbit_mysql_complete or not swift_complete %}style="display:none"{% endif %}>
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not rabbit_mysql_complete %}<a href="add_workers_for_supporting_roles" id="setup_rabbitmq_mysql">{% endif %}Setup RabbitMQ and MySQL{% if not rabbit_mysql_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if rabbit_mysql_complete %}
+            You have successfully configured and enabled RabbitMQ and MySQL.
+            {% else %}
+            OpenStack Compute makes use of a Database and Message Queue and OpenStack Imaging makes use of a Database. MySQL is used to provide the Database and RabbitMQ is used to provide the AMQP compliant Message Queue.
+            {% endif %}
+            </div>
+        </div>
+    {% welcome-item-end %}    
+   
+   {% welcome-item "setup-identity" "3: Setup OpenStack Identity service" identity_status %}
+        <div class="welcome-sub-items" id="setup-identity" {% if not hypervisor_complete or identity_complete %}style="display:none"{% endif %}>
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not identity_complete %}<a href="setup_identity" id="setup_identity">{% endif %}Setup Identity service{% if not identity_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if identity_complete %}
+            You have successfully setup the Identity service.
+            {% else %}
+            The Identity service is used for user authentication by all the OpenStack components. You need to assign a node to do this role.
+            {% endif %}
+            </div>
+        </div>        
+   {% welcome-item-end %}
+    
+   {% welcome-item "setup-objectstore" "4: Setup OpenStack Object Storage" swift_status %}
+        <div class="welcome-sub-items" id="setup-objectstore" {% if not identity_complete or rabbit_mysql_complete or swift_complete %}style="display:none"{% endif %}>
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not swift_complete %}<a href="setup_swift_start" id="setup_object_store">{% endif %}Setup Object Storage{% if not swift_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if swift_complete %}
+            You have successfully setup Object Storage Worker and Object Storage API nodes.
+            {% else %}
+            Assign Object Storage Worker and Object Storage API roles.
+            {% endif %}
+            </div>
+        </div>
+    {% welcome-item-end %}
+    
+    {% welcome-item "setup-imaging" "5. Setup OpenStack Imaging" imaging_status %}
+        <div class="welcome-sub-items" id="setup-imaging" {% if imaging_complete or not rabbit_mysql_complete %}style="display:none"{% endif %}>
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not imaging_complete %}<a href="setup_imaging" id="setup_imaging">{% endif %}Setup OpenStack Imaging{% if not imaging_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if imaging_complete %}
+            You have successfully configured the OpenStack imaging service.
+            {% else %}
+            Assign OpenStack Imaging Registry and OpenStack Imaging API roles.
+            {% endif %}
+            </div>
+        </div>
+    {% welcome-item-end %}
+    
+    {% welcome-item "setup-compute" "6. Setup OpenStack Compute" compute_status %}
+        <div class="welcome-sub-items" id="setup-compute" {% if not imaging_complete %}style="display:none"{% endif %}>
+            
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not compute_management_complete %}<a href="setup_nova_api" id="setup_api">{% endif %}Add OpenStack Compute Management{% if not compute_management_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if compute_management_complete %}
+            You have successfully configured OpenStack Compute API and OpenStack Compute Scheduler.
+            {% else %}
+            OpenStack Compute API runs the OpenStack and EC2 REST APIs and OpenStack Compute Scheduler decides which worker should handle requests from the API.
+            {% endif %}
+            </div>
+            
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not compute_network_complete %}<a href="setup_network" id="setup_network">{% endif %}Add OpenStack Network Worker{% if not compute_network_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if compute_network_complete %}
+            You have successfully configured OpenStack Network.
+            {% else %}
+            OpenStack Network helps provide networking facilities for instances running on OpenStack Compute Workers.
+            {% endif %}
+            </div>
+            
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif">{% if not block_storage_complete %}<a href="setup_block_storage_worker" id="setup_volume">{% endif %}Add OpenStack Volume Worker{% if not block_storage_complete %}</a>{% endif %}</div>
+            <div class="welcome-sub-item-description">
+            {% if block_storage_complete %}
+            You have successfully configured and enabled OpenStack Volume.
+            {% else %}
+            OpenStack Volume gives you block based storage and allows you to attach volumes to instances.
+            {% endif %}
+            </div>
+             
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif"><a href="add_compute_node" id="setup_compute_worker">Add OpenStack Compute Worker</a></div>
+            <div class="welcome-sub-item-description">
+            {% if compute_controller_complete %}
+            You have successfully added at least one Compute Worker. The Compute Worker is used to run Virtual Machines.
+            {% else %}
+            The Compute Worker is used to run Virtual Machines.
+            {% endif %}
+            </div>
+        </div>
+    {% welcome-item-end %}
+</div>
+ 
+
+<div class="welcome-content">
+    <div class="welcome-item-title-bar">
+        <div class="welcome-item-title">
+            Optional Steps
+        </div>
+    </div>
+    
+    {% welcome-item "setup-static-ip" "Publish Services" False %}
+        <div class="welcome-sub-items" id="setup-static-ip" style="display:none">
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif"> Move Services to Public Network</div>
+            <div class="welcome-sub-item-description">By default, all services are only available on the internal management network.
+            Once you have your cloud correctly configured you may wish to allow users to access the Compute API, Image Service API or Object Store API using the external network.
+            This can be done using the <a href="publish_service">Publish Service Wizard</a>.</div>
+            
+        </div>
+    {% welcome-item-end %}
+    
+    {% welcome-item "setup-lbservice" "Deploy LBaaS" False %}
+        <div class="welcome-sub-items" id="setup-lbservice" style="display:none">
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif"> Configure Load Balancer for Compute Instances</div>
+            <div class="welcome-sub-item-description">This wizard lets you configure and deploy an LB Service (and self-service portal) so that Web Server instances 
+            run by cloud tenants can take advantage of this (experimental) feature. This can be done using the <a href="configure_lbaas">Configure Service Wizard</a>.</div>
+            
+        </div>
+    {% welcome-item-end %}
+    
+    {% welcome-item "scaleout" "Scale out cloud" False %}
+        <div class="welcome-sub-items" id="scaleout" style="display:none">
+            <div class="welcome-sub-item-title"><img src="images/icon/treebullet.gif"> Scale out your OpenStack cloud</div>
+            <div class="welcome-sub-item-description">This wizard allows you to add extra capacity, such as addition Compute Controllers and addition Compute API nodes. To add an extra node run the <a href="scaleout_choose_role">Cloud Scale Out Wizard</a>.</div>
+            
+        </div>
+    {% welcome-item-end %}
+</div>
+
+{% endblock %}

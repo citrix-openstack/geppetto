@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Citrix OpenStack VPX - {% block title %}{{ title }}{% endblock %}</title>
+    
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% load adminmedia %}{% admin_media_prefix %}css/base.css{% endblock %}" />
+    {% block extrastyle %}{% endblock %}
+    <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{% block stylesheet_ie %}{% load adminmedia %}{% admin_media_prefix %}css/ie.css{% endblock %}" /><![endif]-->
+	{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% admin_media_prefix %}css/rtl.css{% endblock %}" />{% endif %}
+	<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";</script>
+	{% block extrahead %}{% endblock %}
+	{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    
+    <!-- Style Sheets Includes and Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/layout.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/tables.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/menu.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/vmlist.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/poollist.css">
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/layout-ie.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/vmlist-ie.css">
+    <![endif]-->
+    <!-- End Styles -->
+
+    <!--SubModal-->
+    <link rel="stylesheet" type="text/css" href="/css/submodal.css">
+    <script type="text/javascript" src="/javascript/submodal-common.js"></script>
+    <script type="text/javascript" src="/javascript/submodal.js"></script>
+    <!--/SubModal-->
+    
+    <script type="text/javascript" src="/javascript/util.js"></script>
+    <script type="text/javascript" src="/javascript/json2.js"></script>
+    <script type="text/javascript" src="/javascript/menu.js"></script>
+    
+    <script type="text/javascript" src="/javascript/jquery-1.3.2.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.sparkline.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.form.js"></script>
+</head>
+{% load i18n %}
+
+{% block body %}
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% block body_class %}login_layout{% endblock %}{% endblock %}">
+
+{% block header %}
+<div id="header">
+    
+    <div id="header_right">
+    {% if user.is_active and user.is_staff %}
+          	{% now "jS F Y H:i" %} &nbsp;|&nbsp;
+            <a href="/admin/">DB Admin</a>
+            &nbsp;|&nbsp;
+            <img src="/images/icon/information.png" alt="">
+            <a href="http://support.citrix.com/product/xens" target="_blank">Help</a>
+                &nbsp;|&nbsp;
+                <img src="/images/icon/logout.png" alt="">
+                <a href="/accounts/logout/">Logout</a>
+    {% endif %}
+        <a href="http://citrix.com/" target="_blank" id="citrix_logo">
+            <img
+                src="/oem-map/citrix_logo.png"
+                alt="Citrix Systems, Inc."
+            >
+        </a>
+    </div>    
+
+    <div id="header_title">
+        <a href="/">
+        <img
+            src="/oem-map/logo.png"
+            alt="XenServer Web Self Service"
+        >
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% comment %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/">{% trans 'Home' %}</a>{% if title %} &rsaquo; {{ title }}{% endif %}</div>{% endblock %}
+{% endcomment %}
+
+
+
+
+
+    <!-- Content -->
+    <div id="content_" style="margin-left: 15px; margin-right:15px;" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear" />
+    </div>
+    <!-- END Content -->
+
+    {% block footer %}<div id="footer"></div>{% endblock %}
+
+
+</body>
+{% endblock %}
+</html>
+
+

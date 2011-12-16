@@ -1,0 +1,118 @@
+--- os-dashboard-upstream/django-openstack/django_openstack/fixtures/initial_data.json	1970-01-01 01:00:00.000000000 +0100
++++ os-dashboard-upstream/django-openstack/django_openstack/fixtures/initial_data.json	2011-07-13 14:10:28.000000000 +0100
+@@ -0,0 +1,28 @@
++[
++    {
++        "pk": 1,
++        "model": "auth.user",
++        "fields": {
++            "username": "@ADMIN_USER@",
++            "first_name": "",
++            "last_name": "",
++            "is_active": true,
++            "is_superuser": true,
++            "is_staff": true,
++            "last_login": "2011-04-15 03:07:29",
++            "groups": [],
++            "user_permissions": [],
++            "password": "sha1$21c98$e019b87b91067be94e02ebad80b98ae81adb23b7",
++            "email": "@ADMIN_EMAIL@",
++            "date_joined": "2011-04-15 03:07:29"
++        }
++    },
++    {
++        "pk": 1,
++        "model": "sites.site",
++        "fields": {
++            "domain": "@SITE_DOMAIN@",
++            "name": "@SITE_NAME@"
++        }
++    }
++]
+--- os-dashboard-upstream/openstack-dashboard/local/local_settings.py	1970-01-01 01:00:00.000000000 +0100
++++ os-dashboard-upstream/openstack-dashboard/local/local_settings.py	2011-07-13 14:15:19.000000000 +0100
+@@ -0,0 +1,84 @@
++import os
++
++DEBUG = True
++TEMPLATE_DEBUG = DEBUG
++PROD = False
++USE_SSL = False
++
++LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
++DATABASES = {
++    'default': {
++        'ENGINE': 'django.db.backends.sqlite3',
++        'NAME': os.path.join(LOCAL_PATH, 'dashboard_openstack.sqlite3'),
++    },
++}
++
++CACHE_BACKEND = 'dummy://'
++
++
++# Send email to the console by default
++EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
++# Or send them to /dev/null
++#EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
++
++# django-mailer uses a different settings attribute
++MAILER_EMAIL_BACKEND = EMAIL_BACKEND
++
++# Configure these for your outgoing email host
++# EMAIL_HOST = 'smtp.my-company.com'
++# EMAIL_PORT = 25
++# EMAIL_HOST_USER = 'djangomail'
++# EMAIL_HOST_PASSWORD = 'top-secret!'
++
++
++OPENSTACK_ADMIN_TOKEN = "999888777666"
++OPENSTACK_KEYSTONE_URL = "http://localhost:5000/v2.0/"
++
++# NOTE(tres): Replace all of this nonsense once Swift+Keystone
++# is stable.
++# SWIFT_AUTHURL = 'http://localhost:8080/auth/v1.0'
++# SWIFT_ACCOUNT = 'test'
++# SWIFT_USER = 'tester'
++# SWIFT_PASS = 'testing'
++
++# If you have external monitoring links
++EXTERNAL_MONITORING = [
++    ['Nagios','http://foo.com'],
++    ['Ganglia','http://bar.com'],
++]
++
++# If you do not have external monitoring links
++# EXTERNAL_MONITORING = []
++
++# Uncomment the following segment to silence most logging
++# django.db and boto DEBUG logging is extremely verbose.
++#LOGGING = {
++#        'version': 1,
++#        # set to True will disable all logging except that specified, unless
++#        # nothing is specified except that django.db.backends will still log,
++#        # even when set to True, so disable explicitly
++#        'disable_existing_loggers': False,
++#        'handlers': {
++#            'null': {
++#                'level': 'DEBUG',
++#                'class': 'django.utils.log.NullHandler',
++#                },
++#            'console': {
++#                'level': 'DEBUG',
++#                'class': 'logging.StreamHandler',
++#                },
++#            },
++#        'loggers': {
++#            # Comment or Uncomment these to turn on/off logging output
++#            'django.db.backends': {
++#                'handlers': ['null'],
++#                'propagate': False,
++#                },
++#            'django_openstack': {
++#                'handlers': ['null'],
++#                'propagate': False,
++#            },
++#        }
++#}
++
++TOTAL_CLOUD_RAM_GB = 10

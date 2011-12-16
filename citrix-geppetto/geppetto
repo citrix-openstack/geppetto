@@ -1,0 +1,16 @@
+#!/usr/bin/python2.6
+from geppetto.wsgi import run_eventlet_server
+import sys
+
+def main(argv):    
+    if len(argv) != 2:
+        print "Please provide the interface (e.g. 0.0.0.0) and the port (e.g. 8080) as arguments to this script"
+        sys.exit(1)
+    
+    interface = argv[0]
+    port = int(argv[1])
+    
+    run_eventlet_server(port, interface)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
