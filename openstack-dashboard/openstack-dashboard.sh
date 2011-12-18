@@ -2,11 +2,11 @@ DASHBOARD_USER=root
 # Note PYTHON_EGG_CACHE is overridden lower down, when we're running Python
 # directly (i.e. not through daemonize).
 export PYTHON_EGG_CACHE="/tmp/$DASHBOARD_USER/PYTHON_EGG_CACHE"
-export DASHBOARD_DB=/var/lib/dashboard/dashboard_openstack.sqlite3
+export DASHBOARD_DB=/var/lib/horizon/horizon.sqlite3
 
 . /etc/rc.d/init.d/functions
 
-pidfile="/var/run/dashboard/dashboard.pid"
+pidfile="/var/run/horizon/horizon.pid"
 lockfile="/var/lock/subsys/openstack-dashboard"
 
 [ -f "/etc/sysconfig/openstack-dashboard" ] && . "/etc/sysconfig/openstack-dashboard"
@@ -16,7 +16,7 @@ OPTIONS="$OPTIONS"
 start() {
     echo -n "Starting openstack-dashboard: "
     daemonize -p "$pidfile" -u "$DASHBOARD_USER" -l "$lockfile" \
-              -a -e "/var/log/dashboard/dashboard-stderr.log" "/usr/bin/openstack-dashboard" $OPTIONS
+              -a -e "/var/log/horizon/horizon-stderr.log" "/usr/bin/openstack-dashboard" $OPTIONS
     retval=$?
     [ $retval -eq 0 ] && touch "$lockfile"
     [ $retval -eq 0 ] && success || failure
@@ -50,10 +50,10 @@ rh_status_q() {
 setup() {
     if [[ ! -e "$DASHBOARD_DB" ]]
     then
-        cd /var/lib/dashboard/ > /dev/null
+        cd /var/lib/horizon/ > /dev/null
         echo -n "No Database detected, creating..."
         export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
-        python26 /usr/lib/python2.6/site-packages/dashboard/manage.py syncdb --noinput
+        python26 /usr/lib/python2.6/site-packages/horizon/manage.py syncdb --noinput
         export PYTHON_EGG_CACHE="/tmp/$DASHBOARD_USER/PYTHON_EGG_CACHE"
         cd - > /dev/null
         echo "done!"

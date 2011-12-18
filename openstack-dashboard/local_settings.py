@@ -9,7 +9,7 @@ LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/var/lib/dashboard/dashboard_openstack.sqlite3',
+        'NAME': '/var/lib/horizon/horizon.sqlite3',
     },
 }
 
@@ -90,11 +90,3 @@ EXTERNAL_MONITORING = []
 
 # How much ram on each compute host?
 COMPUTE_HOST_RAM_GB = 16
-
-#
-# Enable CloudStack style
-#
-#TEMPLATE_DIRS = (
-#    '/usr/lib/python2.6/site-packages/media/dashboard-cs/templates'
-#)
-#MEDIA_ROOT = '/usr/lib/python2.6/site-packages/media/dashboard-cs/media'

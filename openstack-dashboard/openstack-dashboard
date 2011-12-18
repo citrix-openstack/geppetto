@@ -1,6 +1,6 @@
 #!/usr/bin/python2.6
 
-from dashboard.wsgi import run_eventlet_server
+from horizon.wsgi import run_eventlet_server
 
 
 PORT = 9999

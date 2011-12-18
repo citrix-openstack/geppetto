@@ -14,7 +14,6 @@ COMPUTE_UPSTREAM := ../openstack.compute
 OPENSTACKX_UPSTREAM := ../openstackx
 endif
 
-LP_OS_DASHBOARD_BRANCH ?= lp:openstack-dashboard
 
 GEPPETTO_FULLNAME := citrix-geppetto-$(PRODUCT_VERSION)-$(BUILD_NUMBER)
 GEPPETTO_BASE_FULLNAME := citrix-geppetto-base-$(PRODUCT_VERSION)-$(BUILD_NUMBER)
@@ -33,8 +32,8 @@ GEPPETTO_SERVER_RPM := $(MY_OUTPUT_DIR)/RPMS/noarch/citrix-geppetto-server-$(PRO
 GEPPETTO_SRPM := $(MY_OUTPUT_DIR)/SRPMS/$(GEPPETTO_FULLNAME).src.rpm
 
 
-DASHBOARD_VERSION := $(shell sed -ne "s,^.*version = '\(.*\)'.*$$,\1,p" \
-                     $(HORIZON_UPSTREAM)/openstack-dashboard/setup.py)
+DASHBOARD_VERSION := $(shell PYTHONPATH=$(HORIZON_UPSTREAM)/horizon \
+                               python -c 'import horizon.version; print horizon.version.canonical_version_string()')
 
 MY_DB_OBJ_DIR := $(MY_OBJ_DIR)/openstack-dashboard
 DASHBOARD_FULLNAME := openstack-dashboard-$(DASHBOARD_VERSION)-$(BUILD_NUMBER)
