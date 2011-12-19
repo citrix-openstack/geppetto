@@ -34,11 +34,13 @@ class ReportStatus:
     Failed = 'f'
     Stable = 'u'
     Pending = '_'
+    Disabled = '_'
 
     _Changed = 'changed'
     _Failed = 'failed'
     _Stable = 'stable'
     _Pending = 'pending'
+    _Disabled = 'disabled'
     _Unchanged = 'unchanged'
 
     # the first three left-side values are what
@@ -46,7 +48,8 @@ class ReportStatus:
     choices = {Changed: _Changed,
                Failed: _Failed,
                Stable: _Stable,
-               Pending: _Pending, }
+               Pending: _Pending,
+               Disabled: _Disabled, }
 
     r_choices = {_Changed: Changed,
                  _Failed: Failed,
@@ -211,6 +214,7 @@ class Node(models.Model):
 
     def disable(self):
         self.enabled = False
+        self.set_report_status(ReportStatus.Disabled)
         self.save()
 
     @classmethod
