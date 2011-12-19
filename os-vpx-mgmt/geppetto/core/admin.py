@@ -17,7 +17,7 @@
 import logging
 
 from django.contrib import admin
-from geppetto.geppettolib import puppet
+from geppetto.ui.views import utils as ui_utils
 
 from geppetto.tasks import task_utils
 
@@ -70,10 +70,7 @@ class NodeAdmin(admin.ModelAdmin):
 
     def apply_changes(self, request, queryset):
         node_fqdns = [node.fqdn for node in queryset]
-
-        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
-        svc = service_proxy.create_proxy(master_fqdn, 8080,
-                                         service_proxy.Proxy.Geppetto, 'v1')
+        svc = ui_utils.get_geppetto_web_service_client()
         logger.debug('Applying configuration following node: %s' % node_fqdns)
         svc.Task.apply_changes(node_fqdns)
 
@@ -99,15 +96,12 @@ class NodeRoleAssignmentAdmin(admin.ModelAdmin):
             node_dict[nodeRoleAssignment.node.fqdn].\
                           append(str(nodeRoleAssignment.role))
 
-        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
-        svc = service_proxy.create_proxy(master_fqdn, 8080,
-                                         service_proxy.Proxy.Geppetto, 'v1')
+        svc = ui_utils.get_geppetto_web_service_client()
         for node in node_dict.keys():
             svc.Node.restart_services(node, node_dict[node])
     restart_services.short_description = ("Restart the services on the "
                                           "selected nodes")
 
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def delete_noderole_assignment(self, request, queryset):
 

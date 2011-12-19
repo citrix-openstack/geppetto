@@ -214,3 +214,11 @@ class configure-public-vif {
    }
 }
 
+class ensure-celeryd-init-run {
+  init { 'confirm-celeryd-initialized':
+    cmd => "celeryd-init",
+    state => "/var/lib/geppetto/celeryd-init-run",
+    configs => 'geppetto-backend-config',
+   }
+}
+

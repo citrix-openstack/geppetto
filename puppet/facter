@@ -17,6 +17,7 @@
 #    under the License.
 
 import os
+import re
 import shutil
 import socket
 import sys
@@ -37,6 +38,42 @@ from geppetto.core.views import service_proxy
 
 RUBY_LIB = '/tmp/ruby'
 FACTER_PATH = '%s/facter' % RUBY_LIB
+LAST_FACTS = '/tmp/facts.lastsrun'
+
+EXCLUDE_FACTS = ['uptime', 'uptime_seconds', 'memoryfree']
+
+
+def write_facts(facts):
+    try:
+        with open(LAST_FACTS, 'w') as f:
+            f.write(facts)
+    except IOError, e:
+        print >> sys.stderr, e
+
+
+def read_facts():
+    try:
+        with open(LAST_FACTS, 'r') as f:
+            return f.read()
+    except IOError, e:
+        print >> sys.stderr, e
+        return ''
+
+
+def are_facts_changed(facts):
+    last_facts = read_facts()
+    if last_facts == facts:
+        return False
+    else:
+        write_facts(facts)
+        return True
+
+
+def strip_facts_entries(facts, exclude_list=EXCLUDE_FACTS):
+    for entry in exclude_list:
+        facts = re.sub('%s: .*' % entry, '', facts)
+    return facts
+
 
 if __name__ == "__main__":
     try:
@@ -48,11 +85,16 @@ if __name__ == "__main__":
         facter_cmd = 'facter %s' % custom_fact
         facts, err = utils.execute(facter_cmd)
         facts = facts.replace(' => ', ': ')
-        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
-        proxy = service_proxy.create_proxy(master_fqdn, 8080,
-                                           service_proxy.Proxy.Facter)
-        proxy.process_facts(network.get_hostname().lower(), facts)
-        print facts
+        facts = strip_facts_entries(facts)
+        if are_facts_changed(facts):
+                master_fqdn = puppet.PuppetNode().get_puppet_option('server')
+                proxy = service_proxy.create_proxy(master_fqdn, 8080,
+                                                   service_proxy.Proxy.Facter)
+                proxy.process_facts(network.get_hostname().lower(), facts)
+                print facts
+        else:
+            print >> sys.stderr, ('No changes occurred, to see the facts '
+                                 'check the file: %s') % LAST_FACTS
         sys.exit(0)
     except xmlrpclib.ProtocolError, err:
         print >> sys.stderr, "A protocol error occurred"

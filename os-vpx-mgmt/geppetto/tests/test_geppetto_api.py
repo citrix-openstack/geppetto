@@ -553,7 +553,7 @@ class TestGeppettoServiceAPI(test_base.DBTestBase):
         self.assertTrue('openstack-lb-service' in tags)
         self.assertTrue('COMPUTE_VLAN_INTERFACE' in tags)
         self.assertTrue('test1' in tags)
-        self.assertEqual(len(tags), 118)
+        self.assertEqual(len(tags), 126)
 
 
 def _add_stubout(stubs):

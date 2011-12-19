@@ -63,6 +63,10 @@ class TestGeppettoModel(test_base.DBTestBase):
         configs = config.get_values()
         self.assertGreater(len(configs), 0, '')
 
+    def test_safe_get_by_name(self):
+        node = Node.safe_get_by_name('missing_node')
+        self.assertEqual(node, None)
+
     def test_get_service_roles(self):
         roles = Role.get_service_roles()
         self.assertGreater(len(roles), 0)
@@ -135,7 +139,8 @@ class TestGeppettoModel(test_base.DBTestBase):
     def test_get_node_details(self):
         node = self._add_dummy_node()
         details = node.get_details()
-        valid_details = {'fqdn': 'test_fqdn',
+        valid_details = {'enabled': True,
+                         'fqdn': 'test_fqdn',
                          'group_id': None,
                          'group_overrides': {},
                          'host_fqdn': 'test_host',
@@ -235,6 +240,12 @@ class TestGeppettoModel(test_base.DBTestBase):
         self.assertEquals(roles['openstack-nova-api'],
                           'OpenStack Compute API')
 
+    def test_get_node_disabled(self):
+        node = self._add_dummy_node('node_1234')
+        node.enabled = False
+        node.save()
+        self.assertRaises(Failure, Node.get_by_name, 'node_1234')
+
     def test_get_role_compositions(self):
         compositions = RoleDescription.get_compositions()
         self.assertListEqual(compositions['OpenStack Compute Worker'],
@@ -247,6 +258,24 @@ class TestGeppettoModel(test_base.DBTestBase):
         nodes = Node.get_fqdns_by_roles(composition)
         self.assertEqual(node.fqdn, nodes[0])
         self.assertEqual(len(nodes), 1)
+
+    def test_get_fqdns_by_roles_with_disabled(self):
+        nova_api = RoleDescription.get_by_name('OpenStack Compute API')
+        composition = nova_api.get_composition()
+        node1 = self._add_dummy_node_into_role('node_1234', composition)
+        node1.enabled = False
+        node1.save()
+        self._add_dummy_node_into_role('node_1235', composition)
+        all_apis = Node.get_fqdns_by_roles(composition)
+        self.assertListEqual(['node_1235'], all_apis)
+
+    def test_get_all_with_disabled(self):
+        n1 = self._add_blank_node('n1')
+        n1.enabled = False
+        n1.save()
+        self._add_blank_node('n2')
+        all = Node.get_fqdns()
+        self.assertListEqual(['n2'], all)
 
     def test_get_configparam_by_role_description(self):
         params = RoleDesConfigParamAssignment.\

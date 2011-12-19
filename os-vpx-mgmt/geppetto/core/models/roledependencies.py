@@ -86,6 +86,8 @@ class Role(models.Model):
     # Geppetto utility roles
     IMG_CONTAINER = "os-vpx-image-container"
     RING_BUILDER = "os-vpx-ring-builder"
+    CELERY_WORKER = "citrix-geppetto-celeryd"
+    CELERY_CAMERA = "citrix-geppetto-celerycam"
     # Experimental
     LBSERVICE = "openstack-lb-service"
     # Keystone services

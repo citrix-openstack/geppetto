@@ -22,8 +22,8 @@ import roledependencies
 
 from django.db import models
 from django.core import validators
-from django.core import exceptions
 
+from geppetto.core import Failure
 from geppetto.core import exception_handler
 from geppetto.core import exception_messages
 from geppetto.hapi.config_util import HOST_TYPES
@@ -193,6 +193,7 @@ class Node(models.Model):
                                      choices=ReportStatus.choices.items(),
                                      blank=True)
     host = models.ForeignKey(Host, null=True, blank=True)
+    enabled = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["fqdn"]
@@ -208,9 +209,14 @@ class Node(models.Model):
         return cls.objects.create(fqdn=node_fqdn,
                                   master=Master.get_infrastructure_master())
 
+    def disable(self):
+        self.enabled = False
+        self.save()
+
     @classmethod
     def get_all_by_rolename(cls, role_name):
-        return cls.objects.filter(roles__name=role_name)
+        return cls.objects.filter(roles__name=role_name,
+                                  enabled=True)
 
     def get_details(self):
         d = dict(self.__dict__)
@@ -239,37 +245,41 @@ class Node(models.Model):
 
     @classmethod
     def get_fqdns(cls):
-        return [node.fqdn for node in cls.objects.all()]
+        return [node.fqdn for node in cls.objects.filter(enabled=True)]
 
     @classmethod
     def get_fqdns_by_role(cls, role, is_service=True, is_internal=False):
         return [node.fqdn for node in cls.objects.\
                                             filter(roles__name=role,
                                             roles__service=is_service,
-                                            roles__internal=is_internal)]
+                                            roles__internal=is_internal,
+                                            enabled=True)]
 
     @classmethod
     def get_fqdns_by_roles(cls, roles):
         return [node.fqdn \
-                for node in cls.objects.filter(roles__name__in=roles).\
-                                                                distinct()]
+                for node in cls.objects.filter(roles__name__in=roles,
+                                               enabled=True).distinct()]
 
     @classmethod
     def get_fqdns_excluded_by_roles(cls, roles):
         return [node.fqdn \
-                for node in cls.objects.exclude(roles__name__in=roles).\
-                                                                distinct()]
+                for node in cls.objects.exclude(roles__name__in=roles,
+                                                enabled=True).distinct()]
 
     @classmethod
     @exception_handler(exception_messages.not_found)
     def get_by_name(cls, node_fqdn):
-        return cls.objects.get(fqdn=node_fqdn)
+        node = cls.objects.get(fqdn=node_fqdn)
+        if not node.enabled:
+            raise validators.ValidationError('Node not enabled')
+        return node
 
     @classmethod
     def safe_get_by_name(cls, node_fqdn):
         try:
-            return cls.objects.get(fqdn=node_fqdn)
-        except exceptions.ObjectDoesNotExist:
+            return cls.get_by_name(node_fqdn)
+        except Failure:
             return None
 
     def get_roles(self):
@@ -283,11 +293,9 @@ class Node(models.Model):
                             exclude(role__name__in=role_exceptions).delete()
 
     def get_enabled_services(self):
-        r = []
-        for rel in self.noderoleassignment_set.filter(enabled__exact=True):
-            if rel.role.service:
-                r.append(rel.role.name)
-        return r
+        return [rel.role.name
+                for rel in self.noderoleassignment_set.\
+                            filter(enabled__exact=True) if rel.role.service]
 
     def get_group(self):
         return self.group
@@ -378,7 +386,7 @@ class Node(models.Model):
             self.report_status = status
             self.save()
         else:
-            raise validators.ValidationError()
+            raise validators.ValidationError('Invalid Report Status')
 
     def update_group(self, group):
         self.group = group

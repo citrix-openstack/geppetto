@@ -16,12 +16,13 @@
 
 import commands
 import logging
+import random
 import re
 
 from threading import Timer
 from geppetto.geppettolib import utils
 
-log = logging.getLogger('geppettolib.puppet')
+logger = logging.getLogger('geppettolib.puppet')
 
 
 class PuppetNode():
@@ -44,7 +45,7 @@ class PuppetNode():
             with open(PuppetNode.STATE_FILE, 'r') as f:
                 self._master_flag = int(f.read())
         except (IOError, ValueError), e:
-            log.error(e)
+            logger.error(e)
             self._master_flag = PuppetNode.UNKNOWN
         else:
             if self._master_flag not in [PuppetNode.UNKNOWN,
@@ -90,7 +91,7 @@ class PuppetNode():
             try:
                 self._do_action_on_service('service', 'start')
             except Exception, e:
-                log.error(e)
+                logger.error(e)
 
     def uninstall_service(self):
         """Remove service from bootstrap list"""
@@ -147,7 +148,7 @@ class PuppetNode():
                     with open(new_value, 'w') as f:
                         f.write(settings['server-autosign-pattern'])
                 except IOError, e:
-                    log.error(e)
+                    logger.error(e)
             elif settings['server-auto-sign-policy'] is False:
                 new_value = 'false'
             # update PCONF_FILE
@@ -188,7 +189,7 @@ class PuppetNode():
         try:
             utils.execute('%s %s %s' % (command, service, action))
         except Exception, e:
-            log.error(e)
+            logger.error(e)
             raise Exception('Unable to execute command')
 
 
@@ -216,11 +217,16 @@ def remote_puppet_run(node_fqdn, foreground=True):
         utils.execute('sudo puppetrun --host %s%s' % (node_fqdn,
                                                        flag), [3])
     except Exception, e:
-        log.exception(e)
+        logger.exception(e)
 
 
 def remote_puppet_run_async(node_fqdn):
     def _run_async():
         remote_puppet_run(node_fqdn, False)
-    t = Timer(0.1, lambda: _run_async())
+
+    random.seed()
+    delay = random.uniform(1, 60)
+    logger.debug('Command puppetrun scheduled to execute '
+                 'in: %s seconds.' % delay)
+    t = Timer(delay, lambda: _run_async())
     t.start()

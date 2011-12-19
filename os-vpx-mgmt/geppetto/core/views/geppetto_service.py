@@ -394,7 +394,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Node___copy(self, node_fqdn_src, node_fqdn_dst):
         """
@@ -415,7 +414,10 @@ class Service():
         roles = NodeRoleAssignment.copy_role_assignments_to_node(
                                     node_src.get_role_assignments(), node_dst)
 
-        node_src.delete()
+        node_src.unset_group(None)
+        node_src.delete_overrides()
+        node_src.delete_roles()
+        node_src.disable()
 
         affected_node_fqdns = \
             model_utils.update_related_config_params(roles, node_fqdn_dst)
@@ -480,7 +482,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Node___restart_services(self, node_fqdn, service_names):
         """Restarts the specified services on the specified node.
@@ -570,7 +571,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def ObjectStorage___add_workers(self, node_fqdns, config):
         """
@@ -660,7 +660,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def ObjectStorage___add_apis(self, node_fqdns, config):
         """
@@ -739,7 +738,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Identity___add_auth(self, node_fqdn, config):
         """Not implemented"""
@@ -774,7 +772,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Compute___add_message_queue(self, node_fqdn, config={}):
         """
@@ -819,7 +816,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Compute___add_database(self, node_fqdn, config):
         """
@@ -873,7 +869,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Compute___add_apis(self, node_fqdns, config):
         """
@@ -949,7 +944,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Compute___add_workers(self, node_fqdns, config):
         """
@@ -1014,7 +1008,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Compute___add_ajax_console_proxies(self, node_fqdns, config):
         """
@@ -1067,7 +1060,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Scheduling___add_workers(self, node_fqdns, config):
         """
@@ -1163,7 +1155,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Network___add_workers(self, node_fqdns, config):
         """
@@ -1402,7 +1393,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def BlockStorage___add_workers(self, node_fqdns, config):
         """
@@ -1493,7 +1483,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Imaging___add_registry(self, node_fqdn, config):
         """
@@ -1575,7 +1564,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Imaging___add_container(self, node_fqdn, config):
         """This API is added to create image containers on a node. It
@@ -1637,7 +1625,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def LBaaS___add_api(self, node_fqdn, config):
         """This enable LBaaS demo on an Olympus VPX deployment"""
@@ -1651,7 +1638,6 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    @task_utils.puppet_check
     @task_utils.puppet_kick
     def Task___apply_changes(self, node_fqdns, dont_wait=False):
         """
@@ -1692,7 +1678,7 @@ class Service():
         *SUCCESS*
         The task executed successfully. The :attr:`result` attribute
         then contains the tasks return value."""
-        task_result = task_utils.get_task_result(task_uuid)
+        task_result = task_utils.get_task(task_uuid)
         return task_result.state
 
     @trace
@@ -1712,16 +1698,24 @@ class Service():
           'result': 'Exception("Timed out waiting for service to start",)',
           ...,}
         """
-        task_result = task_utils.get_task_result(task_uuid)
-        details = {'task_uuid': task_uuid,
-                   'status': task_result.state,
-                   'result': task_result.result}
-        # TODO - result (above) doesn't seem to work...
+        return task_utils.get_task_details(task_uuid)
 
-        if task_result.failed():
-            details['traceback'] = task_result.traceback
+    @trace
+    @validators.xmlrpc_fault_wrapper
+    def Task___get_all(self):
+        """
+        (*)
+        Get details about registered task.
 
-        return details
+        return: dict of dict
+
+        Example dictionary for details is:
+
+        { '37b18811-434f-45f8-ae6c-2f1d6c7704fc': {'status': 'FAILURE',
+          'result': 'Exception("Timed out waiting for service to start",)'},
+          ...,}
+        """
+        return task_utils.get_uuids()
 
     @trace
     @validators.xmlrpc_fault_wrapper

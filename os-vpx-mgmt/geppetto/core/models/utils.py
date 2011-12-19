@@ -5,6 +5,8 @@ import socket
 
 from django.contrib.auth.models import User
 
+from geppetto.settings import DATABASES
+
 from geppetto.core.models import ConfigClassParameter
 from geppetto.core.models import GroupOverride
 from geppetto.core.models import Master
@@ -30,6 +32,11 @@ def get_or_create_node(node_fqdn):
         # Assign default roles on node creation
         default_roles = Role.get_default_roles()
         NodeRoleAssignment.add_roles_to_node(node, default_roles)
+        # determine if we can add celeryd on each worker. This is
+        # possible only if the DB backend is != sqlite3
+        if DATABASES['default']['ENGINE'] == 'django.db.backends.mysql':
+            celery_role = Role.get_by_name(Role.CELERY_WORKER)
+            NodeRoleAssignment.add_roles_to_node(node, [celery_role], True)
     return node
 
 
@@ -82,9 +89,9 @@ def model_init():
                                   'Citrix OpenStack VPX')
     NodeRoleAssignment.\
         add_roles_to_node(master,
-                          [Role.get_by_name("rabbitmq-server"),
-                           Role.get_by_name("citrix-geppetto-celeryd"),
-                           Role.get_by_name("citrix-geppetto-celerycam")],
+                          [Role.get_by_name(Role.RABBITMQ),
+                           Role.get_by_name(Role.CELERY_WORKER),
+                           Role.get_by_name(Role.CELERY_CAMERA)],
                            True)
 
 

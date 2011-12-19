@@ -29,10 +29,13 @@ class Failure(Exception):
         self.details = details
 
     def __str__(self):
-        return "for object '%s' on operation '%s'. " \
-               "Error message: '%s'." % (self.entity,
-                                         self.operation,
-                                         super(Failure, self).__str__())
+        if self.details is None:
+            details_str = 'Not provided.'
+        else:
+            details_str = self.details.__str__()
+        return "for object '%s' on operation '%s'. Error message: '%s'." \
+               " Details: %s" % (self.entity, self.operation,
+                                 super(Failure, self).__str__(), details_str)
 
     def get_message(self):
         return super(Failure, self).__str__()

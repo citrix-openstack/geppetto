@@ -120,7 +120,7 @@ import djcelery
 djcelery.setup_loader()
 
 BROKER_TRANSPORT = "amqplib"
-CELERYD_CONCURRENCY = 4
+CELERYD_CONCURRENCY = 2
 CELERYD_LOG_LEVEL = "DEBUG"
 
 BROKER_HOST = "localhost"

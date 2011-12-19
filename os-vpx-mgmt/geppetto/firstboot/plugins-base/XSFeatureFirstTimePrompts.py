@@ -281,8 +281,7 @@ class MasterOrClientDialogue(Dialogue):
         # so that we do not overwhelm the master's
         # DHCP/DNS servers during cloud bootstrapping
         random.seed()
-        time.sleep(random.uniform(1, 60))
-        t = Timer(0.1, self._poll_for_ip)
+        t = Timer(random.uniform(1, 30), self._poll_for_ip)
         t.daemon = True
         t.start()
 

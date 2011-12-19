@@ -22,43 +22,30 @@ import time
 
 from functools import wraps
 
+from django.core import validators
 from djcelery.models import TaskState
 from celery.result import AsyncResult
 
-from geppetto.geppettolib import puppet
 from geppetto.tasks import node_state
+from geppetto.core import exception_handler
+from geppetto.core import exception_messages
 
-from geppetto.core import Failure
-from geppetto.core.models import Node
 from geppetto.core.models.infrastructure import ReportStatus
 
 
 def puppet_kick(f):
     @wraps(f)
     def inner(*args, **kwargs):
-        result = f(*args, **kwargs)
-        for node_fqdn in result['node_fqdns']:
-            try:
-                node = Node.get_by_name(node_fqdn)
-                node.set_report_status(ReportStatus.Pending)
-            except Failure:
-                # the node might have been removed, don't worry
-                # but let's still kick a puppet run
-                pass
-            puppet.remote_puppet_run_async(node_fqdn)
-        return result
-    return inner
-
-
-def puppet_check(f):
-    @wraps(f)
-    def inner(*args, **kwargs):
         config = f(*args, **kwargs)
-        if 'dont_wait' in config and config['dont_wait']:
+
+        dont_wait = config.get('dont_wait', False)
+        node_fqdns = config.get('node_fqdns', [])
+        if dont_wait or len(node_fqdns) == 0:
             return
-        node_fqdns = config['node_fqdns']
-        if len(node_fqdns) == 0:
-            return
+
+        # set Node status to Pending
+        node_state.set_report_status(node_fqdns,
+                                     ReportStatus.Pending)
 
         tags = []
         for _, value in config.iteritems():
@@ -68,16 +55,19 @@ def puppet_check(f):
                 continue
 
         random.seed()
-        # Execute the task after a random number of seconds (base + delta)
-        countdown = 60 + random.randint(1, 15)
+        # Execute the task after a random number of seconds
+        countdown = random.randint(1, 15)
         start = datetime.datetime.now() + datetime.timedelta(seconds=countdown)
+        sender = [f.__name__, str(args), str(kwargs)]
         for i in xrange(1, 10):
             try:
-                result = node_state.monitor.apply_async(args=[node_fqdns,
-                                                              start,
-                                                              tags],
-                                                        countdown=countdown)
-                return result.task_id
+                t = node_state.\
+                  monitor.apply_async(args=[node_fqdns, start],
+                                      kwargs={'tags': tags,
+                                              'sender': sender,
+                                              'retries': 0, },
+                                      countdown=countdown)
+                return t.task_id
             except IOError, e:
                 logger = node_state.monitor.get_logger()
                 logger.warning('Waiting for new socket connection(%d).' % i)
@@ -87,9 +77,26 @@ def puppet_check(f):
     return inner
 
 
-def get_task_result(task_id):
-    # TODO - wrap exceptions?
-    return AsyncResult(task_id)
+@exception_handler(exception_messages.not_found)
+def get_task(task_id):
+    try:
+        return AsyncResult(task_id)
+    except:
+        raise validators.ValidationError('Unable to retrieve task')
+
+
+def get_task_details(task_uuid):
+        task_result = get_task(task_uuid)
+        details = {'task_uuid': task_uuid,
+                   'status': task_result.state,
+                   'result': task_result.result}
+        if task_result.failed():
+            details['traceback'] = task_result.traceback
+        return details
+
+
+def get_uuids():
+    return [t.task_id for t in TaskState.objects.all()]
 
 
 def get_task_ids_by_tags(tags):
@@ -115,3 +122,8 @@ def get_task_ids_by_tags(tags):
             matching_tasks.append(id)
 
     return matching_tasks
+
+
+def chunks(l, chunk_size=3):
+    for i in xrange(0, len(l), chunk_size):
+        yield l[i:i + chunk_size]

@@ -14,7 +14,6 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import datetime
 import random
 import xmlrpclib
 
@@ -32,7 +31,7 @@ TASK_MONITOR_NAME = 'tasks.node_state.monitor'
 
 @celery_task.task(name=TASK_MONITOR_NAME,
                   max_retries=settings.GEPPETTO_TASK_MAX_RETRIES)
-def monitor(node_fqdns, start_time, tags):
+def monitor(node_fqdns, start_time, tags=None, sender=None, retries=0):
     """Controls that configuration changes are applied to the nodes."""
     logger = monitor.get_logger()
     details_dict = {}
@@ -70,17 +69,24 @@ def monitor(node_fqdns, start_time, tags):
             random.seed()
             countdown = settings.GEPPETTO_TASK_RETRY_DELAY + \
                                                     random.randint(1, 15)
-            return monitor.retry(args=[affected_nodes, start_time, tags],
+            return monitor.retry(args=[affected_nodes, start_time],
+                                 kwargs={'tags': tags,
+                                         'sender': sender,
+                                         'retries': retries + 1},
                                  countdown=countdown)
         except celery_exceptions.MaxRetriesExceededError:
             logger.exception("%s: configuration failed "
                              "to apply." % affected_nodes)
-            for node_fqdn in affected_nodes:
-                node = Node.safe_get_by_name(node_fqdn)
-                if node:
-                    node.set_report_status(ReportStatus.Failed)
+            set_report_status(affected_nodes, ReportStatus.Failed)
             raise Exception("Following nodes are "
                             "not stable: %s" % affected_nodes)
 
     logger.debug("%s: configuration applied" % tags)
     return tags
+
+
+def set_report_status(node_fqdns, status):
+    for node_fqdn in node_fqdns:
+        node = Node.safe_get_by_name(str(node_fqdn))
+        if node:
+            node.set_report_status(status)

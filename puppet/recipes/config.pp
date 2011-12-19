@@ -47,6 +47,20 @@ class dashboard-config {
   }
 }
 
+class geppetto-backend-config {
+  conf { 'geppetto-backend':
+    filename => '/etc/openstack/geppetto-backend',
+    config => "VPX_MASTER_DB_BACKEND='$VPX_MASTER_DB_BACKEND'
+    		   \nVPX_MASTER_DB_NAME='$VPX_MASTER_DB_NAME'
+               \nVPX_MASTER_DB_HOST='$VPX_MASTER_DB_HOST'
+               \nVPX_MASTER_DB_USER='$VPX_MASTER_DB_USER'
+               \nVPX_MASTER_DB_PASS='$VPX_MASTER_DB_PASS'
+               \nVPX_MASTER_QUEUE_HOST='$VPX_MASTER_QUEUE_HOST'
+               \nVPX_MASTER_QUEUE_USER='$VPX_MASTER_QUEUE_USER'
+               \nVPX_MASTER_QUEUE_PASS='$VPX_MASTER_QUEUE_PASS'",
+  }
+}
+
 # This is special
 class geppetto-vpx-config {
   conf { 'geppetto-vpx':
