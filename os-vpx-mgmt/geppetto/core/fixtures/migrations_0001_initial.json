@@ -1121,7 +1121,7 @@
         "pk": 83, 
         "model": "core.configclassparameter", 
         "fields": {
-            "default_value": "nova.scheduler.base_scheduler.BaseScheduler", 
+            "default_value": "nova.scheduler.distributed_scheduler.DistributedScheduler",
             "config_type": 13, 
             "config_class": 33, 
             "name": "SCHEDULER_COMPUTE_DRIVER", 
