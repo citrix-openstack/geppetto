@@ -34,7 +34,7 @@ class ReportStatus:
     Failed = 'f'
     Stable = 'u'
     Pending = '_'
-    Disabled = '_'
+    Disabled = 'd'
 
     _Changed = 'changed'
     _Failed = 'failed'
