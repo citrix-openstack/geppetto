@@ -56,7 +56,7 @@ SESSION_LB_LIST = "GeppettoLbList"
 
 @login_required
 def lbservice(request):
-    dummy_tenants = ["dashboard"]
+    dummy_tenants = ["Administrator"]
     text = "Please select what Load Balancer operation you require:"
     header = "Load Balancer Service"
 
@@ -161,7 +161,7 @@ def lbservice_list(request):
             logger.error(e)
             request.session['LBAAS_LAST_ERROR'] = e
             return redirect('lbservice_info')
-        return utils.generate_form_request_handler(header, text,
+    return utils.generate_form_request_handler(header, text,
                                            on_form_valid=on_form_valid,
                                            django_form=LoadBalancerList,
                                            update_form=update_form)(request)
@@ -210,7 +210,7 @@ def lbservice_delete(request):
         request.session[SESSION_LB_LIST] = lb_list
         form.add_load_balancers_into_form(lb_list)
 
-        return utils.generate_form_request_handler(header, text,
+    return utils.generate_form_request_handler(header, text,
                                            on_form_valid=on_form_valid,
                                            django_form=LoadBalancerDelete,
                                            update_form=update_form)(request)

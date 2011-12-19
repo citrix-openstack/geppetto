@@ -18,8 +18,8 @@ class EC2Client():
     def _get_ec2_connection(self, api_node_hostname):
         """ Connect to an EC2 instance """
         # TODO - these are the dashboard user's hardcoded keys
-        access_key = 'ef81eccc-172c-4aad-810b-05278bbdbbf3'
-        secret_key = 'b24b6b50-dee5-4ed7-9d2a-ba965cd4493c'
+        access_key = 'root'
+        secret_key = 'citrix'
         return boto.connect_ec2(aws_access_key_id=access_key,
                                 aws_secret_access_key=secret_key,
                                 is_secure=False,
