@@ -118,16 +118,16 @@ class TestGeppettoLib(TestCase):
         self.assertListEqual(expected_priorities, priorities)
 
     def test_service_order_no_external_services(self):
-        self._test_service_order(True, True, [0, 1, 2, 2, 2])
+        self._test_service_order(True, True, [0, 1, 2, 3, 3])
 
     def test_service_order_dbonly(self):
-        self._test_service_order(True, False, [0, 2, 2, 2])
+        self._test_service_order(True, False, [0, 2, 3, 3])
 
     def test_service_order_queueonly(self):
-        self._test_service_order(False, True, [1, 2, 2, 2])
+        self._test_service_order(False, True, [1, 2, 3, 3])
 
     def test_service_order(self):
-        self._test_service_order(False, False, [2, 2, 2])
+        self._test_service_order(False, False, [2, 3, 3])
 
     def test_service_mysql(self):
         args = setup.database_setup(' dbengine=mysql dbhost=localhost')

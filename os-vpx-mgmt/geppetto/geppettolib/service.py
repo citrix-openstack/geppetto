@@ -99,8 +99,8 @@ class GeppettoService():
         # Second element: service name
         # Third element: pre-initialization script
         self.services = [(2, Service("citrix-geppetto")),
-                         (2, Service("citrix-geppetto-celeryd")),
-                         (2, Service("citrix-geppetto-celerycam")), ]
+                         (3, Service("citrix-geppetto-celeryd")),
+                         (3, Service("citrix-geppetto-celerycam")), ]
         self._db_init(db_args)
         self._queue_init(queue_args)
         self.apply_config(geppetto_args, db_args, queue_args)
