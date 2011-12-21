@@ -81,9 +81,7 @@ def model_init(**kwargs):
     """Set this host to be the Geppetto master and save global config"""
     for name, value in kwargs.iteritems():
         if value:
-            full_name = 'vpx_master_%s' % name
-            ConfigClassParameter.set_config_parameter(full_name.upper(), value)
-
+            ConfigClassParameter.set_config_parameter(name.upper(), value)
     master_hostname = network.get_hostname()
     Master.promote_node(master_hostname)
     master = get_or_create_node(master_hostname)
@@ -95,9 +93,9 @@ def model_init(**kwargs):
 
     geppetto_roles = [Role.get_by_name(Role.CELERY_WORKER),
                       Role.get_by_name(Role.CELERY_CAMERA)]
-    if kwargs['db_host'] in [master_hostname, 'localhost']:
+    if kwargs['vpx_master_db_host'] in [master_hostname, 'localhost']:
         geppetto_roles.append(Role.get_by_name(Role.MYSQL))
-    if kwargs['queue_host'] in [master_hostname, 'localhost']:
+    if kwargs['vpx_master_queue_host'] in [master_hostname, 'localhost']:
         geppetto_roles.append(Role.get_by_name(Role.RABBITMQ))
     roles_to_apply = [r for r in geppetto_roles \
                                 if not NodeRoleAssignment.exists(master, r)]

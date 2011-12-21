@@ -30,14 +30,22 @@ class Command(BaseCommand):
            root_password     Set root password to <password>."""
 
     option_list = BaseCommand.option_list + (
-        make_option('--db_backend', help='The DB driver'),
-        make_option('--db_name', help='The DB name'),
-        make_option('--db_host', help='The DB host fqdn'),
-        make_option('--db_user', help='The DB user'),
-        make_option('--db_pass', help='The user password'),
-        make_option('--queue_host', help='The Message Queue fqdn'),
-        make_option('--queue_user', help='The Queue user'),
-        make_option('--queue_pass', help='The user password'),
+        make_option('--db_backend', dest='vpx_master_db_backend',
+                    help='The DB driver'),
+        make_option('--db_name', dest='vpx_master_db_name',
+                    help='The DB name'),
+        make_option('--db_host', dest='vpx_master_db_host',
+                    help='The DB host fqdn'),
+        make_option('--db_user', dest='vpx_master_db_user',
+                    help='The DB user'),
+        make_option('--db_pass', dest='vpx_master_db_pass',
+                    help='The user password'),
+        make_option('--queue_host', dest='vpx_master_queue_host',
+                    help='The Message Queue fqdn'),
+        make_option('--queue_user', dest='vpx_master_queue_user',
+                    help='The Queue user'),
+        make_option('--queue_pass', dest='vpx_master_queue_pass',
+                    help='The user password'),
         )
 
     def handle(self, *args, **options):
