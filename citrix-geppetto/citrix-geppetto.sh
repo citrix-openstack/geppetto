@@ -83,7 +83,7 @@ reset() {
 }
 
 setup() {
-    if [[ ! -e "$GEPPETTO_DB_SYNC" ]]
+    if [[ ! -e "$GEPPETTO_DBSYNC" ]]
     then
         [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && cd /var/lib/geppetto/ > /dev/null
         echo "No Database detected, creating one."
@@ -94,7 +94,7 @@ setup() {
         export PYTHON_EGG_CACHE="/tmp/$GEPPETTO_USER/PYTHON_EGG_CACHE"
         [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && chown geppetto.geppetto $GEPPETTO_DB
         [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && cd - > /dev/null
-        touch $GEPPETTO_DB_SYNC
+        touch $GEPPETTO_DBSYNC
     else
         export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
         changes=$(python26 $GEPPETTO_MANAGE migrate --list | grep -w "( )" | wc -l)
