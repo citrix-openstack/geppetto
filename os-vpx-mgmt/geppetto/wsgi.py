@@ -6,8 +6,6 @@ import os
 from eventlet import wsgi
 from django.core.handlers import wsgi as django_wsgi
 from django.conf import settings
-from logging import StreamHandler
-
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'geppetto.settings'
 os.environ['PYTHON_EGG_CACHE'] = '/tmp/%s/PYTHON_EGG_CACHE' % getpass.getuser()

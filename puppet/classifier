@@ -25,7 +25,7 @@ import sys
 socket.setdefaulttimeout(30)
 
 # Set django settings as it's required by service_proxy
-os.environ['DJANGO_SETTINGS_MODULE'] = 'geppetto.core'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'geppetto.settings'
 
 from geppetto.core.views import service_proxy
 
