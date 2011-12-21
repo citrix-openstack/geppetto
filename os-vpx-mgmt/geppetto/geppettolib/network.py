@@ -30,9 +30,9 @@ from geppetto.geppettolib.utils import GeppettoConfigParser
 
 log = logging.getLogger('network')
 
-REGEX_DNS_VALIDATION = re.compile(r'^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*' +\
+REGEX_DNS_VALIDATION = re.compile(r'^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*' + \
         '[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$')
-REGEX_HOSTNAME_VALIDATION = re.compile(r'^(([a-zA-Z]|[a-zA-Z]' +\
+REGEX_HOSTNAME_VALIDATION = re.compile(r'^(([a-zA-Z]|[a-zA-Z]' + \
         '[a-zA-Z0-9\-]*[a-zA-Z0-9])+)$')
 
 
@@ -234,7 +234,7 @@ send host-name "%s";
 request;""" % hostname
         config_generator.write_config(config, self.DHCLIENT_FILE)
 
-    def set_network(self, hn, dns_suff, gw='0.0.0.0'):
+    def set_network(self, hn, dns_suff, gw='0.0.0.0', ip_address='127.0.1.1'):
         """Write info to NetworkConfiguration.NETWK_FILE\
         and HOSTS_TEMPLATE_FILE"""
         self.set_hostname_and_gateway(hn, gw)
@@ -242,7 +242,9 @@ request;""" % hostname
         self._netwk_setup = self._netwk_setup and \
             config_generator.apply_config(config_generator.HOSTS_TEMPLATE_FILE,
                                           NetworkConfiguration.HOSTS_FILE,
-                                          hostname=hn, dns_suffix=dns_suff)
+                                          hostname=hn,
+                                          dns_suffix=dns_suff,
+                                          ipaddr=ip_address)
 
     def set_dns_server(self, server, suffix, prefix):
         """Write info to NetworkConfiguration.RESLV_FILE,

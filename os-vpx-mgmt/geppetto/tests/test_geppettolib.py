@@ -73,7 +73,8 @@ class TestGeppettoLib(TestCase):
                                   '192.168.1.1')
             network.set_network('dummy-hostname',
                                 'mycloud.com',
-                                '192.168.1.1')
+                                '192.168.1.1',
+                                '192.168.0.100')
             network.set_dns_server('192.168.1.1',
                                    'mycloud.com',
                                    '1.168.192')

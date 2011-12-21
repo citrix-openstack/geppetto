@@ -136,7 +136,7 @@ class DataUtils:
         [subnet_address, broadcast_address, reverse_zone_prefix] = \
                                                      ipinfo(host_ip, netmask)
         self.network_config.set_interface("eth1", "static", netmask, host_ip)
-        self.network_config.set_network(hostname, dns_suffix, gateway)
+        self.network_config.set_network(hostname, dns_suffix, gateway, host_ip)
         self.network_config.set_dns_server(dns_server, dns_suffix,
                                            reverse_zone_prefix)
         self.network_config.set_ntp_server(ntp_server)
