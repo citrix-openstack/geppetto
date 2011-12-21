@@ -8,6 +8,9 @@ pidfile="/var/run/geppetto/$name.pid"
 lockfile="/var/lock/subsys/$name"
 logfile="/var/log/geppetto/$name.log"
 
+[ -f "/etc/sysconfig/citrix-geppetto" ] && . "/etc/sysconfig/citrix-geppetto"
+
+
 start() {
     echo -n "Starting citrix-geppetto-$name: "
     daemonize -u "$GEPPETTO_USER" -l "$lockfile" -a -e "$logfile" \
@@ -42,7 +45,7 @@ rh_status_q() {
 }
 
 setup() {
-    if [[ ! -e "$GEPPETTO_DB" ]]
+    if [[ ! -e "$GEPPETTO_DB" && "$VPX_MASTER_DB_BACKEND" == "sqlite3" ]]
     then
         echo "Please ensure the geppetto database has been created. Please start citrix-geppetto first."
         exit 42

@@ -3,6 +3,7 @@ GEPPETTO_USER=geppetto
 # directly (i.e. not through daemonize).
 export PYTHON_EGG_CACHE="/tmp/$GEPPETTO_USER/PYTHON_EGG_CACHE"
 export GEPPETTO_DB="/var/lib/geppetto/sqlite3.db~"
+export GEPPETTO_DBSYNC="/var/lib/geppetto/db.sync"
 export GEPPETTO_PATH="/usr/lib/python2.6/site-packages/geppetto"
 export GEPPETTO_MANAGE="$GEPPETTO_PATH/manage.py"
 export GEPPETTO_SETTINGS="$GEPPETTO_PATH/settings.py"
@@ -60,7 +61,7 @@ reset() {
         then
             REPLY=y
         else
-            read -p "This will destroy the current Geppetto DB. Are you sure (y/n)? "
+            read -p "This will destroy the current Geppetto DB; please not, this currently works only in SQlite mode. Are you sure (y/n)? "
         fi
         if [ "$REPLY" == "y" -o "$REPLY" == "Y" ]
         then
@@ -82,17 +83,18 @@ reset() {
 }
 
 setup() {
-    if [[ ! -e "$GEPPETTO_DB" ]]
+    if [[ ! -e "$GEPPETTO_DB_SYNC" ]]
     then
-        cd /var/lib/geppetto/ > /dev/null
+        [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && cd /var/lib/geppetto/ > /dev/null
         echo "No Database detected, creating one."
         export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
         python26 $GEPPETTO_MANAGE syncdb --noinput --verbosity=0
         python26 $GEPPETTO_MANAGE migrate --verbosity=0
         python26 $GEPPETTO_MANAGE geppettodb init $EXTRA_OPTS
         export PYTHON_EGG_CACHE="/tmp/$GEPPETTO_USER/PYTHON_EGG_CACHE"
-        chown geppetto.geppetto $GEPPETTO_DB
-        cd - > /dev/null
+        [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && chown geppetto.geppetto $GEPPETTO_DB
+        [ "$VPX_MASTER_DB_BACKEND" == "sqlite3" ] && cd - > /dev/null
+        touch $GEPPETTO_DB_SYNC
     else
         export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
         changes=$(python26 $GEPPETTO_MANAGE migrate --list | grep -w "( )" | wc -l)
