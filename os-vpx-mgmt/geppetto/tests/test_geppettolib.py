@@ -133,7 +133,7 @@ class TestGeppettoLib(TestCase):
         args = setup.database_setup(' dbengine=mysql dbhost=localhost')
         svc = GeppettoService(db_args=args)
         self.assertEqual(svc.services[0][2],
-                         '/usr/local/bin/geppetto/database-init '
+                         '/usr/local/bin/geppetto/init/database-init '
                          '"geppetto" "root" "citrix"')
 
     def test_db_setup_sqlite(self):

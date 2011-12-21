@@ -13,6 +13,7 @@ sed -e "s;'NAME': .*;'NAME': '$VPX_MASTER_DB_NAME',;" -i $SETTINGS
 sed -e "s/'USER': .*/'USER': '$VPX_MASTER_DB_USER',/" -i $SETTINGS
 sed -e "s/'PASSWORD': .*/'PASSWORD': '$VPX_MASTER_DB_PASS',/" -i $SETTINGS
 sed -e "s/'HOST': .*/'HOST': '$VPX_MASTER_DB_HOST',/" -i $SETTINGS
+sed -e "s/'OPTIONS': .*/'OPTIONS': BACKEND_OPTIONS['$VPX_MASTER_DB_BACKEND'],/" -i $SETTINGS
 
 # Message Queue Settings
 sed -e "s,BROKER_HOST = .*,BROKER_HOST = '$VPX_MASTER_QUEUE_HOST'," -i $SETTINGS

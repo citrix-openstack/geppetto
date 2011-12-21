@@ -15,6 +15,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+BACKEND_OPTIONS = {'sqlite3': {'timeout': 20, },
+                   'mysql': {}, }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -23,7 +25,7 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
-        'OPTIONS': {'timeout': 20, }
+        'OPTIONS': BACKEND_OPTIONS['sqlite3']
     }
 }
 
