@@ -24,6 +24,7 @@ import sys
 # Set connection timeout to 30 secs
 socket.setdefaulttimeout(30)
 
+os.environ['PYTHON_EGG_CACHE'] = '/tmp/puppet'
 # Set django settings as it's required by service_proxy
 os.environ['DJANGO_SETTINGS_MODULE'] = 'geppetto.settings'
 
