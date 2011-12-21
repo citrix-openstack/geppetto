@@ -130,7 +130,7 @@ class GeppettoService():
             pre_script = ''
             if 'config' in db_args:
                 pre_script = \
-                         ('/usr/local/bin/geppetto/database-init '
+                         ('/usr/local/bin/geppetto/init/database-init '
                           '"%s" "%s" "%s"' % (db_args['config'][setup.DBNAME],
                                               db_args['config'][setup.DBUSER],
                                               db_args['config'][setup.DBPASS]))
