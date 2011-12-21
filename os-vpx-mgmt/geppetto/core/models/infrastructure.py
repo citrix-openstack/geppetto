@@ -240,6 +240,7 @@ class Node(models.Model):
         # Remove stuff that's not needed
         if '_master_cache' in d:
             del d['_master_cache']
+        del d['fqdn']
         del d['facts']
         del d['facts_list']
         del d['report']
@@ -248,8 +249,8 @@ class Node(models.Model):
         return d
 
     @classmethod
-    def get_fqdns(cls):
-        return [node.fqdn for node in cls.objects.filter(enabled=True)]
+    def get_fqdns(cls, is_enabled=True):
+        return [node.fqdn for node in cls.objects.filter(enabled=is_enabled)]
 
     @classmethod
     def get_fqdns_by_role(cls, role, is_service=True, is_internal=False):
@@ -275,8 +276,6 @@ class Node(models.Model):
     @exception_handler(exception_messages.not_found)
     def get_by_name(cls, node_fqdn):
         node = cls.objects.get(fqdn=node_fqdn)
-        if not node.enabled:
-            raise validators.ValidationError('Node not enabled')
         return node
 
     @classmethod

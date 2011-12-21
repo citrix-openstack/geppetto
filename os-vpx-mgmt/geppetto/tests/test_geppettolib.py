@@ -1,13 +1,14 @@
-import commands
 import random
-import re
 import logging
 
 from django.test import TestCase
 
 from geppetto.geppettolib import config_generator
-from geppetto.geppettolib.network import NetworkConfiguration, ValidateIP
-from geppetto.geppettolib.puppet import PuppetNode, _get_puppet_option
+from geppetto.geppettolib import setup
+from geppetto.geppettolib.network import NetworkConfiguration
+from geppetto.geppettolib.network import ValidateIP
+from geppetto.geppettolib.puppet import PuppetNode
+from geppetto.geppettolib.service import GeppettoService
 
 from django.utils import unittest
 
@@ -29,14 +30,14 @@ class TestGeppettoLib(TestCase):
         PuppetNode.STATE_FILE = 'tests/fakes/state.test'
         PuppetNode.ASIGN_FILE = 'tests/fakes/asign.test'
         config_generator.TEMPLATES_PATH = 'core/templates'
-        self.server = _get_puppet_option(PuppetNode.PCONF_FILE,
-                                         'server',
-                                         r'[-A-Za-z0-9.]+$')
-        self.interval = int(_get_puppet_option(PuppetNode.PCONF_FILE,
-                                                  'runinterval',
-                                                  r'[0-9]+'))
+        self.server = PuppetNode.get_puppet_option('server')
+        self.interval = int(PuppetNode.get_puppet_option('runinterval'))
         with open(PuppetNode.ASIGN_FILE, 'r') as f:
-                self.asign = f.read()
+            self.asign = f.read()
+        GeppettoService.GEPPETTO_BACKEND_FILE = 'tests/fakes/backend.test'
+        GeppettoService.GEPPETTO_SETUP_SCRIPT = ':'  # noop
+        with open(GeppettoService.GEPPETTO_BACKEND_FILE, 'r') as f:
+            self.backend = f.read()
 
     def tearDown(self):
         super(TestGeppettoLib, self).tearDown()
@@ -45,7 +46,9 @@ class TestGeppettoLib(TestCase):
         puppet = PuppetNode()
         puppet.set_service_settings(options)
         with open(PuppetNode.ASIGN_FILE, 'w') as f:
-                f.write(self.asign)
+            f.write(self.asign)
+        with open(GeppettoService.GEPPETTO_BACKEND_FILE, 'w') as f:
+            f.write(self.backend)
 
     def test_network_config(self):
         network = NetworkConfiguration()
@@ -89,13 +92,9 @@ class TestGeppettoLib(TestCase):
                    'client-master-reference': fqdn, }
         puppet.set_service_settings(options)
         logger.debug('Am I a master? %s' % puppet.is_master())
-        expected = int(_get_puppet_option(PuppetNode.PCONF_FILE,
-                                      'runinterval',
-                                       r'[0-9]+'))
+        expected = int(PuppetNode.get_puppet_option('runinterval'))
         self.assertEqual(interval, expected)
-        expected = _get_puppet_option(PuppetNode.PCONF_FILE,
-                                      'server',
-                                       r'[-A-Za-z0-9.]+$')
+        expected = PuppetNode.get_puppet_option('server')
         self.assertEqual(fqdn, expected)
 
     def test_puppet_server_config(self):
@@ -110,12 +109,99 @@ class TestGeppettoLib(TestCase):
                 expected = f.read()
         self.assertEqual(dns_suffix, expected)
 
+    def _test_service_order(self, db, queue, expected_priorities):
+        svc = GeppettoService(db_args={'svc_on': db, },
+                              queue_args={'svc_on': queue, })
+        priorities = []
+        for service in svc.services:
+            priorities.append(service[0])
+        self.assertListEqual(expected_priorities, priorities)
+
+    def test_service_order_no_external_services(self):
+        self._test_service_order(True, True, [0, 1, 2, 2, 2])
+
+    def test_service_order_dbonly(self):
+        self._test_service_order(True, False, [0, 2, 2, 2])
+
+    def test_service_order_queueonly(self):
+        self._test_service_order(False, True, [1, 2, 2, 2])
+
+    def test_service_order(self):
+        self._test_service_order(False, False, [2, 2, 2])
+
+    def test_service_mysql(self):
+        args = setup.database_setup(' dbengine=mysql dbhost=localhost')
+        svc = GeppettoService(db_args=args)
+        self.assertEqual(svc.services[0][2],
+                         '/usr/local/bin/geppetto/database-init '
+                         '"geppetto" "root" "citrix"')
+
+    def test_db_setup_sqlite(self):
+        self.assertFalse(setup.database_setup(' dbengine=sqlite3')['svc_on'])
+
+    def test_db_setup_sqlite_noargs(self):
+        self.assertFalse(setup.database_setup('')['svc_on'])
+
+    def test_db_setup_mysql(self):
+        self.assertTrue(setup.\
+                database_setup(' dbengine=mysql dbhost=localhost')['svc_on'])
+
+    def test_queue_setup(self):
+        self.assertTrue(setup.queue_setup('')['svc_on'])
+
+    def test_mysql_backend_configuration(self):
+        conf = setup.database_setup(' dbengine=mysql dbhost=external_db')
+        expected = {'svc_on': False,
+                    'config': {setup.DBENGINE: 'mysql',
+                               setup.DBNAME:
+                        setup.MasterBootOptions[setup.DBNAME]['options'][1],
+                               setup.DBHOST: 'external_db',
+                               setup.DBUSER:
+                        setup.MasterBootOptions[setup.DBUSER]['options'][1],
+                               setup.DBPASS:
+                        setup.MasterBootOptions[setup.DBPASS]['options'][1], },
+                    }
+        self.maxDiff = None
+        self.assertDictEqual(conf, expected)
+
+    def test_mysql_backend_configuration_with_password(self):
+        conf = setup.database_setup(' dbengine=mysql'
+                                    ' dbhost=external_db'
+                                    ' dbpass=myTerribleSecret')
+        expected = {'svc_on': False,
+                    'config': {setup.DBENGINE: 'mysql',
+                               setup.DBNAME:
+                        setup.MasterBootOptions[setup.DBNAME]['options'][1],
+                               setup.DBHOST: 'external_db',
+                               setup.DBUSER:
+                        setup.MasterBootOptions[setup.DBUSER]['options'][1],
+                               setup.DBPASS: 'myTerribleSecret', },
+                    }
+        self.maxDiff = None
+        self.assertDictEqual(conf, expected)
+
+    def test_default_backend_configuration(self):
+        expected = []
+        for details in setup.MasterBootOptions.itervalues():
+            expected.append("%s='%s'" % (details['config_param'],
+                                      details['options'][0]))
+        expected.sort()
+        GeppettoService.apply_config(db_args=setup.database_setup(''),
+                                     queue_args=setup.queue_setup(''))
+
+        with open(GeppettoService.GEPPETTO_BACKEND_FILE, 'r') as f:
+            config = f.readlines()
+        config.sort()
+        config = [c.rstrip() for c in config]
+
+        self.maxDiff = None
+        self.assertListEqual(expected, config)
+
 
 class TestValidateIP(unittest.TestCase):
     """Unit Tests for ValidateIP class """
 
     def test_valid_mask(self):
-        """ Testing Validity of Net mask"""
         self.assertEqual(ValidateIP.ensure_valid_mask(
                 '255.255.255.0'), '255.255.255.0')
         self.assertEqual(ValidateIP.ensure_valid_mask(
@@ -128,7 +214,6 @@ class TestValidateIP(unittest.TestCase):
                 ValidateIP.ensure_valid_mask, ('255.255.128.1'))
 
     def test_last_ip_less_than_first(self):
-        """ test if last ip less than first """
         self.assertTrue(ValidateIP.is_last_ip_less_than_first(
                 '192.168.1.10', '192.168.1.10'))
         self.assertTrue(ValidateIP.is_last_ip_less_than_first(
@@ -140,7 +225,6 @@ class TestValidateIP(unittest.TestCase):
                                             '192.168.1.100', '192.168.1.20'))
 
     def test_ensure_ip_in_network(self):
-        """ ensure if ip is in network """
         self.assertEqual(ValidateIP.ensure_ip_in_network(
                 '192.168.1.1', '255.255.255.0', '192.168.1.10', "first_ip"),
                 '192.168.1.10')
@@ -170,7 +254,6 @@ class TestValidateIP(unittest.TestCase):
                 '10.5.5.10', '255.254.0.0', '10.3.0.2', "last_ip"))
 
     def test_convert_mask_to_cidr(self):
-        """ testing converstion of mask """
         self.assertEqual(ValidateIP.convert_mask_to_cidr(
                                                         '255.255.255.255'), 32)
         self.assertEqual(ValidateIP.convert_mask_to_cidr(
@@ -195,11 +278,11 @@ class TestValidateIP(unittest.TestCase):
                                                     '255.0.128.1'))
 
     def test_ensure_valid_address(self):
-        self.assertEqual(ValidateIP.ensure_valid_address('192.168.1.1', \
+        self.assertEqual(ValidateIP.ensure_valid_address('192.168.1.1',
                                                 'ip'), '192.168.1.1')
-        self.assertEqual(ValidateIP.ensure_valid_address('10.10.10.1', \
+        self.assertEqual(ValidateIP.ensure_valid_address('10.10.10.1',
                                                 'ip'), '10.10.10.1')
-        self.assertEqual(ValidateIP.ensure_valid_address('123.120.36.65', \
+        self.assertEqual(ValidateIP.ensure_valid_address('123.120.36.65',
                                                 'ip'), '123.120.36.65')
         self.assertRaises(Exception,
                 ValidateIP.ensure_valid_address, ('192.168.1', 'ip'))
@@ -209,27 +292,26 @@ class TestValidateIP(unittest.TestCase):
                 ValidateIP.ensure_valid_address, ('192.256.1.1', 'ip'))
 
     def test_ensure_valid_hostname(self):
-        """ tests for validating hostname """
-        self.assertEqual(ValidateIP.ensure_valid_hostname('master', \
+        self.assertEqual(ValidateIP.ensure_valid_hostname('master',
                                                 'hostname'), 'master')
-        self.assertEqual(ValidateIP.ensure_valid_hostname('my-master', \
+        self.assertEqual(ValidateIP.ensure_valid_hostname('my-master',
                                                 'hostname'), 'my-master')
-        self.assertEqual(ValidateIP.ensure_valid_hostname('mast3r', \
+        self.assertEqual(ValidateIP.ensure_valid_hostname('mast3r',
                                                 'hostname'), 'mast3r')
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_hostname, ('mast*r', \
+                ValidateIP.ensure_valid_hostname, ('mast*r',
                                                 'hostname'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_hostname, ('mastr.', \
+                ValidateIP.ensure_valid_hostname, ('mastr.',
                                                 'hostname'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_hostname, ('12master', \
+                ValidateIP.ensure_valid_hostname, ('12master',
                                                 'hostname'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_hostname, ('master.client', \
+                ValidateIP.ensure_valid_hostname, ('master.client',
                                                 'hostname'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_hostname, ('.master', \
+                ValidateIP.ensure_valid_hostname, ('.master',
                                                 'hostname'))
         self.assertRaises(Exception,
                 ValidateIP.ensure_valid_hostname, ('', 'hostname'))
@@ -242,16 +324,16 @@ class TestValidateIP(unittest.TestCase):
         self.assertEqual(ValidateIP.ensure_valid_dns_suffix(
                         'a.b.c.d', 'dns_suffix'), 'a.b.c.d')
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_dns_suffix, ('', \
+                ValidateIP.ensure_valid_dns_suffix, ('',
                                                 'dns_suffix'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_dns_suffix, ('.openstack.com', \
+                ValidateIP.ensure_valid_dns_suffix, ('.openstack.com',
                                                 'dns_suffix'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_dns_suffix, ('open stack.com', \
+                ValidateIP.ensure_valid_dns_suffix, ('open stack.com',
                                                 'dns_suffix'))
         self.assertRaises(Exception,
-                ValidateIP.ensure_valid_dns_suffix, ('123.com', \
+                ValidateIP.ensure_valid_dns_suffix, ('123.com',
                                                 'dns_suffix'))
 
 
@@ -261,17 +343,3 @@ def _generate_word():
     for _ in range(0, 8):
         word += char_array[random.randint(0, 25)]
     return word
-
-
-def _get_puppet_option(config_file, option_name, option_match_regex):
-    retVal = None
-    match_re = re.compile(r'\s*' + option_name + \
-                          '\s* = (' + option_match_regex + ')\s*$',
-                          re.IGNORECASE)
-    puppet_opts = commands.getoutput('cat %s' % config_file).split("\n")
-    for line in puppet_opts:
-        match = match_re.match(line)
-        if match:
-            retVal = match.group(1)
-            break
-    return retVal

@@ -24,8 +24,8 @@ import sys
 import xmlrpclib
 
 from geppetto.geppettolib import network
-from geppetto.geppettolib import puppet
 from geppetto.geppettolib import utils
+from geppetto.geppettolib.puppet import PuppetNode
 
 # Set connection timeout to 30 secs
 socket.setdefaulttimeout(30)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         facts = facts.replace(' => ', ': ')
         facts = strip_facts_entries(facts)
         if are_facts_changed(facts):
-                master_fqdn = puppet.PuppetNode().get_puppet_option('server')
+                master_fqdn = PuppetNode.get_puppet_option('server')
                 proxy = service_proxy.create_proxy(master_fqdn, 8080,
                                                    service_proxy.Proxy.Facter)
                 proxy.process_facts(network.get_hostname().lower(), facts)

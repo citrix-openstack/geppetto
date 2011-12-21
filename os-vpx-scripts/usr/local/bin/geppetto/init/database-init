@@ -8,7 +8,9 @@ set -eux
 
 nova_migrate_repo="/usr/lib/python2.6/site-packages/nova/db/sqlalchemy/migrate_repo/versions"
 
-passwd="${1-$MYSQL_PASS}"
+dbs="${1-$MYSQL_DBS}"
+user="${2-$MYSQL_USER}"
+passwd="${3-$MYSQL_PASS}"
 
 log="logger -s -t $(basename $0) --"
 
@@ -117,7 +119,7 @@ mysql -p$passwd -e"grant all privileges on *.* to 'root'@'%' \
                                   identified by '$passwd' with grant option;"
 
 # Setup OpenStack DBs
-for db in ${MYSQL_DBS//,/ }
+for db in ${dbs//,/ }
 do
   create_db "$db"
 done

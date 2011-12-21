@@ -37,7 +37,7 @@ def monitor(node_fqdns, start_time, tags=None, sender=None, retries=0):
     details_dict = {}
     try:
         logger.debug("%s: retrieving details." % node_fqdns)
-        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
+        master_fqdn = puppet.PuppetNode.get_puppet_option('server')
         svc = service_proxy.create_proxy(master_fqdn, 8080,
                                          service_proxy.Proxy.Geppetto, 'v1')
         details_dict = svc.Node.get_details(node_fqdns)
@@ -55,7 +55,8 @@ def monitor(node_fqdns, start_time, tags=None, sender=None, retries=0):
                      details['report_status'] or ReportStatus.Pending
             logger.debug("%s[%s]: configuration "
                          "status(%s)" % (node_fqdn, date, status))
-            if date > start_time and status == ReportStatus.Stable:
+            if (status == ReportStatus.Disabled) or \
+               (status == ReportStatus.Stable and date > start_time):
                 affected_nodes.remove(node_fqdn)
     except Exception, e:
         logger.exception(e)

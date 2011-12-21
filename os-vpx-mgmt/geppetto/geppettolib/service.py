@@ -17,8 +17,8 @@
 import commands
 import logging
 
+from geppetto.geppettolib import setup
 from geppetto.geppettolib import utils
-
 
 log = logging.getLogger('geppetto')
 
@@ -53,8 +53,13 @@ class Service():
             log.error(e)
             raise Exception('Unable to execute command')
 
-    def start_service(self):
+    def start_service(self, pre_script='', post_script=''):
         """Start service"""
+        try:
+            if pre_script != '':
+                utils.execute(pre_script)
+        except Exception, e:
+            log.exception(e)
         try:
             utils.execute('service %s start' % self.name)
         except Exception, e:
@@ -66,6 +71,11 @@ class Service():
                 # if restart fails too, raise exc
                 log.exception(e)
                 raise Exception('Unable to execute command')
+        try:
+            if post_script != '':
+                utils.execute(post_script)
+        except Exception, e:
+            log.exception(e)
 
     def stop_service(self):
         """Stop service"""
@@ -78,24 +88,70 @@ class Service():
 
 class GeppettoService():
     """This class is for managing Geppetto and related services"""
-    def __init__(self):
-        self.services = [Service("citrix-geppetto"),
-                         Service("citrix-geppetto-celeryd"),
-                         Service("citrix-geppetto-celerycam"),
-                         Service("rabbitmq-server"), ]
+    GEPPETTO_BACKEND_FILE = '/etc/openstack/geppetto-backend'
+    GEPPETTO_SETUP_SCRIPT = '/usr/local/bin/geppetto/init/geppetto-init'
+
+    def __init__(self,
+                 db_args={'svc_on': False, },
+                 queue_args={'svc_on': True, },
+                 geppetto_args={}):
+        # first element: starting order
+        # Second element: service name
+        # Third element: pre-initialization script
+        self.services = [(2, Service("citrix-geppetto")),
+                         (2, Service("citrix-geppetto-celeryd")),
+                         (2, Service("citrix-geppetto-celerycam")), ]
+        self._db_init(db_args)
+        self._queue_init(queue_args)
+        self.apply_config(geppetto_args, db_args, queue_args)
+        self.services.sort()
 
     def install_service(self):
         for svc in self.services:
-            svc.install_service()
+            svc[1].install_service()
 
     def uninstall_service(self):
         for svc in self.services:
-            svc.uninstall_service()
+            svc[1].uninstall_service()
 
     def start_service(self):
-        for svc in self.services:
-            svc.start_service()
+        for svc_entry in self.services:
+            if len(svc_entry) == 3:
+                svc_entry[1].start_service(pre_script=svc_entry[2])
+            else:
+                svc_entry[1].start_service()
 
     def stop_service(self):
-        for svc in self.services:
-            svc.stop_service()
+        for svc_entry in self.services:
+                svc_entry[1].stop_service()
+
+    def _db_init(self, db_args):
+        if db_args['svc_on']:
+            pre_script = ''
+            if 'config' in db_args:
+                pre_script = \
+                         ('/usr/local/bin/geppetto/database-init '
+                          '"%s" "%s" "%s"' % (db_args['config'][setup.DBNAME],
+                                              db_args['config'][setup.DBUSER],
+                                              db_args['config'][setup.DBPASS]))
+            self.services.append((0, Service("mysqld"), pre_script))
+
+    def _queue_init(self, queue_args):
+        if queue_args['svc_on']:
+            self.services.append((1, Service("rabbitmq-server")))
+
+    @classmethod
+    def apply_config(cls, geppetto_args={}, db_args={}, queue_args={}):
+        args_list = []
+        if 'config' in db_args:
+            args_list.append(db_args['config'])
+        if 'config' in queue_args:
+            args_list.append(queue_args['config'])
+        for args in args_list:
+            for arg_label, arg_value in args.iteritems():
+                utils.\
+                update_config_option_strip_spaces(cls.GEPPETTO_BACKEND_FILE,
+                        setup.MasterBootOptions[arg_label]['config_param'],
+                        "'" + arg_value + "'")
+        utils.execute(cls.GEPPETTO_SETUP_SCRIPT)
+        # TODO update settings.py with things like DEBUG='value', etc.

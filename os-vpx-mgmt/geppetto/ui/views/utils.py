@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
-from geppetto.geppettolib import puppet
+from geppetto.geppettolib.puppet import PuppetNode
 from geppetto.core.models import Role
 from geppetto.core.views import service_proxy
 from geppetto.geppettolib.ec2_client import EC2Client
@@ -14,7 +14,7 @@ from geppetto.ui.forms.install import ChooseWorkerForm
 
 def get_geppetto_web_service_client():
     try:
-        master_fqdn = puppet.PuppetNode().get_puppet_option('server')
+        master_fqdn = PuppetNode.get_puppet_option('server')
     except:
         master_fqdn = 'localhost'
     return service_proxy.create_proxy(master_fqdn, 8080,

@@ -41,9 +41,10 @@ class DBTestBase(TestCase):
             taskstate.delete()
         self.stubs.UnsetAll()
 
-    def _add_dummy_node(self, fqdn='test_fqdn'):
+    def _add_dummy_node(self, fqdn='test_fqdn', is_enabled=True):
         self.dummy_node_fqdn = fqdn
         node = Node.create(fqdn)
+        node.enabled = is_enabled
         import pickle
         node.facts = pickle.dumps({"geppetto_status_running_services":
                                    "openstack-nova-api,openstack-nova-compute",
@@ -100,8 +101,9 @@ class DBTestBase(TestCase):
                                 value=value)
 
     def _add_dummy_node_into_role(self, fqdn='test_fqdn',
-                                  roles=["openstack-dashboard"]):
-        node = self._add_dummy_node(fqdn)
+                                  roles=["openstack-dashboard"],
+                                  is_enabled=True,):
+        node = self._add_dummy_node(fqdn, is_enabled)
         for role in roles:
             r = Role.get_by_name(role)
             NodeRoleAssignment.objects.create(node=node, role=r)

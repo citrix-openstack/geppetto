@@ -77,8 +77,13 @@ def model_reset():
     config.save()
 
 
-def model_init():
-    """Set this host to be the Geppetto master"""
+def model_init(**kwargs):
+    """Set this host to be the Geppetto master and save global config"""
+    for name, value in kwargs.iteritems():
+        if value:
+            full_name = 'vpx_master_%s' % name
+            ConfigClassParameter.set_config_parameter(full_name.upper(), value)
+
     master_hostname = network.get_hostname()
     Master.promote_node(master_hostname)
     master = get_or_create_node(master_hostname)
@@ -87,12 +92,16 @@ def model_init():
                                   ConfigClassParameter.get_by_name(
                                   ConfigClassParameter.VPX_LABEL_PREFIX),
                                   'Citrix OpenStack VPX')
-    NodeRoleAssignment.\
-        add_roles_to_node(master,
-                          [Role.get_by_name(Role.RABBITMQ),
-                           Role.get_by_name(Role.CELERY_WORKER),
-                           Role.get_by_name(Role.CELERY_CAMERA)],
-                           True)
+
+    geppetto_roles = [Role.get_by_name(Role.CELERY_WORKER),
+                      Role.get_by_name(Role.CELERY_CAMERA)]
+    if kwargs['db_host'] in [master_hostname, 'localhost']:
+        geppetto_roles.append(Role.get_by_name(Role.MYSQL))
+    if kwargs['queue_host'] in [master_hostname, 'localhost']:
+        geppetto_roles.append(Role.get_by_name(Role.RABBITMQ))
+    roles_to_apply = [r for r in geppetto_roles \
+                                if not NodeRoleAssignment.exists(master, r)]
+    NodeRoleAssignment.add_roles_to_node(master, roles_to_apply, True)
 
 
 def set_root_password(raw_password):

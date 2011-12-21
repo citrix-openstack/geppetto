@@ -19,10 +19,10 @@ define conf($filename, $config) {
 class cert-config {
   conf { 'cert':
     filename => '/etc/openstack/cert',
-    config => "CRED_CERT_C='$CRED_CERT_C'
-               \nCRED_CERT_ST='$CRED_CERT_ST'
-               \nCRED_CERT_L='$CRED_CERT_L'
-               \nCRED_CERT_O='$CRED_CERT_O'
+    config => "CRED_CERT_C='$CRED_CERT_C' \
+               \nCRED_CERT_ST='$CRED_CERT_ST' \
+               \nCRED_CERT_L='$CRED_CERT_L' \
+               \nCRED_CERT_O='$CRED_CERT_O' \
                \nCRED_CERT_OU='$CRED_CERT_OU'",
   }
 }
@@ -37,12 +37,12 @@ class compute-api-config {
 class dashboard-config {
   conf { 'dashboard':
     filename => '/etc/openstack/dashboard',
-    config => "DASHBOARD_ACCESS='$DASHBOARD_ACCESS'
-               \nDASHBOARD_SECRET='$DASHBOARD_SECRET'
-               \nDASHBOARD_ADMIN='$DASHBOARD_ADMIN'
-               \nDASHBOARD_PROJECT='$DASHBOARD_PROJECT'
-               \nDASHBOARD_SMTP_SVR='$DASHBOARD_SMTP_SVR'
-               \nDASHBOARD_SMTP_USR='$DASHBOARD_SMTP_USR'
+    config => "DASHBOARD_ACCESS='$DASHBOARD_ACCESS' \
+               \nDASHBOARD_SECRET='$DASHBOARD_SECRET' \
+               \nDASHBOARD_ADMIN='$DASHBOARD_ADMIN' \
+               \nDASHBOARD_PROJECT='$DASHBOARD_PROJECT' \
+               \nDASHBOARD_SMTP_SVR='$DASHBOARD_SMTP_SVR' \
+               \nDASHBOARD_SMTP_USR='$DASHBOARD_SMTP_USR' \
                \nDASHBOARD_SMTP_PWD='$DASHBOARD_SMTP_PWD'",
   }
 }
@@ -50,13 +50,13 @@ class dashboard-config {
 class geppetto-backend-config {
   conf { 'geppetto-backend':
     filename => '/etc/openstack/geppetto-backend',
-    config => "VPX_MASTER_DB_BACKEND='$VPX_MASTER_DB_BACKEND'
-    		   \nVPX_MASTER_DB_NAME='$VPX_MASTER_DB_NAME'
-               \nVPX_MASTER_DB_HOST='$VPX_MASTER_DB_HOST'
-               \nVPX_MASTER_DB_USER='$VPX_MASTER_DB_USER'
-               \nVPX_MASTER_DB_PASS='$VPX_MASTER_DB_PASS'
-               \nVPX_MASTER_QUEUE_HOST='$VPX_MASTER_QUEUE_HOST'
-               \nVPX_MASTER_QUEUE_USER='$VPX_MASTER_QUEUE_USER'
+    config => "VPX_MASTER_DB_BACKEND='$VPX_MASTER_DB_BACKEND' \
+    		   \nVPX_MASTER_DB_NAME='$VPX_MASTER_DB_NAME' \
+               \nVPX_MASTER_DB_HOST='$VPX_MASTER_DB_HOST' \
+               \nVPX_MASTER_DB_USER='$VPX_MASTER_DB_USER' \
+               \nVPX_MASTER_DB_PASS='$VPX_MASTER_DB_PASS' \
+               \nVPX_MASTER_QUEUE_HOST='$VPX_MASTER_QUEUE_HOST' \
+               \nVPX_MASTER_QUEUE_USER='$VPX_MASTER_QUEUE_USER' \
                \nVPX_MASTER_QUEUE_PASS='$VPX_MASTER_QUEUE_PASS'",
   }
 }
@@ -65,8 +65,8 @@ class geppetto-backend-config {
 class geppetto-vpx-config {
   conf { 'geppetto-vpx':
     filename => '/etc/openstack/geppetto',
-    config => "VPX_LABEL_PREFIX='$VPX_LABEL_PREFIX'
-               \nVPX_DESCRIPTION='$VPX_DESCRIPTION'
+    config => "VPX_LABEL_PREFIX='$VPX_LABEL_PREFIX' \
+               \nVPX_DESCRIPTION='$VPX_DESCRIPTION' \
                \nVPX_TAGS=[$VPX_TAGS]",
   }
   exec { "geppetto-properties-update":
@@ -80,7 +80,7 @@ class geppetto-vpx-config {
 class geppetto-syslog-config {
   conf { 'syslog':
     filename => '/etc/openstack/syslog',
-    config => "VPX_LOGGING_COLLECTOR=$VPX_LOGGING_COLLECTOR
+    config => "VPX_LOGGING_COLLECTOR=$VPX_LOGGING_COLLECTOR \
     		   \nVPX_LOGGING_LEVEL=$VPX_LOGGING_LEVEL",
   }
   exec { "configure-vpx-logging":
@@ -99,10 +99,10 @@ class geppetto-syslog-config {
 class glance-config {
   conf { 'glance':
     filename => '/etc/openstack/glance',
-    config => "GLANCE_HOSTNAME=$GLANCE_HOSTNAME
-               \nAPI_BIND_HOST=$API_BIND_HOST
-               \nAPI_BIND_PORT=$API_BIND_PORT
-               \nREGISTRY_BIND_HOST=$REGISTRY_BIND_HOST
+    config => "GLANCE_HOSTNAME=$GLANCE_HOSTNAME \
+               \nAPI_BIND_HOST=$API_BIND_HOST \
+               \nAPI_BIND_PORT=$API_BIND_PORT \
+               \nREGISTRY_BIND_HOST=$REGISTRY_BIND_HOST \
                \nREGISTRY_BIND_PORT=$REGISTRY_BIND_PORT",
   }
 }
@@ -111,9 +111,9 @@ class glance-store-config {
   conf { 'glance-store':
     filename => '/etc/openstack/glance-store',
     config => "GLANCE_STORE=$GLANCE_STORE
-               \nGLANCE_FILE_STORE_SIZE_GB=$GLANCE_FILE_STORE_SIZE_GB
-               \nGLANCE_SWIFT_ADDRESS=$GLANCE_SWIFT_ADDRESS
-               \nGLANCE_SWIFT_USER=$GLANCE_SWIFT_USER
+               \nGLANCE_FILE_STORE_SIZE_GB=$GLANCE_FILE_STORE_SIZE_GB \
+               \nGLANCE_SWIFT_ADDRESS=$GLANCE_SWIFT_ADDRESS \
+               \nGLANCE_SWIFT_USER=$GLANCE_SWIFT_USER \
                \nGLANCE_SWIFT_STORE_KEY=$GLANCE_SWIFT_STORE_KEY",
   }
 }
@@ -121,17 +121,17 @@ class glance-store-config {
 class guest-network-config {
   conf { 'guest-network':
     filename => '/etc/openstack/guest-network',
-    config => "GUEST_NETWORK_BRIDGE='$GUEST_NETWORK_BRIDGE'
-               \nGUEST_NETWORK_DNS='$GUEST_NETWORK_DNS'
-               \nNETWORK_MANAGER=$NETWORK_MANAGER
-               \nCOMPUTE_NETWORK_DRIVER=$COMPUTE_NETWORK_DRIVER
-               \nCOMPUTE_VLAN_INTERFACE=$COMPUTE_VLAN_INTERFACE
-               \nNETWORK_NETWORK_DRIVER=$NETWORK_NETWORK_DRIVER
-               \nNETWORK_VLAN_INTERFACE=$BRIDGE_INTERFACE
-               \nBRIDGE_INTERFACE=$BRIDGE_INTERFACE
-               \nPUBLIC_INTERFACE=$PUBLIC_INTERFACE
-               \nFIREWALL_DRIVER=$FIREWALL_DRIVER
-               \nFLAT_INJECTED=$FLAT_INJECTED
+    config => "GUEST_NETWORK_BRIDGE='$GUEST_NETWORK_BRIDGE' \
+               \nGUEST_NETWORK_DNS='$GUEST_NETWORK_DNS' \
+               \nNETWORK_MANAGER=$NETWORK_MANAGER \
+               \nCOMPUTE_NETWORK_DRIVER=$COMPUTE_NETWORK_DRIVER \
+               \nCOMPUTE_VLAN_INTERFACE=$COMPUTE_VLAN_INTERFACE \
+               \nNETWORK_NETWORK_DRIVER=$NETWORK_NETWORK_DRIVER \
+               \nNETWORK_VLAN_INTERFACE=$BRIDGE_INTERFACE \
+               \nBRIDGE_INTERFACE=$BRIDGE_INTERFACE \
+               \nPUBLIC_INTERFACE=$PUBLIC_INTERFACE \
+               \nFIREWALL_DRIVER=$FIREWALL_DRIVER \
+               \nFLAT_INJECTED=$FLAT_INJECTED \
                \nMULTI_HOST=$MULTI_HOST"
   }
 }
@@ -139,8 +139,8 @@ class guest-network-config {
 class hapi-config {
   conf { 'hapi':
     filename => '/etc/openstack/hapi',
-    config => "HAPI_USER=$HAPI_USER
-               \nHAPI_PASS='$HAPI_PASS'
+    config => "HAPI_USER=$HAPI_USER \
+               \nHAPI_PASS='$HAPI_PASS' \
                \nVMWAREAPI_WSDL_LOC=$VMWAREAPI_WSDL_LOC",
   }
 }
@@ -155,10 +155,10 @@ class host-config {
 class keystone-config {
   conf { 'keystone':
     filename => '/etc/openstack/keystone',
-    config => "KEYSTONE_HOST=$KEYSTONE_HOST
-               \nKEYSTONE_SUPERUSER_NAME=$KEYSTONE_SUPERUSER_NAME
-               \nKEYSTONE_SUPERUSER_PASS=$KEYSTONE_SUPERUSER_PASS
-               \nKEYSTONE_SUPERUSER_TOKEN=$KEYSTONE_SUPERUSER_TOKEN
+    config => "KEYSTONE_HOST=$KEYSTONE_HOST \
+               \nKEYSTONE_SUPERUSER_NAME=$KEYSTONE_SUPERUSER_NAME \
+               \nKEYSTONE_SUPERUSER_PASS=$KEYSTONE_SUPERUSER_PASS \
+               \nKEYSTONE_SUPERUSER_TOKEN=$KEYSTONE_SUPERUSER_TOKEN \
                \nKEYSTONE_SUPERUSER_TENANT=$KEYSTONE_SUPERUSER_TENANT",
   }
 }
@@ -170,9 +170,9 @@ class memcached {
 class mysql-config {
   conf { 'mysql':
     filename => '/etc/openstack/mysql',
-    config => "MYSQL_HOST=$MYSQL_HOST
-               \nMYSQL_USER=$MYSQL_USER
-               \nMYSQL_PASS=$MYSQL_PASS
+    config => "MYSQL_HOST=$MYSQL_HOST \
+               \nMYSQL_USER=$MYSQL_USER \
+               \nMYSQL_PASS=$MYSQL_PASS \
                \nMYSQL_DBS='$MYSQL_DBS'",
   }
 }
@@ -180,10 +180,10 @@ class mysql-config {
 class netscaler-config {
   conf { 'netscaler':
     filename => '/etc/openstack/netscaler',
-    config => "NS_VPX_HOST=$NS_VPX_HOST
-               \nNS_VPX_PORT=$NS_VPX_PORT
-               \nNS_VPX_USER=$NS_VPX_USER
-               \nNS_VPX_PASS=$NS_VPX_PASS
+    config => "NS_VPX_HOST=$NS_VPX_HOST \
+               \nNS_VPX_PORT=$NS_VPX_PORT \
+               \nNS_VPX_USER=$NS_VPX_USER \
+               \nNS_VPX_PASS=$NS_VPX_PASS \
                \nNS_VPX_VIPS=$NS_VPX_VIPS",
   }
 }
@@ -198,7 +198,7 @@ class networking-config {
 class nova-ajax-console-proxy-config {
   conf { 'nova-ajax-console-proxy':
     filename => '/etc/openstack/nova-ajax-console-proxy',
-    config => "NOVA_AJAX_CONSOLE_PROXY_BIND_INTERFACE=$NOVA_AJAX_CONSOLE_PROXY_BIND_INTERFACE
+    config => "NOVA_AJAX_CONSOLE_PROXY_BIND_INTERFACE=$NOVA_AJAX_CONSOLE_PROXY_BIND_INTERFACE \
              \nNOVA_AJAX_CONSOLE_PROXY_BIND_PORT=$NOVA_AJAX_CONSOLE_PROXY_BIND_PORT",
   }
 }
@@ -206,7 +206,7 @@ class nova-ajax-console-proxy-config {
 class nova-ajax-console-public-config {
   conf { 'nova-ajax-console-public':
     filename => '/etc/openstack/nova-ajax-console-public',
-    config => "NOVA_AJAX_CONSOLE_PUBLIC_URL=$NOVA_AJAX_CONSOLE_PUBLIC_URL
+    config => "NOVA_AJAX_CONSOLE_PUBLIC_URL=$NOVA_AJAX_CONSOLE_PUBLIC_URL \
              \nNOVA_AJAX_CONSOLE_PUBLIC_URL_COMPUTED=$NOVA_AJAX_CONSOLE_PUBLIC_URL_COMPUTED"
   }
 }
@@ -214,9 +214,9 @@ class nova-ajax-console-public-config {
 class rabbitmq-config {
   conf { 'rabbitmq':
     filename => '/etc/openstack/rabbitmq',
-    config => "RABBIT_HOST=$RABBIT_HOST
-               \nRABBIT_PORT=$RABBIT_PORT
-               \nRABBIT_USER=$RABBIT_USER
+    config => "RABBIT_HOST=$RABBIT_HOST \
+               \nRABBIT_PORT=$RABBIT_PORT \
+               \nRABBIT_USER=$RABBIT_USER \
                \nRABBIT_PASS=$RABBIT_PASS",
   }
 }
@@ -224,8 +224,8 @@ class rabbitmq-config {
 class scheduler-config {
   conf { 'scheduler':
     filename => '/etc/openstack/scheduler',
-    config => "SCHEDULER_COMPUTE_DRIVER=$SCHEDULER_COMPUTE_DRIVER
-               \nSCHEDULER_VOLUME_DRIVER=$SCHEDULER_VOLUME_DRIVER
+    config => "SCHEDULER_COMPUTE_DRIVER=$SCHEDULER_COMPUTE_DRIVER \
+               \nSCHEDULER_VOLUME_DRIVER=$SCHEDULER_VOLUME_DRIVER \
                \nSCHEDULER_DEFAULT_HOST_FILTER=$SCHEDULER_DEFAULT_HOST_FILTER",
   }
 }
@@ -233,7 +233,7 @@ class scheduler-config {
 class swift-config {
   conf { 'swift':
     filename => '/etc/openstack/swift',
-    config => "SWIFT_PROXY_ADDRESS=$SWIFT_PROXY_ADDRESS
+    config => "SWIFT_PROXY_ADDRESS=$SWIFT_PROXY_ADDRESS \
                \nSWIFT_HASH_PATH_SUFFIX=$SWIFT_HASH_PATH_SUFFIX",
   }
 }
@@ -241,7 +241,7 @@ class swift-config {
 class swift-disks-config {
   conf { 'swift-disks':
     filename => '/etc/openstack/swift-store',
-    config => "SWIFT_DISK_SIZE_GB=$SWIFT_DISK_SIZE_GB
+    config => "SWIFT_DISK_SIZE_GB=$SWIFT_DISK_SIZE_GB \
                \nSWIFT_DEVICES='$SWIFT_DEVICES'",
   }
 }

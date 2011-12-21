@@ -36,6 +36,10 @@ class PuppetNode():
     MASTER = 0
     PUPPET = 1
 
+    PUPPET_OPTIONS = {'runinterval': r'[0-9]+',
+                      'server': r'[-A-Za-z0-9.]+$',
+                      'autosign': r'(.+?)(\.[^.]*$|$)', }
+
     def __init__(self):
         self._master_flag = PuppetNode.UNKNOWN
 
@@ -53,15 +57,12 @@ class PuppetNode():
                                          PuppetNode.PUPPET]:
                 raise Exception('Corrupted VPX State, please reset!')
 
-    def get_puppet_option(self, opt):
-        """Read configuration 'opt' from PuppetNode.PCONF_FILE"""
-        regex = {'runinterval': r'[0-9]+',
-                 'server': r'[-A-Za-z0-9.]+$',
-                 'autosign': r'(.+?)(\.[^.]*$|$)', }
-        if opt in ['runinterval', 'server', 'autosign']:
-            return _get_puppet_option(PuppetNode.PCONF_FILE,
-                                      opt,
-                                      regex[opt])
+    @classmethod
+    def get_puppet_option(cls, opt):
+        """Read configuration 'opt' from cls.PCONF_FILE"""
+        if opt in cls.PUPPET_OPTIONS.keys():
+            return _get_puppet_option(cls.PCONF_FILE, opt,
+                                      cls.PUPPET_OPTIONS[opt])
         else:
             raise Exception('Puppet option not supported: %s' % opt)
 
@@ -105,7 +106,8 @@ class PuppetNode():
         """Stop service"""
         self._do_action_on_service('service', 'stop')
 
-    def set_service_settings(self, configuration):
+    @classmethod
+    def set_service_settings(cls, configuration):
         """
         Setup the service on host with the given configuration kwargs
         kwargs currently supported are:
@@ -125,7 +127,7 @@ class PuppetNode():
         def _set_client(settings):
             if 'client-poll-interval' in settings:
                 new_value = int(settings['client-poll-interval'])
-                utils.update_config_option(PuppetNode.PCONF_FILE,
+                utils.update_config_option(cls.PCONF_FILE,
                                            'runinterval',
                                            new_value)
             if 'client-master-reference' in settings:
@@ -133,7 +135,7 @@ class PuppetNode():
                 if not re.match(hostname, settings['client-master-reference']):
                     raise Exception('Invalid hostname %s' % \
                                     settings['client-master-reference'])
-                utils.update_config_option(PuppetNode.PCONF_FILE,
+                utils.update_config_option(cls.PCONF_FILE,
                                            'server',
                                            settings['client-master-reference'])
 
@@ -142,7 +144,7 @@ class PuppetNode():
                 return
             if settings['server-auto-sign-policy'] is True and \
                'server-autosign-pattern' in settings:
-                new_value = PuppetNode.ASIGN_FILE
+                new_value = cls.ASIGN_FILE
                 # update autosignfile.conf
                 try:
                     with open(new_value, 'w') as f:
@@ -152,9 +154,7 @@ class PuppetNode():
             elif settings['server-auto-sign-policy'] is False:
                 new_value = 'false'
             # update PCONF_FILE
-            utils.update_config_option(PuppetNode.PCONF_FILE,
-                                       'autosign',
-                                       new_value)
+            utils.update_config_option(cls.PCONF_FILE, 'autosign', new_value)
 
         options = ['client-poll-interval',
                    'client-master-reference',
@@ -225,7 +225,7 @@ def remote_puppet_run_async(node_fqdn):
         remote_puppet_run(node_fqdn, False)
 
     random.seed()
-    delay = random.uniform(1, 60)
+    delay = random.uniform(1, 30)
     logger.debug('Command puppetrun scheduled to execute '
                  'in: %s seconds.' % delay)
     t = Timer(delay, lambda: _run_async())

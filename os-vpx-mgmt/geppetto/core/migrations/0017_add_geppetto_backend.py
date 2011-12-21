@@ -9,7 +9,7 @@ class Migration(DataMigration):
     def forwards(self, orm):
         config_cls = orm.ConfigClass.objects.create(name='geppetto-backend-config',
                                                     description='Configuration of the Geppetto backend. Internal use only.')
-        init_cls = orm.ConfigClass.objects.create(name='ensure-celeryd-init-run',
+        init_cls = orm.ConfigClass.objects.create(name='ensure-geppetto-init-run',
                                                     description='To setup the Geppetto backend. Internal use only.')
         backend_type = orm.ConfigClassParameterType.objects.create(name='geppettodb_backend',
                                                                   validator_function='enum_validator',
@@ -19,29 +19,29 @@ class Migration(DataMigration):
         fqdn_type = orm.ConfigClassParameterType.objects.get(id=2)
         configs = {'VPX_MASTER_DB_BACKEND': {'default_value': 'sqlite3',
                                              'config_type': backend_type,
-                                             'description': 'Internal use only.',
+                                             'description': 'The DB driver. Internal use only.',
                                              },
                    'VPX_MASTER_DB_NAME': {'default_value': '/var/lib/geppetto/sqlite3.db~',
                                              'config_type': string_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The DB name. Valid only if DB_BACKEND != sqlite3. Internal use only.', },
                    'VPX_MASTER_DB_HOST': {'default_value': '',
                                              'config_type': fqdn_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The DB host fqdn. Valid only if DB_BACKEND != sqlite3. Internal use only.', },
                    'VPX_MASTER_DB_USER': {'default_value': '',
                                              'config_type': string_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The DB user. Valid only if DB_BACKEND != sqlite3. Internal use only.', },
                    'VPX_MASTER_DB_PASS': {'default_value': '',
                                              'config_type': string_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The user password. Valid only if DB_BACKEND != sqlite3. Internal use only.', },
                    'VPX_MASTER_QUEUE_HOST': {'default_value': 'localhost',
                                              'config_type': fqdn_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The Message Queue fqdn. Internal use only.', },
                    'VPX_MASTER_QUEUE_USER': {'default_value': 'guest',
                                              'config_type': string_type,
-                                             'description': 'Internal use only.', },
+                                             'description': 'The Queue user. Internal use only.', },
                    'VPX_MASTER_QUEUE_PASS': {'default_value': 'guest',
                                              'config_type': string_type,
-                                             'description': 'Internal use only.', }, }
+                                             'description': 'The user password. Internal use only.', }, }
         for k, d in configs.iteritems():
             orm.ConfigClassParameter.\
                 objects.create(name=k,

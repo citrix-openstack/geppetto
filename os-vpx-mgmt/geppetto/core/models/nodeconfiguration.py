@@ -62,9 +62,18 @@ class NodeRoleAssignment(models.Model):
         return roles
 
     @classmethod
+    @exception_handler(exception_messages.non_unique)
     def add_roles_to_node(cls, node, roles, enable=False):
         for role in roles:
             cls.objects.create(node=node, role=role, enabled=enable)
+
+    @classmethod
+    def exists(cls, node, role):
+        try:
+            cls.objects.get(node=node, role=role)
+            return True
+        except NodeRoleAssignment.DoesNotExist:
+            return False
 
 
 class Override(models.Model):

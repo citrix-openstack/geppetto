@@ -370,6 +370,7 @@ class Service():
         }
         """
         all_fqdns = Node.get_fqdns()
+        all_fqdns.extend(Node.get_fqdns(is_enabled=False))
         return dict([(x, Node.get_by_name(x).get_details()) \
                                         for x in node_fqdns if x in all_fqdns])
 
@@ -1683,22 +1684,22 @@ class Service():
 
     @trace
     @validators.xmlrpc_fault_wrapper
-    def Task___get_details(self, task_uuid):
+    def Task___get_details(self, task_uuids):
         """
         (*)
-        Get details about the specified task.
+        Get details about the specified tasks.
 
-        task_uuid(string): the uuid of the task, e.g. '1234-5678-...'
-        return: a dictionary that contains details about the task e.g.
+        task_uuid(list(string)): the uuids of the tasks
+        return: a dictionary that contains details about the tasks e.g.
 
         Example dictionary for details is:
 
-        { 'task_uuid': '37b18811-434f-45f8-ae6c-2f1d6c7704fc',
-          'status': 'FAILURE',
+        { '37b18811-434f-45f8-ae6c-2f1d6c7704fc': { 'status': 'FAILURE',
           'result': 'Exception("Timed out waiting for service to start",)',
-          ...,}
+          ...,},
+        }
         """
-        return task_utils.get_task_details(task_uuid)
+        return dict([(x, task_utils.get_task_details(x)) for x in task_uuids])
 
     @trace
     @validators.xmlrpc_fault_wrapper

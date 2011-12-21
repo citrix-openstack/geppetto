@@ -87,8 +87,7 @@ def get_task(task_id):
 
 def get_task_details(task_uuid):
         task_result = get_task(task_uuid)
-        details = {'task_uuid': task_uuid,
-                   'status': task_result.state,
+        details = {'status': task_result.state,
                    'result': task_result.result}
         if task_result.failed():
             details['traceback'] = task_result.traceback

@@ -59,7 +59,7 @@ def execute(command, ignore_codes=[]):
     if process.returncode != 0 and process.returncode not in ignore_codes:
         logger.error('Error code: %s' % process.returncode)
         raise Exception('Command output: %(out)s %(err)s' % locals())
-    else:
+    elif process.returncode > 0:
         logger.warning('Error code: %s is ignored.' % process.returncode)
     return (out, err)
 
@@ -114,8 +114,14 @@ def get_trace_decorator(newlogger):
 
 
 def update_config_option(file_path, option_name, option_value):
-    base_cmd = 'sed -e "s,%(option_name)s = .*,%(option_name)s = \
-%(option_value)s," -i %(file_path)s'
+    base_cmd = ('sed -e "s,%(option_name)s = .*,%(option_name)s = '
+                '%(option_value)s," -i %(file_path)s')
+    execute(base_cmd % locals())
+
+
+def update_config_option_strip_spaces(file_path, option_name, option_value):
+    base_cmd = ('sed -e "s,%(option_name)s=.*,%(option_name)s='
+               '%(option_value)s," -i %(file_path)s')
     execute(base_cmd % locals())
 
 

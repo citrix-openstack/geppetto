@@ -9,13 +9,11 @@ export GEPPETTO_SETTINGS="$GEPPETTO_PATH/settings.py"
 
 . /etc/rc.d/init.d/functions
 
-flagfile="/etc/geppetto/geppetto.conf"
 pidfile="/var/run/geppetto/geppetto.pid"
 lockfile="/var/lock/subsys/citrix-geppetto"
 
 [ -f "/etc/sysconfig/citrix-geppetto" ] && . "/etc/sysconfig/citrix-geppetto"
 
-OPTIONS="$OPTIONS" # no flag file at the moment --flagfile=$flagfile
 
 start() {
     echo -n "Starting citrix-geppetto: "
@@ -90,8 +88,8 @@ setup() {
         echo "No Database detected, creating one."
         export PYTHON_EGG_CACHE="/tmp/$(whoami)/PYTHON_EGG_CACHE"
         python26 $GEPPETTO_MANAGE syncdb --noinput --verbosity=0
-        python26 $GEPPETTO_MANAGE migrate
-        python26 $GEPPETTO_MANAGE geppettodb init
+        python26 $GEPPETTO_MANAGE migrate --verbosity=0
+        python26 $GEPPETTO_MANAGE geppettodb init $EXTRA_OPTS
         export PYTHON_EGG_CACHE="/tmp/$GEPPETTO_USER/PYTHON_EGG_CACHE"
         chown geppetto.geppetto $GEPPETTO_DB
         cd - > /dev/null
@@ -101,7 +99,7 @@ setup() {
         if [ $changes -gt 0 ]
         then
             echo "A newer version of Geppetto has been detected. Applying changes to the database." 
-            python26 $GEPPETTO_MANAGE migrate geppetto.core
+            python26 $GEPPETTO_MANAGE migrate --verbosity=0
         fi
         export PYTHON_EGG_CACHE="/tmp/$GEPPETTO_USER/PYTHON_EGG_CACHE"
     fi

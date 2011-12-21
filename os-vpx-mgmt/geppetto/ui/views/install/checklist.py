@@ -2,12 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from geppetto.geppettolib import puppet
-
 from geppetto.core.models import ConfigClassParameter
 from geppetto.core.models import Role
-from geppetto.core.views import service_proxy
 
+from geppetto.ui.views import utils as ui_utils
 from geppetto.ui.views.install import swift
 from geppetto.ui.views.install import rabbitmq_mysql
 from geppetto.ui.views.install import identity
@@ -100,13 +98,7 @@ def _get_status_from_task(service, session, task_session_keys, legacy_flag):
 class InstallChecklistBL():
 
     def __init__(self):
-        try:
-            master_fqdn = puppet.PuppetNode().get_puppet_option('server')
-        except:
-            master_fqdn = 'localhost'
-        self.svc = service_proxy.create_proxy(master_fqdn, 8080,
-                                              service_proxy.Proxy.Geppetto,
-                                              'v1')
+        self.svc = ui_utils.get_geppetto_web_service_client()
 
     def is_hypervisor_complete(self):
         return self.svc.Config.get(ConfigClassParameter.HAPI_PASS) != " "
@@ -115,10 +107,16 @@ class InstallChecklistBL():
         return self.svc.Role.has_node(Role.KEYSTONE_AUTH)
 
     def is_rabbit_mysql_complete(self):
-        return (self.svc.Role.has_node(Role.RABBITMQ) and \
-                    self.svc.Role.has_node(Role.MYSQL)) or \
-                    self.svc.Config.get(ConfigClassParameter.\
-                                                MYSQL_TYPE) == "external"
+        if self.svc.Config.get(ConfigClassParameter.\
+                                        VPX_MASTER_DB_BACKEND) == 'sqlite3':
+            return (self.svc.Role.has_node(Role.RABBITMQ) and \
+                        self.svc.Role.has_node(Role.MYSQL)) or \
+                        self.svc.Config.get(ConfigClassParameter.\
+                                                    MYSQL_TYPE) == "external"
+        else:
+            queues = self.svc.Node.get_by_role(Role.RABBITMQ)
+            dbs = self.svc.Node.get_by_role(Role.MYSQL)
+            return len(queues) == 2 and len(dbs) == 2
 
     def is_imaging_complete(self):
         return self.svc.Role.has_node(Role.GLANCE_API) and \

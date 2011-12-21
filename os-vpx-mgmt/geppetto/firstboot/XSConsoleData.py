@@ -8,6 +8,7 @@ from geppetto.geppettolib import network
 from geppetto.geppettolib.network import NetworkConfiguration
 from geppetto.geppettolib.puppet import PuppetNode
 from geppetto.geppettolib import service
+from geppetto.geppettolib import setup
 from geppetto.geppettolib.utils import execute
 from geppetto.geppettolib.utils import ipinfo
 from geppetto.geppettolib import config_generator as gen
@@ -33,7 +34,7 @@ class DataUtils:
         self.count = 0
         self.network_config = NetworkConfiguration()
         self.puppet_node = PuppetNode()
-        self.geppetto_node = service.GeppettoService()
+        self.geppetto_node = None
 
     @classmethod
     def Inst(cls):
@@ -164,9 +165,22 @@ class DataUtils:
         return False
 
     def make_into_puppet_master(self):
-        log.debug('DNS Suffix: %s' % self.network_config.dns_suffix)
+        # Geppetto
+        cmdline = self.get_kernel_cmdline()
+        log.debug('Determining what Geppetto services to start based '
+                  'on the options specified: %s' % cmdline)
+        db = setup.database_setup(cmdline)
+        queue = setup.queue_setup(cmdline)
+        if db['config'][setup.DBHOST] == 'localhost':
+            db['config'][setup.DBHOST] = network.get_hostname()
+        if queue['config'][setup.QUEUEHOST] == 'localhost':
+            queue['config'][setup.QUEUEHOST] = network.get_hostname()
+        self.geppetto_node = service.GeppettoService(db_args=db,
+                                                     queue_args=queue)
         self.geppetto_node.install_service()
         self.geppetto_node.start_service()
+        # Puppet Master
+        log.debug('DNS Suffix: %s' % self.network_config.dns_suffix)
         self.puppet_node.\
             set_service_settings({"server-auto-sign-policy": True,
                                   "server-autosign-pattern": "*.%s" % \
@@ -177,7 +191,7 @@ class DataUtils:
                                             self.network_config.dns_suffix})
         self.puppet_node.install_service()
         self.puppet_node.start_service()
-
+        # Puppet slave
         for _ in xrange(1, 10):
             if self.is_master_reachable():
                 break
@@ -187,7 +201,7 @@ class DataUtils:
         client_node.install_service()
         client_node.start_service()
         self._restart_service('puppet')
-
+        # Crowbar/External DHCP/DNS
         if self.is_crowbar_present():
             base_url = 'http://192.168.124.10:3000/machines/transition/0.yaml'
             self.notify_crowbar_ready(base_url, "vpx-geppettomaster-ready")
