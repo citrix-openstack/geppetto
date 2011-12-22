@@ -58,9 +58,10 @@ def update_endpoint_template(endpoint_template_id, region, service,
     public_url, admin_url, internal_url, enabled, is_global, auth_token):
     header = httplib2.Http(".cache")
 
-    url = '%sendpointTemplates/%s' % (URL_V2, endpoint_template_id)
-    body = {"endpointTemplate": {"region": region,
-                       "serviceId": service,
+    url = '%sOS-KSCATALOG/endpointTemplates/%s' % (URL_V2, endpoint_template_id)
+    body = {"OS-KSCATALOG:endpointTemplate": {"region": region,
+                       'name': 'IGNORED',
+                       'type': 'IGNORED',
                        "publicURL": public_url,
                        "adminURL": admin_url,
                        "internalURL": internal_url,
