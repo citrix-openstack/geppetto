@@ -182,3 +182,17 @@ class GroupOverride(models.Model):
         for override in cls.objects.filter(config_class_parameter=param):
             override.value = param.default_value
             override.save()
+
+
+def override_defaults(settings, overrides):
+    new_settings = settings
+    for override in overrides:
+        new_settings[override.config_class_parameter.name] = override.value
+        if type(override) is Override:
+            is_applied = override.node.report_date and \
+            override.node.report_last_changed_date and \
+            override.node.report_date > override.timestamp and \
+            override.node.report_status != infrastructure.ReportStatus.Failed \
+            and override.node.report_last_changed_date > override.timestamp
+            if override.one_time_only and is_applied:
+                override.delete()

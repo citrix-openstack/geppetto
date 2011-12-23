@@ -42,6 +42,10 @@ class ConfigClass(models.Model):
         return dict((param.name, param.default_value) \
                     for param in self.configclassparameter_set.all())
 
+    def get_params(self):
+        """Return dictionary of {param_label:param_value}"""
+        return  self.configclassparameter_set.all()
+
 
 class ConfigClassParameterType(models.Model):
     name = models.CharField(max_length=50, unique=True, db_index=True)
@@ -209,6 +213,11 @@ class ConfigClassParameter(models.Model):
                 validator_kwargs = parse(self.config_type.validator_kwargs)
 
             getattr(runtime, validator_fun)(value, **validator_kwargs)
+
+
+def get_default_settings(configs):
+    return dict([((p.name, p.default_value)) \
+                 for c in configs for p in c.get_params()])
 
 
 def string_validator(value):

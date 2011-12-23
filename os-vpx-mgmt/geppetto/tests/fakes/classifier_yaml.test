@@ -20,7 +20,7 @@ parameters:
   MYSQL_PASS: citrix
   API_BIND_PORT: 9292
   MULTI_HOST: False
-  REGISTRY_BIND_PORT: 9191
+  MYSQL_TYPE: internal
   MYSQL_DBS: nova, glance, keystone
   VMWAREAPI_WSDL_LOC: file:///etc/openstack/visdk/vimService.wsdl
   KEYSTONE_SUPERUSER_TOKEN: 999888777666
@@ -32,7 +32,7 @@ parameters:
   KEYSTONE_SUPERUSER_NAME: root
   GLANCE_HOSTNAME: localhost
   VPX_TAGS: 
-  MYSQL_TYPE: internal
+  REGISTRY_BIND_PORT: 9191
   VPX_LABEL_PREFIX:  
   HAPI_USER: root
   HOST_GUID: 00:00:00:00:be:ef

@@ -423,7 +423,8 @@ class Service():
         affected_node_fqdns = \
             model_utils.update_related_config_params(roles, node_fqdn_dst)
 
-        affected_node_fqdns.append(node_fqdn_dst)
+        if node_fqdn_dst not in affected_node_fqdns:
+            affected_node_fqdns.append(node_fqdn_dst)
         return {'node_fqdns': affected_node_fqdns,
                 'roles': [role.name for role in roles]}
 

@@ -285,8 +285,15 @@ class Node(models.Model):
         except Failure:
             return None
 
-    def get_roles(self):
-        return [rel.role for rel in self.noderoleassignment_set.all()]
+    def get_roles(self, exclude_service=False, exclude_internal=True):
+        role_assignments = self.get_role_assignments()
+        if exclude_service:
+            role_assignments = role_assignments.\
+                                exclude(role__service__exact=False)
+        if exclude_internal:
+            role_assignments = role_assignments.\
+                                exclude(role__internal__exact=True)
+        return [ra.role for ra in role_assignments]
 
     def get_role_assignments(self):
             return self.noderoleassignment_set.all()
@@ -349,8 +356,6 @@ class Node(models.Model):
         self.report_date = report_details['report_time']
         if report_details['status_code'] != ReportStatus.Failed:
             self.report_status = report_details['status_code']
-        else:
-            self.report_status = ReportStatus.Pending
         self.report_log = report_details['report_log']
         if self.report_status != ReportStatus.Stable:
             self.report_last_changed_date = report_details['report_time']
