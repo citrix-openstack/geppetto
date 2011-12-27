@@ -69,7 +69,7 @@ class NodeAdmin(admin.ModelAdmin):
     actions = ['apply_changes']
 
     def apply_changes(self, request, queryset):
-        node_fqdns = [node.fqdn for node in queryset]
+        node_fqdns = [node.fqdn for node in queryset if node.enabled]
         svc = ui_utils.get_geppetto_web_service_client()
         logger.debug('Applying configuration following node: %s' % node_fqdns)
         svc.Task.apply_changes(node_fqdns)

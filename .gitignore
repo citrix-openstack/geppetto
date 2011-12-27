@@ -1,0 +1,17 @@
+syntax: glob
+working
+*~
+.*.swp
+*.pyc
+*.pyo
+*.log
+*.test
+tags
+*\#
+*.flc
+*.orig
+*.rej
+.project
+.pydevproject
+.geppetto-venv
+.settings

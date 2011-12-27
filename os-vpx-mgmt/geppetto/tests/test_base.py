@@ -106,7 +106,9 @@ class DBTestBase(TestCase):
         node = self._add_dummy_node(fqdn, is_enabled)
         for role in roles:
             r = Role.get_by_name(role)
-            NodeRoleAssignment.objects.create(node=node, role=r)
+            NodeRoleAssignment.objects.create(node=node,
+                                              role=r,
+                                              enabled=r.service)
         return node
 
 

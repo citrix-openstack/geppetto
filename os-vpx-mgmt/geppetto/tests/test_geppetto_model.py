@@ -136,8 +136,7 @@ class TestGeppettoModel(test_base.DBTestBase):
         logger.debug(configs)
         self.assertGreater(len(configs), 1)
 
-    def test_get_node_details(self):
-        node = self._add_dummy_node()
+    def _test_get_node_details_with_roles(self, node, roles):
         details = node.get_details()
         valid_details = {'enabled': True,
                          'group_id': None,
@@ -157,9 +156,23 @@ class TestGeppettoModel(test_base.DBTestBase):
                          'report_date': None,
                          'report_last_changed_date': None,
                          'report_status': '',
-                         'roles': []}
+                         'roles': roles}
         self.maxDiff = None
         self.assertDictEqual(valid_details, details)
+
+    def test_get_node_details_no_roles(self):
+        node = self._add_dummy_node()
+        self._test_get_node_details_with_roles(node, [])
+
+    def test_get_node_details_default_roles(self):
+        node = self._add_dummy_node_into_role('test', DEFAULT_ROLES)
+        roles = [Role.get_by_name(r) for r in DEFAULT_ROLES]
+        self._test_get_node_details_with_roles(node, roles)
+
+    def test_get_node_details_internal_roles(self):
+        internal_roles = [r.name for r in Role.objects.filter(internal=True)]
+        node = self._add_dummy_node_into_role('test', internal_roles)
+        self._test_get_node_details_with_roles(node, [])
 
     def test_default_role(self):
         roles1 = [r.name for r in Role.objects.filter(name__in=DEFAULT_ROLES)]

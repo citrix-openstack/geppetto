@@ -33,7 +33,7 @@ class TestPuppetServices(test_base.DBTestBase):
         self._add_dummy_node('test_node')
         report_service.process_report(self)
         node = Node.get_by_name('test_node')
-        self.assertEqual(node.report_status, ReportStatus.Pending)
+        self.assertEqual(node.report_status, ReportStatus.Changed)
         self.assertEqual(node.report_date, datetime.datetime(2001, 1, 1,
                                                              0, 0, 0, 0))
         self.assertEqual(node.report_log, u'Puppet: FAKE LOG')

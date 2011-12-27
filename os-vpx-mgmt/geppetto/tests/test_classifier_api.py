@@ -5,6 +5,8 @@ import datetime
 
 from geppetto.tests import test_base
 from geppetto.core.models import utils
+from geppetto.core.models import ConfigClassParameter
+from geppetto.core.models import Role
 from geppetto.core.models.roledependencies import DEFAULT_ROLES
 from geppetto.core.models.infrastructure import ReportStatus
 from geppetto.core.views.geppetto_service import Service as GService
@@ -79,3 +81,14 @@ class TestClassifierServiceAPI(test_base.DBTestBase):
         # test that the override has got away yet
         self.assertEqual(-1, string.find(yaml,
                          "VPX_RESTART_SERVICES: ['openstack-swift-proxy']"))
+
+    def test_get_configuration_with_celeryd(self):
+        roles = [Role.CELERY_WORKER]
+        roles.extend(DEFAULT_ROLES)
+        self._add_dummy_node_into_role('node1', roles)
+        yaml = self.classifier_svc.get_configuration("node1")
+        self.assertNotEqual(-1, string.find(yaml,
+                                ConfigClassParameter.VPX_MASTER_DB_BACKEND))
+        logger.exception(yaml)
+        self.assertNotEqual(-1, string.find(yaml,
+                                    "VPX_TAGS: u'citrix-geppetto-celeryd'"))

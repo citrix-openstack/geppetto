@@ -20,9 +20,12 @@ from django.template import Context
 from django.template import loader
 
 from geppetto.core.models import utils
-from geppetto.core.models import Override
 from geppetto.core.models import Role
 
+from geppetto.core.models.configdefinition import get_default_settings
+from geppetto.core.models.nodeconfiguration import override_defaults
+from geppetto.core.models.roledependencies import get_config_classes
+from geppetto.core.models.roledependencies import filter_enabled_services
 from geppetto.core.views.xmlrpc import GenerateDjangoXMLRPCHandler
 
 logger = logging.getLogger('geppetto.core.views.classifier_service')
@@ -39,16 +42,17 @@ class Service():
         /usr/local/bin/puppet/classifier vpx_node_fqdn"""
         node = utils.get_or_create_node(node_fqdn)
         # Update configuration by:
-        # 1) getting the list of the services running on the node
-        # 2) getting the list of configs to be updated on the node
-        # 3) getting the current values for the configs
-        # 4) determining if there are overrides
-        running_services = node.get_enabled_services()
-        config_classes = _get_all_config_classes(node.get_roles())
-        settings = _get_default_settings(config_classes)
+        # 1) getting the list of roles applied to the node
+        # 2) getting the list of configs that the roles depend on
+        # 3) getting their current values (overrides and non)
+        # 4) determining which roles are enabled services and which aren't
+        all_role_assignments = node.get_role_assignments()
+        config_classes = get_config_classes(all_role_assignments)
+        settings = get_default_settings(config_classes)
         if node.get_group():
-            _override_defaults(settings, node.get_group_overrides())
-        _override_defaults(settings, node.get_overrides())
+            override_defaults(settings, node.get_group_overrides())
+        override_defaults(settings, node.get_overrides())
+        running_services = filter_enabled_services(all_role_assignments)
         # add running_services as a list of tags as Puppet does not like
         # to convert arrays to strings
         settings['VPX_TAGS'] = str(running_services)[1:-1]
@@ -63,34 +67,6 @@ class Service():
                      'stopped_services': stopped_services,
                      'settings': settings})
         return "%s" % loader.get_template("core/recipes.yaml").render(c)
-
-
-def _get_all_config_classes(roles):
-    configs = []
-    for role in roles:
-        configs.extend(role.get_config_classes())
-    return configs
-
-
-def _get_default_settings(configs):
-    settings = {}
-    for config in configs:
-        settings = dict(settings.items() + config.get_params_dict().items())
-    return settings
-
-
-def _override_defaults(settings, overrides):
-    new_settings = settings
-    for override in overrides:
-        new_settings[override.config_class_parameter.name] = override.value
-        if type(override) is Override:
-            is_applied = override.node.report_date and \
-                         override.node.report_last_changed_date and \
-                override.node.report_date > override.timestamp and \
-                override.node.report_status != 'f' and \
-                override.node.report_last_changed_date > override.timestamp
-            if override.one_time_only and is_applied:
-                override.delete()
 
 
 managed_services = Role.get_service_roles()

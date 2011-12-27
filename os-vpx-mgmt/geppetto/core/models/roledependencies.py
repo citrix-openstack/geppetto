@@ -181,3 +181,13 @@ class RoleDesConfigParamAssignment(models.Model):
         return ("RoleDescription: %s"
                 " ConfigParam %s:") % (self.role_description.name,
                                        self.config_parameter.name)
+
+
+def get_config_classes(role_assignments):
+    return [configs for ra in role_assignments \
+                    for configs in ra.role.get_config_classes()]
+
+
+def filter_enabled_services(role_assignments):
+    return [ra.role.name for ra in role_assignments \
+                            if ra.enabled and ra.role.service]
