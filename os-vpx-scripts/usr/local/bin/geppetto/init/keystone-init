@@ -28,8 +28,7 @@ sed -e "s,sql_connection = .*,sql_connection = mysql://$MYSQL_USER:$MYSQL_PASS@$
 
 TOUCH_FILE="/var/lib/geppetto/keystone-init-run"
 
-keystone_manage="keystone-manage $@"
-
+keystone-manage database sync
 tenant_list=$(keystone-manage tenant list)
 is_tenant_1_present=$(echo "$tenant_list" | grep -c 1) || true
 
