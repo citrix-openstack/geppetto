@@ -25,7 +25,7 @@ logger = logging.getLogger('geppetto-properties-update')
 
 # TODO - sharecode with keystone test
 
-URL_V2 = "http://localhost:5001/v2.0/"
+URL_V2 = "http://localhost:35357/v2.0/"
 
 def get_token(user, pswd, tenant_id, url=URL_V2, kind='token'):
     header = httplib2.Http(".cache")
@@ -119,7 +119,7 @@ if __name__ == "__main__":
                                  glance_url, glance_url, glance_url,
                                  enabled_flag, global_flag, auth_token)
 
-        keystone_url = "http://" + keystone_host + ":5001/v2.0"
+        keystone_url = "http://" + keystone_host + ":35357/v2.0"
         update_endpoint_template(2, region, "2",
                                  keystone_url, keystone_url, keystone_url,
                                  enabled_flag, global_flag, auth_token)
