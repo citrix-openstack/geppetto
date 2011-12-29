@@ -5,12 +5,10 @@ include $(B_BASE)/common.mk
 include $(B_BASE)/rpmbuild.mk
 REPO := /repos/geppetto
 HORIZON_UPSTREAM := /repos/horizon
-COMPUTE_UPSTREAM := /repos/openstack.compute
 OPENSTACKX_UPSTREAM := /repos/openstackx
 else
 REPO := .
 HORIZON_UPSTREAM := ../horizon
-COMPUTE_UPSTREAM := ../openstack.compute
 OPENSTACKX_UPSTREAM := ../openstackx
 endif
 
@@ -44,16 +42,6 @@ DASHBOARD_RPM_TMP := $(MY_DB_OBJ_DIR)/RPMS/noarch/$(DASHBOARD_FULLNAME).noarch.r
 DASHBOARD_TARBALL := $(MY_DB_OBJ_DIR)/SOURCES/$(DASHBOARD_FULLNAME).tar.gz
 DASHBOARD_RPM := $(MY_OUTPUT_DIR)/RPMS/noarch/$(DASHBOARD_FULLNAME).noarch.rpm
 DASHBOARD_SRPM := $(MY_OUTPUT_DIR)/SRPMS/$(DASHBOARD_FULLNAME).src.rpm
-
-COMPUTE_VERSION := 1.0
-COMPUTE_OBJ_DIR := $(MY_OBJ_DIR)/openstack-compute
-COMPUTE_FULLNAME := openstack-compute-$(COMPUTE_VERSION)-$(BUILD_NUMBER)
-COMPUTE_SPEC := $(COMPUTE_OBJ_DIR)/openstack-compute.spec
-COMPUTE_RPM_TMP_DIR := $(COMPUTE_OBJ_DIR)/RPM_BUILD_DIRECTORY/tmp/openstack-dashboard
-COMPUTE_RPM_TMP := $(COMPUTE_OBJ_DIR)/RPMS/noarch/$(COMPUTE_FULLNAME).noarch.rpm
-COMPUTE_TARBALL := $(COMPUTE_OBJ_DIR)/SOURCES/$(COMPUTE_FULLNAME).tar.gz
-COMPUTE_RPM := $(MY_OUTPUT_DIR)/RPMS/noarch/$(COMPUTE_FULLNAME).noarch.rpm
-COMPUTE_SRPM := $(MY_OUTPUT_DIR)/SRPMS/$(COMPUTE_FULLNAME).src.rpm
 
 EPEL_RPM_DIR := $(CARBON_DISTFILES)/epel5
 EPEL_YUM_DIR := $(MY_OBJ_DIR)/epel5
@@ -104,11 +92,6 @@ $(MY_DB_OBJ_DIR)/%.spec: $(REPO)/openstack-dashboard/openstack-dashboard.spec.in
 	$(call brand,$^) >$@
 	sed -e 's,@DASHBOARD_VERSION@,$(DASHBOARD_VERSION),g' -i $@
 
-$(COMPUTE_OBJ_DIR)/%.spec: $(REPO)/openstack-compute/openstack-compute.spec.in
-	mkdir -p $(dir $@)
-	$(call brand,$^) >$@
-	sed -e 's,@COMPUTE_VERSION@,$(COMPUTE_VERSION),g' -i $@
-
 $(GEPPETTO_TARBALL): $(shell find $(REPO)/os-vpx-mgmt -type f)
 	rm -rf $@ $(MY_OBJ_DIR)/citrix-geppetto-$(PRODUCT_VERSION)
 	mkdir -p $(@D)
@@ -132,14 +115,6 @@ $(GEPPETTO_MEDIA_TARBALL): $(shell find $(REPO)/os-vpx-mgmt/geppetto-media -type
 	mkdir -p $(@D)
 	cp -a $(REPO)/os-vpx-mgmt/geppetto-media $(MY_OBJ_DIR)/citrix-geppetto-media-$(PRODUCT_VERSION)
 	tar -C $(MY_OBJ_DIR) -czf $@ citrix-geppetto-media-$(PRODUCT_VERSION)
-
-$(COMPUTE_TARBALL): $(shell find $(REPO)/openstack-compute -type f)
-	rm -rf $@ $(COMPUTE_OBJ_DIR)/$(COMPUTE_FULLNAME)
-	mkdir -p $(@D)
-	mkdir -p $(COMPUTE_OBJ_DIR)/$(COMPUTE_FULLNAME)
-	cp -a $(COMPUTE_UPSTREAM) $(COMPUTE_OBJ_DIR)/$(COMPUTE_FULLNAME)
-	cp -a $(OPENSTACKX_UPSTREAM) $(COMPUTE_OBJ_DIR)/$(COMPUTE_FULLNAME)
-	tar -C $(COMPUTE_OBJ_DIR) -czf $@ $(COMPUTE_FULLNAME)
 
 $(REPOMD_XML): $(RPMS)
 	createrepo $(MY_OUTPUT_DIR)
