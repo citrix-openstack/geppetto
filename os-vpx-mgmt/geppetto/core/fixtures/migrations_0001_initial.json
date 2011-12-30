@@ -1132,7 +1132,7 @@
         "pk": 85, 
         "model": "core.configclassparameter", 
         "fields": {
-            "default_value": "InstanceMetadataFilter", 
+            "default_value": "AllHostsFilter", 
             "config_type": 13, 
             "config_class": 33, 
             "name": "SCHEDULER_DEFAULT_HOST_FILTER", 
