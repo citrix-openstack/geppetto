@@ -50,7 +50,7 @@ cd horizon
 %{__python} setup.py install -O1 --root %{buildroot}
 cd ..
 
-install -m 644 %{SOURCE2} %{buildroot}%{python_sitelib}/horizon/wsgi.py
+install -m 644 %{SOURCE2} %{buildroot}%{python_sitelib}/dashboard/wsgi.py
 
 # Set up /etc/horizon/ and link for local_settings.py.
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/horizon/local_settings.py
