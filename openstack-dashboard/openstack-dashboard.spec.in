@@ -20,6 +20,8 @@ BuildRoot: %{_tmppath}/%{name}
 Requires(post): chkconfig
 Requires(preun): chkconfig
 
+Requires: openstackx
+
 %global _sharedstatedir /var/lib
 %global python_sitelib /usr/lib/python2.6/site-packages
 
