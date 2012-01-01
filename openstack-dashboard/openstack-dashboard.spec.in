@@ -63,6 +63,8 @@ ln -s %{_sysconfdir}/horizon/local_settings.py %{buildroot}%{python_sitelib}/loc
 install -d -m 755 %{buildroot}%{_sharedstatedir}/horizon
 install -d -m 755 %{buildroot}%{_sysconfdir}/horizon
 install -d -m 755 %{buildroot}%{_localstatedir}/log/horizon
+install -d -m 755 %{buildroot}%{_localstatedir}/cache/horizon
+install -d -m 755 %{buildroot}%{_localstatedir}/cache/horizon/sessions
 
 # Install init files
 install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/openstack-dashboard
@@ -103,4 +105,6 @@ fi
 %config(noreplace) %{_initrddir}/openstack-dashboard.sh
 %dir %attr(0755, root, root) %{_localstatedir}/log/horizon
 %dir %attr(0755, root, root) %{_localstatedir}/run/horizon
+%dir %attr(0755, root, root) %{_localstatedir}/cache/horizon
+%dir %attr(0755, root, root) %{_localstatedir}/cache/horizon/sessions
 %{_sharedstatedir}/horizon

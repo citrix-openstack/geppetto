@@ -15,6 +15,9 @@ DATABASES = {
 
 CACHE_BACKEND = 'dummy://'
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_FILE_PATH = '/var/cache/horizon/sessions'
+
 
 # Send email to the console by default
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
