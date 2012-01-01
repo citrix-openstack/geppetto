@@ -27,15 +27,13 @@ rm -rf %{buildroot}
 cd openstackx
 %{__python} setup.py install -O1 --root %{buildroot}
 cd ..
-mkdir -p %{buildroot}/var/lib/nova
-mv %{buildroot}%{python_sitelib}/extensions %{buildroot}/var/lib/nova
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-/var/lib/nova/extensions
+%{python_sitelib}/extensions
 %{python_sitelib}/openstackx
 %{python_sitelib}/openstackx-*.egg-info
 %{python_sitelib}/openstackx-*-nspkg.pth
