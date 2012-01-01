@@ -8,7 +8,7 @@ set -eux
 
 service openstack-dashboard stop || true
 
-SETTINGS_FILE="/etc/dashboard/local_settings.py"
+SETTINGS_FILE="/etc/horizon/local_settings.py"
 
 # Keystone config
 sed -i "s,^OPENSTACK_KEYSTONE_URL = .*$,OPENSTACK_KEYSTONE_URL = 'http://$KEYSTONE_HOST:5000/v2.0',g" $SETTINGS_FILE
