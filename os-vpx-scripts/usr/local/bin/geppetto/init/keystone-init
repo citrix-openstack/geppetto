@@ -63,7 +63,7 @@ $keystone_manage endpointTemplates add RegionOne swift \
   http://dummy \
   http://dummy 1 1
 
-$keystone_manage role add Admin
+$keystone_manage role add admin
 $keystone_manage role add KeystoneAdmin
 $keystone_manage role add KeystoneServiceAdmin
 $keystone_manage role add Member
@@ -78,7 +78,7 @@ os-vpx-add-user \
          "$KEYSTONE_SUPERUSER_TENANT" \
          "$KEYSTONE_SUPERUSER_NAME" \
          "$KEYSTONE_SUPERUSER_PASS" \
-         "Admin,1 KeystoneAdmin,1 KeystoneServiceAdmin,1 Admin,0 Member,0 netadmin,0 projectmanager,0 sysadmin,0" \
+         "admin,1 KeystoneAdmin,1 KeystoneServiceAdmin,1 admin,0 Member,0 netadmin,0 projectmanager,0 sysadmin,0" \
          "$KEYSTONE_SUPERUSER_TOKEN"
 
 touch $TOUCH_FILE
