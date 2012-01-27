@@ -165,35 +165,25 @@ def _nova_manage_register(auth_token, label, machine, kernel=None, \
     to_log = '&> /var/log/geppetto/nova-manage-register-%s' % time.time()
     # Choose image type
     if kernel is None and ramdisk is None:
-        if(hypervisor == 'xenserver'):
-            logger.debug("Hypervisor is xenserver.")
-            nova_manage_cmd = '/usr/local/bin/nova-manage image image_register'
-            nova_manage_fmt = '%(nova_manage_cmd)s %(machine)s ' + \
-                '--hypervisor="%(hypervisor)s" --owner=admin ' + \
-                '--name="%(label)s" --auth_token=%(auth_token)s %(to_log)s'
-        elif(hypervisor == 'esx'):
-            logger.debug("Hypervisor is ESX.")
-            nova_manage_cmd = '/usr/local/bin/nova-manage image image_register'
-            nova_manage_fmt = '%(nova_manage_cmd)s %(machine)s ' + \
-                '--hypervisor="%(hypervisor)s" --ostype="%(ostype)s" ' + \
-                '--adaptertype="%(adaptertype)s" --owner=admin ' + \
-                '--name="%(label)s" --auth_token=%(auth_token)s %(to_log)s'
-
+        nova_manage_cmd = '/usr/local/bin/nova-manage image image_register'
+        nova_manage_fmt = '%(nova_manage_cmd)s %(machine)s ' + \
+            '--owner=root ' + \
+            '--name="%(label)s" --auth_token=%(auth_token)s %(to_log)s'
     else:
         nova_manage_cmd = '/usr/local/bin/nova-manage image all_register'
         nova_manage_fmt = '%(nova_manage_cmd)s %(machine)s %(kernel)s ' + \
-            '%(ramdisk)s --hypervisor="%(hypervisor)s" --owner=admin ' + \
+            '%(ramdisk)s --owner=root ' + \
             '--name="%(label)s" --auth_token=%(auth_token)s %(to_log)s'
     # Register with registry
     try:
-        logger.debug(nova_manage_fmt % locals())
         execute(nova_manage_fmt % locals())
-        _delete_fileset([machine, kernel, ramdisk])
         logger.debug('nova-manage register: done!')
     except Exception, e:
         logger.error('Nova manage: failure')
         logger.error(e)
-
+        raise Exception("Failed to register image")
+    finally:
+        _delete_fileset([machine, kernel, ramdisk])
 
 def _delete_fileset(files):
     for file in files:

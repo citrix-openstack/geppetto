@@ -30,7 +30,8 @@ TOUCH_FILE="/var/lib/geppetto/keystone-init-run"
 
 keystone_manage="keystone-manage $@"
 
-tenant_list=$(keystone-manage tenant list)
+$keystone_manage database sync
+tenant_list=$($keystone_manage tenant list)
 is_tenant_1_present=$(echo "$tenant_list" | grep -c 1) || true
 
 if [ $is_tenant_1_present -ne 0 ]
@@ -62,7 +63,7 @@ $keystone_manage endpointTemplates add RegionOne swift \
   http://dummy \
   http://dummy 1 1
 
-$keystone_manage role add Admin
+$keystone_manage role add admin
 $keystone_manage role add KeystoneAdmin
 $keystone_manage role add KeystoneServiceAdmin
 $keystone_manage role add Member
@@ -77,7 +78,7 @@ os-vpx-add-user \
          "$KEYSTONE_SUPERUSER_TENANT" \
          "$KEYSTONE_SUPERUSER_NAME" \
          "$KEYSTONE_SUPERUSER_PASS" \
-         "Admin,1 KeystoneAdmin,1 KeystoneServiceAdmin,1 Admin,0 Member,0 netadmin,0 projectmanager,0 sysadmin,0" \
+         "admin,1 KeystoneAdmin,1 KeystoneServiceAdmin,1 admin,0 Member,0 netadmin,0 projectmanager,0 sysadmin,0" \
          "$KEYSTONE_SUPERUSER_TOKEN"
 
 touch $TOUCH_FILE

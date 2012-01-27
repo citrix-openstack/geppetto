@@ -1,0 +1,39 @@
+Summary: OpenStack client extension library
+Name: openstackx
+Version: @OPENSTACKX_VERSION@
+Release: @BUILD_NUMBER@
+License: ASL 2.0
+Group: Applications/System
+Source0: openstackx-%{version}-%{release}.tar.gz
+
+BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}
+
+%global python_sitelib /usr/lib/python2.6/site-packages
+
+%description
+
+%prep
+%setup -q -n openstackx-%{version}-%{release}
+
+%build
+cd openstackx
+%{__python} setup.py build
+cd ..
+
+%install
+rm -rf %{buildroot}
+
+cd openstackx
+%{__python} setup.py install -O1 --root %{buildroot}
+cd ..
+
+%clean
+rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root,-)
+%{python_sitelib}/extensions
+%{python_sitelib}/openstackx
+%{python_sitelib}/openstackx-*.egg-info
+%{python_sitelib}/openstackx-*-nspkg.pth

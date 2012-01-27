@@ -11,7 +11,7 @@ from django.conf import settings
 LOG_LEVEL = logging.DEBUG
 
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'horizon.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'dashboard.settings'
 os.environ['PYTHON_EGG_CACHE'] = '/tmp/%s/PYTHON_EGG_CACHE' % getpass.getuser()
 application = django_wsgi.WSGIHandler()
 
@@ -67,7 +67,7 @@ def _configure_logging():
     hdlr = logging.handlers.SysLogHandler('/dev/log', \
            facility=logging.handlers.SysLogHandler.LOG_USER)
     formatter = \
-        logging.Formatter('horizon: %(levelname)s %(message)s')
+        logging.Formatter('openstack-dashboard: %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)
     logger.handlers = []
     logger.addHandler(hdlr)
