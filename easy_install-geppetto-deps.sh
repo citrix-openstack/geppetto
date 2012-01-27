@@ -37,6 +37,6 @@ $MOCK --chroot "easy_install-2.6 -vvv -Z -H None -f /eggs \
                 django-kombu==0.9.4 \
                 django-mailer==0.1.0 \
                 importlib==1.0.2 \
-                python-cloudfiles==1.7.9.1 \
+                python-cloudfiles==1.7.9.3 \
                 python-dateutil==1.5 \
 "

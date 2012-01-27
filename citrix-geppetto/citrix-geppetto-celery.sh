@@ -5,7 +5,7 @@ export GEPPETTO_DB=/var/lib/geppetto/sqlite3.db~
 . /etc/rc.d/init.d/functions
 
 pidfile="/var/run/geppetto/$name.pid"
-lockfile="/var/lock/subsys/$name"
+lockfile="/var/lock/subsys/citrix-geppetto-$name"
 logfile="/var/log/geppetto/$name.log"
 
 [ -f "/etc/sysconfig/citrix-geppetto" ] && . "/etc/sysconfig/citrix-geppetto"
