@@ -65,7 +65,7 @@ def setup_scheduler(request):
     def on_form_valid(form, service, roles):
         _make_request(request, form, NOVA_SCHEDULER_TASK_ID,
                       lambda s, w: s.Scheduling.add_workers([w], {}))
-        return redirect('setup_nova_ajax_console_proxy')
+        return redirect('install_checklist')
 
     def update_form(form, service, roles):
         _add_unused_workers(form, service, [Role.NOVA_SCHEDULER])
